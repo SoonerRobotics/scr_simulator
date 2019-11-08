@@ -721,15 +721,15 @@ MonoBehaviour:
     leftWheelVisual: {fileID: 412076787}
     rightWheelVisual: {fileID: 513195839}
     motor: 1
-    steering: 0
+    freeSpinning: 0
   - leftWheel: {fileID: 267974306}
     rightWheel: {fileID: 654955874}
     leftWheelVisual: {fileID: 230556326}
     rightWheelVisual: {fileID: 1695463293}
     motor: 0
-    steering: 0
+    freeSpinning: 0
   maxMotorTorque: 500
-  maxSteeringAngle: 30
+  maxSteeringAngle: 360
 --- !u!54 &1014256455
 Rigidbody:
   m_ObjectHideFlags: 0
