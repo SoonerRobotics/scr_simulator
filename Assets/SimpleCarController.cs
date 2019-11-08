@@ -10,7 +10,7 @@ public class AxleInfo
     public Transform leftWheelVisual;
     public Transform rightWheelVisual;
     public bool motor;
-    public bool steering;
+    public bool freeSpinning;
 }
 
 public class SimpleCarController : MonoBehaviour
@@ -45,10 +45,13 @@ public class SimpleCarController : MonoBehaviour
 
         foreach (AxleInfo axleInfo in axleInfos)
         {
-            if (axleInfo.steering)
+            if (axleInfo.freeSpinning)
             {
                 axleInfo.leftWheel.steerAngle = steering;
                 axleInfo.rightWheel.steerAngle = steering;
+
+                axleInfo.leftWheel.motorTorque = 0.0001f;
+                axleInfo.rightWheel.motorTorque = -0.0001f;
             }
             if (axleInfo.motor)
             {
