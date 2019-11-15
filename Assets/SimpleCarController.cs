@@ -60,7 +60,7 @@ public class SimpleCarController : MonoBehaviour
             }
             ApplyLocalPositionToVisuals(axleInfo.leftWheel, axleInfo.leftWheelVisual);
             ApplyLocalPositionToVisuals(axleInfo.rightWheel, axleInfo.rightWheelVisual);
-            Debug.Log(this.rb.velocity.magnitude * 2.237 + "mph");
+            // Debug.Log(this.rb.velocity.magnitude * 2.237 + "mph");
         }
     }
 }
