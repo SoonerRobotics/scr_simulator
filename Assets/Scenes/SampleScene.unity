@@ -346,8 +346,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 443974648}
-  - component: {fileID: 443974652}
-  - component: {fileID: 443974650}
   - component: {fileID: 443974649}
   m_Layer: 0
   m_Name: Lidar
@@ -394,36 +392,6 @@ MonoBehaviour:
   range_max: 10
   ranges: []
   intensities: []
---- !u!114 &443974650
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 443974647}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28b0e460b28ad924d8aaea870b04bfce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectWidth: 0.00272
-  material: {fileID: 2100000, guid: 79614c1d937379c47a3510ff648e1306, type: 2}
---- !u!114 &443974652
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 443974647}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff98778ae051cfd40a6e4effdf851ebd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Timeout: 10
-  Serializer: 0
-  Protocol: 0
-  RosBridgeServerUrl: ws://192.168.0.1:9090
 --- !u!1 &513195838
 GameObject:
   m_ObjectHideFlags: 0
@@ -926,7 +894,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1014256453}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.61, z: -2.524}
+  m_LocalPosition: {x: 0, y: 0.61, z: -1.72}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 963194228}
@@ -984,7 +952,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a908e83b1e7ce9e428caae2838615cc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Topic: /cv_camera
+  Topic: /igvc/camera/compressed
   ImageCamera: {fileID: 1475111074}
   FrameId: Camera
   resolutionWidth: 640
@@ -1472,7 +1440,7 @@ GameObject:
   - component: {fileID: 1475111076}
   - component: {fileID: 1475111074}
   m_Layer: 0
-  m_Name: Camera
+  m_Name: Robot Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1489,7 +1457,7 @@ Camera:
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
-  m_projectionMatrixMode: 2
+  m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
   m_SensorSize: {x: 36, y: 24}
@@ -1506,13 +1474,13 @@ Camera:
   field of view: 69
   orthographic: 0
   orthographic size: 5
-  m_Depth: 0
+  m_Depth: -2
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
+  m_TargetDisplay: 1
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1

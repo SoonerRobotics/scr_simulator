@@ -17,11 +17,7 @@ namespace RosSharp.RosBridgeClient
 
         void FixedUpdate()
         {
-            message.data = Vector3.SignedAngle(Vector3.forward, tf.forward, Vector3.up);
-            if (message.data < 0)
-            {
-                message.data = -(message.data - 360);
-            }
+            message.data = tf.rotation.eulerAngles.y;
             Publish(message);
         }
     }

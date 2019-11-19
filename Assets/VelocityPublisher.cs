@@ -18,9 +18,9 @@ namespace RosSharp.RosBridgeClient
         void FixedUpdate()
         {
             Vector3 vel = rb.velocity;
-            message.x = vel.x;
-            message.y = vel.y;
-            message.z = vel.z;
+            message.x = vel.z;
+            message.y = -vel.x;
+            message.z = vel.y;
             Publish(message);
         }
     }

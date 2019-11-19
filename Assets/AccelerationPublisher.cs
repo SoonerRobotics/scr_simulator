@@ -29,9 +29,9 @@ namespace RosSharp.RosBridgeClient
             Vector3 accel = (rb.velocity - lastVelocity) / Time.fixedDeltaTime;
             lastVelocity = rb.velocity;
 
-            message.x = accel.x;
-            message.y = accel.y;
-            message.z = accel.z;
+            message.x = accel.z;
+            message.y = -accel.x;
+            message.z = accel.y;
 
             Publish(message);
         }
