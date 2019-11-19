@@ -12,7 +12,7 @@ namespace RosSharp.RosBridgeClient
         
         private Vector3 lastVelocity = Vector3.positiveInfinity;
 
-        void Start()
+        protected override void Start()
         {
             base.Start();
             message = new Messages.Geometry.Vector3();

@@ -9,7 +9,7 @@ namespace RosSharp.RosBridgeClient
         private Messages.Standard.Float64 message;
         public Transform tf;
 
-        void Start()
+        protected override void Start()
         {
             base.Start();
             message = new Messages.Standard.Float64();

@@ -9,7 +9,7 @@ namespace RosSharp.RosBridgeClient
         private Messages.Geometry.Vector3 message;
         public Rigidbody rb;
 
-        void Start()
+        protected override void Start()
         {
             base.Start();
             message = new Messages.Geometry.Vector3();
