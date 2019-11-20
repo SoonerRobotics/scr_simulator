@@ -19,7 +19,7 @@ namespace RosSharp.RosBridgeClient
         {
             Vector3 pos = tf.position;
             message.x = pos.z / 78710.0f + 35.194881f;
-            message.y = -pos.x / 10247.0f + -92.438621f;
+            message.y = -pos.x / 10247.0f + -97.438621f;
             Publish(message);
         }
     }

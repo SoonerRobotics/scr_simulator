@@ -4,23 +4,20 @@ using UnityEngine;
 
 namespace RosSharp.RosBridgeClient
 {
-    public class VelocityPublisher : Publisher<Messages.Geometry.Vector3>
+    public class VelocityPublisher : Publisher<Messages.Standard.Float64>
     {
-        private Messages.Geometry.Vector3 message;
+        private Messages.Standard.Float64 message;
         public Rigidbody rb;
 
         protected override void Start()
         {
             base.Start();
-            message = new Messages.Geometry.Vector3();
+            message = new Messages.Standard.Float64();
         }
 
         void FixedUpdate()
         {
-            Vector3 vel = rb.velocity;
-            message.x = vel.z;
-            message.y = -vel.x;
-            message.z = vel.y;
+            message.data = rb.velocity.magnitude;
             Publish(message);
         }
     }

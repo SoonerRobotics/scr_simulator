@@ -836,6 +836,7 @@ GameObject:
   - component: {fileID: 1014256461}
   - component: {fileID: 1014256462}
   - component: {fileID: 1014256463}
+  - component: {fileID: 1014256464}
   m_Layer: 0
   m_Name: car_root
   m_TagString: Untagged
@@ -937,7 +938,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 938611d5f671cfe4f9be87c66d865ae1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Topic: /lidar
+  Topic: /igvc/lidar
   laserScanReader: {fileID: 443974649}
   FrameId: Unity
 --- !u!114 &1014256459
@@ -1012,8 +1013,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a5f2ccb7e6b9a6489d4ceb9e4d4265d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Topic: /igvc/pos
+  Topic: /igvc/gps
   tf: {fileID: 1014256456}
+--- !u!114 &1014256464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1014256453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f0fe44209a15904b976a01dbd6e2a36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Topic: /igvc/motors_raw
+  TimeStep: 0
+  left: 0
+  right: 0
 --- !u!1 &1039410775
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace RosSharp.RosBridgeClient
 {
-    public class AccelerationPublisher : Publisher<Messages.Geometry.Vector3>
+    public class AccelerationPublisher : Publisher<Messages.Standard.Float64>
     {
 
-        private Messages.Geometry.Vector3 message;
+        private Messages.Standard.Float64 message;
         public Rigidbody rb;
         
         private Vector3 lastVelocity = Vector3.positiveInfinity;
@@ -15,7 +15,7 @@ namespace RosSharp.RosBridgeClient
         protected override void Start()
         {
             base.Start();
-            message = new Messages.Geometry.Vector3();
+            message = new Messages.Standard.Float64();
         }
 
         void FixedUpdate()
@@ -29,9 +29,7 @@ namespace RosSharp.RosBridgeClient
             Vector3 accel = (rb.velocity - lastVelocity) / Time.fixedDeltaTime;
             lastVelocity = rb.velocity;
 
-            message.x = accel.z;
-            message.y = -accel.x;
-            message.z = accel.y;
+            message.data = accel.magnitude;
 
             Publish(message);
         }
