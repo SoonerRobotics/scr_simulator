@@ -8,28 +8,32 @@ namespace RosSharp.RosBridgeClient
     {
 
         private Messages.Standard.Float64 message;
+        private SimpleCarController c;
         public Rigidbody rb;
         
-        private Vector3 lastVelocity = Vector3.positiveInfinity;
+        private float lastVelocity = float.PositiveInfinity;
 
         protected override void Start()
         {
             base.Start();
+            c = GetComponent<SimpleCarController>();
             message = new Messages.Standard.Float64();
         }
 
         void FixedUpdate()
         {
-            if (lastVelocity == Vector3.positiveInfinity)
+            if (lastVelocity == float.PositiveInfinity)
             {
-                lastVelocity = rb.velocity;
+                lastVelocity = (c.vr + c.vl) / c.L;
                 return;
             }
 
-            Vector3 accel = (rb.velocity - lastVelocity) / Time.fixedDeltaTime;
-            lastVelocity = rb.velocity;
+            float accel = ((c.vr + c.vl) / c.L - lastVelocity) / Time.fixedDeltaTime;
+            lastVelocity = (c.vr + c.vl) / c.L;
 
-            message.data = accel.magnitude;
+            message.data = accel;
+
+            Debug.Log("accel: " + accel);
 
             Publish(message);
         }

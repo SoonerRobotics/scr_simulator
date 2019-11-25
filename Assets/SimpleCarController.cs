@@ -11,8 +11,8 @@ public class SimpleCarController : MonoBehaviour
     public float L = 0.6096f;
     public float Q = 0.3456f;
 
-    float vl = 0;
-    float vr = 0;
+    public float vl = 0;
+    public float vr = 0;
 
     private Rigidbody rb;
 
