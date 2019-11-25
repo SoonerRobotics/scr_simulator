@@ -4,34 +4,36 @@ using UnityEngine;
 
 namespace RosSharp.RosBridgeClient
 {
-    public class AccelerationPublisher : Publisher<Messages.Geometry.Vector3>
+    public class AccelerationPublisher : Publisher<Messages.Standard.Float64>
     {
 
-        private Messages.Geometry.Vector3 message;
+        private Messages.Standard.Float64 message;
+        private SimpleCarController c;
         public Rigidbody rb;
         
-        private Vector3 lastVelocity = Vector3.positiveInfinity;
+        private float lastVelocity = float.PositiveInfinity;
 
         protected override void Start()
         {
             base.Start();
-            message = new Messages.Geometry.Vector3();
+            c = GetComponent<SimpleCarController>();
+            message = new Messages.Standard.Float64();
         }
 
         void FixedUpdate()
         {
-            if (lastVelocity == Vector3.positiveInfinity)
+            if (lastVelocity == float.PositiveInfinity)
             {
-                lastVelocity = rb.velocity;
+                lastVelocity = (c.vr + c.vl) / c.L;
                 return;
             }
 
-            Vector3 accel = (rb.velocity - lastVelocity) / Time.fixedDeltaTime;
-            lastVelocity = rb.velocity;
+            float accel = ((c.vr + c.vl) / c.L - lastVelocity) / Time.fixedDeltaTime;
+            lastVelocity = (c.vr + c.vl) / c.L;
 
-            message.x = accel.z;
-            message.y = -accel.x;
-            message.z = accel.y;
+            message.data = accel;
+
+            Debug.Log("accel: " + accel);
 
             Publish(message);
         }
