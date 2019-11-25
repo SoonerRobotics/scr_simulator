@@ -4,22 +4,22 @@ using UnityEngine;
 
 namespace RosSharp.RosBridgeClient
 {
-    public class GPSPublisher : Publisher<Messages.Geometry.Vector3>
+    public class GPSPublisher : Publisher<Messages.IGVC.GPS>
     {
-        private Messages.Geometry.Vector3 message;
+        private Messages.IGVC.GPS message;
         public Transform tf;
 
         protected override void Start()
         {
             base.Start();
-            message = new Messages.Geometry.Vector3();
+            message = new Messages.IGVC.GPS();
         }
 
         void FixedUpdate()
         {
             Vector3 pos = tf.position;
-            message.x = pos.z / 78710.0f + 35.194881f;
-            message.y = -pos.x / 10247.0f + -97.438621f;
+            message.latitude = pos.z / 78710.0f + 35.194881f;
+            message.longitude = -pos.x / 10247.0f + -97.438621f;
             Publish(message);
         }
     }
