@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RosSharp.RosBridgeClient
 {
@@ -9,17 +7,32 @@ namespace RosSharp.RosBridgeClient
         private Messages.IGVC.GPS message;
         public Transform tf;
 
+        private System.Random random;
+
         protected override void Start()
         {
             base.Start();
+            random = new System.Random();
             message = new Messages.IGVC.GPS();
+        }
+
+        public float getRandNormal(float mean, float stdDev)
+        {
+            float u1 = 1.0f - (float)random.NextDouble(); //uniform(0,1] random doubles
+            float u2 = 1.0f - (float)random.NextDouble();
+            float randStdNormal = Mathf.Sqrt(-2.0f * Mathf.Log(u1)) *
+                         Mathf.Sin(2.0f * Mathf.PI * u2); //random normal(0,1)
+
+            return stdDev * randStdNormal;
         }
 
         void FixedUpdate()
         {
             Vector3 pos = tf.position;
             message.latitude = pos.z / 78710.0f + 35.194881f;
+            message.latitude += getRandNormal(0, 1.843f);
             message.longitude = -pos.x / 10247.0f + -97.438621f;
+            message.longitude += getRandNormal(0, 2.138f);
             Publish(message);
         }
     }

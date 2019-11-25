@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RosSharp.RosBridgeClient
 {
-    public class MotorsSubscriber : Subscriber<Messages.motors>
+    public class MotorsSubscriber : Subscriber<Messages.IGVC.Motors>
     {
         public float left;
         public float right;
@@ -14,7 +14,7 @@ namespace RosSharp.RosBridgeClient
             base.Start();
         }
 
-        protected override void ReceiveMessage(Messages.motors motors)
+        protected override void ReceiveMessage(Messages.IGVC.Motors motors)
         {
             left = motors.left;
             right = motors.right;

@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace RosSharp.RosBridgeClient
 {
-    public class VelocityPublisher : Publisher<Messages.Standard.Float64>
+    public class VelocityPublisher : Publisher<Messages.IGVC.Velocity>
     {
-        private Messages.Standard.Float64 message;
+        private Messages.IGVC.Velocity message;
         private SimpleCarController c;
         public Rigidbody rb;
 
@@ -14,13 +14,13 @@ namespace RosSharp.RosBridgeClient
         {
             base.Start();
             c = GetComponent<SimpleCarController>();
-            message = new Messages.Standard.Float64();
+            message = new Messages.IGVC.Velocity();
         }
 
         void FixedUpdate()
         {
-            message.data = (c.vr + c.vl) / c.L;
-            Debug.Log("velocity: " + message.data);
+            message.leftVel = c.vl;
+            message.rightVel = c.vr;
             Publish(message);
         }
     }

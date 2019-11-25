@@ -4,24 +4,24 @@ using UnityEngine;
 
 namespace RosSharp.RosBridgeClient
 {
-    public class AccelerationPublisher : Publisher<Messages.Standard.Float64>
+    public class IMUPublisher : Publisher<Messages.IGVC.IMUOdom>
     {
+        private Messages.IGVC.IMUOdom message;
+        public Transform tf;
 
-        private Messages.Standard.Float64 message;
         private SimpleCarController c;
-        public Rigidbody rb;
-        
         private float lastVelocity = float.PositiveInfinity;
 
         protected override void Start()
         {
             base.Start();
             c = GetComponent<SimpleCarController>();
-            message = new Messages.Standard.Float64();
+            message = new Messages.IGVC.IMUOdom();
         }
 
         void FixedUpdate()
         {
+
             if (lastVelocity == float.PositiveInfinity)
             {
                 lastVelocity = (c.vr + c.vl) / c.L;
@@ -31,12 +31,9 @@ namespace RosSharp.RosBridgeClient
             float accel = ((c.vr + c.vl) / c.L - lastVelocity) / Time.fixedDeltaTime;
             lastVelocity = (c.vr + c.vl) / c.L;
 
-            message.data = accel;
-
-            Debug.Log("accel: " + accel);
-
+            message.heading = tf.rotation.eulerAngles.y;
+            message.acceleration = accel;
             Publish(message);
         }
     }
-
 }
