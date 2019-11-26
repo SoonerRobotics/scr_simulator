@@ -722,11 +722,11 @@ GameObject:
   - component: {fileID: 1014256457}
   - component: {fileID: 1014256459}
   - component: {fileID: 1014256458}
-  - component: {fileID: 1014256460}
   - component: {fileID: 1014256461}
   - component: {fileID: 1014256462}
   - component: {fileID: 1014256463}
   - component: {fileID: 1014256464}
+  - component: {fileID: 1014256460}
   m_Layer: 0
   m_Name: car_root
   m_TagString: Untagged
@@ -751,8 +751,10 @@ MonoBehaviour:
   wheelRadius: 0.127
   L: 0.6096
   Q: 0.3456
+  drag: 0.85
   vl: 0
   vr: 0
+  useController: 0
 --- !u!54 &1014256455
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -806,7 +808,7 @@ MonoBehaviour:
   Timeout: 10
   Serializer: 0
   Protocol: 0
-  RosBridgeServerUrl: ws://192.168.1.73:9090
+  RosBridgeServerUrl: ws://localhost:9090
 --- !u!114 &1014256458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -849,11 +851,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1014256453}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 816067a18e9c9f141851d852b713a210, type: 3}
+  m_Script: {fileID: 11500000, guid: 805b868d5fd588441988892328e67723, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Topic: /igvc/acceleration
-  rb: {fileID: 1014256455}
 --- !u!114 &1014256461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -866,7 +866,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afe39e33efbd8e44692f63c6c203967e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Topic: /igvc/heading
+  Topic: /igvc/imu
   tf: {fileID: 1014256456}
 --- !u!114 &1014256462
 MonoBehaviour:

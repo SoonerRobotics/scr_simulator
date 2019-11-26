@@ -45,34 +45,18 @@ namespace RosSharp.RosBridgeClient
                 right = ms.right;
             }
 
-            Debug.Log("vl: " + vl + ", vr: " + vr);
-
             float psi_dot = (vl - vr) / L;
 
             vl = (1.0f - drag) * left + drag * vl;
             vr = (1.0f - drag) * right + drag * vr;
 
-            if (vr - vl != 0)
-            {
+            float dot_x = (vr + (vl - vr) / 4.0f) * Mathf.Sin(psi);
+            float dot_y = (vr + (vl - vr) / 4.0f) * Mathf.Cos(psi);
 
-                Debug.Log("psidot: " + psi_dot);
+            transform.Translate(new Vector3(dot_x, 0, dot_y) * Time.deltaTime * speedMod, Space.World);
 
-                float dot_x = (vr + (vl - vr) / 4.0f) * Mathf.Sin(psi);
-                float dot_y = (vr + (vl - vr) / 4.0f) * Mathf.Cos(psi);
+            transform.Rotate(new Vector3(0, psi_dot * Mathf.Rad2Deg, 0) * Time.deltaTime * turnMod, Space.World);
 
-                transform.Translate(new Vector3(dot_x, 0, dot_y) * Time.deltaTime * speedMod, Space.World);
-
-                transform.Rotate(new Vector3(0, psi_dot * Mathf.Rad2Deg, 0) * Time.deltaTime * turnMod, Space.World);
-                return;
-            }
-
-            float dx2 = wheelRadius / 2.0f * (vl + vr) * Mathf.Cos(psi);
-            float dy2 = wheelRadius / 2.0f * (vl + vr) * Mathf.Sin(psi);
-
-            Debug.Log("dx: " + dx2 + ", dy: " + dy2);
-
-            // transform.Translate(new Vector3(-dy2, 0, dx2) * speedMod, Space.World);
-            // transform.Rotate(new Vector3(0, 0, 0) * Time.deltaTime * turnMod);
         }
     }
 }

@@ -1,16 +1,21 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-static class MenuValues
+[Serializable]
+public class MenuValues
 {
-    public static bool autonomous;
-    public static string camera_topic;
-    public static string heading_topic;
-    public static string velocity_topic;
-    public static string acceleration_topic;
-    public static string gps_topic;
-    public static string laser_scan_topic;
-    public static string motors_topic;
-    public static string ros_bridge_url;
+
+    [NonSerialized]
+    public static MenuValues _instance; 
+
+    public string autonomous;
+    public string camera_topic;
+    public string imu_topic;
+    public string velocity_topic;
+    public string gps_topic;
+    public string laser_scan_topic;
+    public string motors_topic;
+    public string ros_bridge_url;
 }
