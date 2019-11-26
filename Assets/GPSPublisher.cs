@@ -29,10 +29,8 @@ namespace RosSharp.RosBridgeClient
         void FixedUpdate()
         {
             Vector3 pos = tf.position;
-            message.latitude = pos.z / 78710.0f + 35.194881f;
-            message.latitude += getRandNormal(0, 1.843f);
-            message.longitude = -pos.x / 10247.0f + -97.438621f;
-            message.longitude += getRandNormal(0, 2.138f);
+            message.latitude = (pos.z + getRandNormal(0, 1.843f)) / 78710.0f + 35.194881f;
+            message.longitude = (-pos.x + getRandNormal(0, 2.138f)) / 10247.0f + -97.438621f;
             Publish(message);
         }
     }
