@@ -30,9 +30,13 @@ public class UIController : MonoBehaviour
 
     public void Restart()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    public void Menu()
+    {
+        SceneManager.LoadScene(0);
+    }
     public void Quit()
     {
         Application.Quit();

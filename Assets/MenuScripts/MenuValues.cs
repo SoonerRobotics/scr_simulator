@@ -18,4 +18,5 @@ public class MenuValues
     public string laser_scan_topic;
     public string motors_topic;
     public string ros_bridge_url;
+    public string level_id;
 }

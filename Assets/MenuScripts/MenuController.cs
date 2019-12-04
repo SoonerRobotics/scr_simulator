@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using System.IO;
+using System;
 
 public class MenuController : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class MenuController : MonoBehaviour
     public GameObject MotorsTopic;
     public GameObject RosBridgeTopic;
     public GameObject Autonomous;
+    public GameObject LevelID;
 
     public void Start()
     {
@@ -41,7 +43,8 @@ public class MenuController : MonoBehaviour
                 gps_topic = "/igvc/gps",
                 laser_scan_topic = "/igvc/lidar",
                 motors_topic = "/igvc/motors_raw",
-                ros_bridge_url = "localhost:9090"
+                ros_bridge_url = "localhost:9090",
+                level_id = "1"
 
             };
             StreamWriter writer = new StreamWriter(jsonPath, true);
@@ -56,6 +59,7 @@ public class MenuController : MonoBehaviour
         LaserScanTopic.GetComponent<TMP_InputField>().text = MenuValues._instance.laser_scan_topic;
         MotorsTopic.GetComponent<TMP_InputField>().text = MenuValues._instance.motors_topic;
         RosBridgeTopic.GetComponent<TMP_InputField>().text = MenuValues._instance.ros_bridge_url;
+        LevelID.GetComponent<TMP_InputField>().text = MenuValues._instance.level_id;
         Autonomous.GetComponent<Toggle>().isOn = MenuValues._instance.autonomous.Equals("True");
     }
 
@@ -68,12 +72,13 @@ public class MenuController : MonoBehaviour
         MenuValues._instance.laser_scan_topic = LaserScanTopic.GetComponent<TMP_InputField>().text;
         MenuValues._instance.motors_topic = MotorsTopic.GetComponent<TMP_InputField>().text;
         MenuValues._instance.ros_bridge_url = RosBridgeTopic.GetComponent<TMP_InputField>().text;
+        MenuValues._instance.level_id = LevelID.GetComponent<TMP_InputField>().text;
         MenuValues._instance.autonomous = Autonomous.GetComponent<Toggle>().isOn.ToString();
     }
 
     public void PlaySim()
     {
         UpdateDemFieldsYo();
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(Int32.Parse(MenuValues._instance.level_id));
     }
 }
