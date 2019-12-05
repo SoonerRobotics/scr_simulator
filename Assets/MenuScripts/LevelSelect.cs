@@ -32,8 +32,8 @@ public class LevelSelect : MonoBehaviour
             IGVCMenuPanel.SetActive(true);
         else if (selectedLevelIndex == 2)
             LevelSelectPanel.SetActive(true);  //Load the other panel... or just load the sim if options arent required
-        else
-            LevelSelectPanel.SetActive(false);
+
+        LevelSelectPanel.SetActive(false);
 
         MenuValues._instance.level_id = selectedLevelIndex.ToString();
     }
