@@ -12,6 +12,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Barrel_Maze.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/Scenes/Blank_World.unity
+    path: Assets/Scenes/Empty_World.unity
     guid: a8c0ffda51a8bcc4daa084b044117bd9
   m_configObjects: {}

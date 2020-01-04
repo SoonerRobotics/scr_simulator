@@ -41,7 +41,7 @@ public class MenuControllerIGVC : MonoBehaviour
                 imu_topic = "/igvc/imu",
                 velocity_topic = "/igvc/velocity",
                 gps_topic = "/igvc/gps",
-                laser_scan_topic = "/igvc/lidar",
+                laser_scan_topic = "/scan",
                 motors_topic = "/igvc/motors_raw",
                 ros_bridge_url = "localhost:9090",
                 //level_id = "1"
