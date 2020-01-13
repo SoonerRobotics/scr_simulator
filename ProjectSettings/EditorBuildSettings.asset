@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Empty_World.unity
     guid: a8c0ffda51a8bcc4daa084b044117bd9
+  - enabled: 1
+    path: Assets/Scenes/NRC_Land.unity
+    guid: 93ff5cf7b2427cd4cbc86d09b60fddb7
   m_configObjects: {}
