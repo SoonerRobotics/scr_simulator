@@ -7,21 +7,22 @@ using TMPro;
 using System.IO;
 using System;
 
-public class MenuControllerIGVC : MonoBehaviour
+public class MenuController : MonoBehaviour
 {
     public GameObject togglePrefab;
+    private static bool alreadyInit = false;
 
     [Header("Levels")]
     public LevelScriptableObject[] levels;
     public ToggleGroup togglesGroup;
     public RectTransform togglesParent;
-    private LevelScriptableObject activeLevel;
+    public static LevelScriptableObject activeLevel { get; private set; }
 
     [Header("Robots")]
     public RobotScriptableObject[] robots;
     public ToggleGroup robotsGroup;
     public RectTransform robotsParent;
-    private RobotScriptableObject activeRobot;
+    public static RobotScriptableObject activeRobot { get; private set; }
     private Dictionary<string, TMP_InputField> keyToOptionField = new Dictionary<string, TMP_InputField>();
 
     [Header("Options")]
@@ -32,10 +33,18 @@ public class MenuControllerIGVC : MonoBehaviour
     public void Start()
     {
         // Load up Robot Options
-        RobotOptions.LoadSaved(robots);
+        if (!alreadyInit)
+        {
+            RobotOptions.LoadSaved(robots);
+            activeRobot = robots[0];
+            activeLevel = levels[0];
+        }
+        else
+        {
+            FillOptionFields();
+        }
 
         bool first = true;
-
         // Generate level toggles
         foreach (LevelScriptableObject level in levels)
         {
@@ -48,10 +57,15 @@ public class MenuControllerIGVC : MonoBehaviour
             });
             toggle.group = togglesGroup;
 
-            if (first)
+            if (!alreadyInit && first)
             {
                 toggle.isOn = true;
                 first = false;
+            }
+
+            if (alreadyInit && level == activeLevel)
+            {
+                toggle.isOn = true;
             }
 
             TextMeshProUGUI text = levelToggle.GetComponentInChildren<TextMeshProUGUI>();
@@ -59,7 +73,6 @@ public class MenuControllerIGVC : MonoBehaviour
         }
 
         first = true;
-
         // Generate robot toggles
         foreach (RobotScriptableObject robot in robots)
         {
@@ -72,26 +85,33 @@ public class MenuControllerIGVC : MonoBehaviour
             });
             toggle.group = robotsGroup;
 
-            if (first)
+            if (!alreadyInit && first)
             {
                 toggle.isOn = true;
                 first = false;
+            }
+
+            if (alreadyInit && robot == activeRobot)
+            {
+                toggle.isOn = true;
             }
 
 
             TextMeshProUGUI text = robotToggle.GetComponentInChildren<TextMeshProUGUI>();
             text.text = robot.robotName;
         }
+
+        alreadyInit = true;
     }
 
     public void SelectLevel(LevelScriptableObject activeLevel)
     {
-        this.activeLevel = activeLevel;
+        MenuController.activeLevel = activeLevel;
     }
 
     public void SelectRobot(RobotScriptableObject activeRobot)
     {
-        this.activeRobot = activeRobot;
+        MenuController.activeRobot = activeRobot;
 
         // Delete existing options
         foreach(GameObject option in options)
@@ -127,16 +147,18 @@ public class MenuControllerIGVC : MonoBehaviour
     {
         RobotOptions.LoadSaved(robots);
 
-        foreach (string key in keyToOptionField.Keys)
-        {
-            keyToOptionField[key].text = RobotOptions.GetValue(key);
-        }
+        FillOptionFields();
     }
 
     public void DefaultOptions()
     {
         RobotOptions.LoadDefaults(robots);
 
+        FillOptionFields();
+    }
+
+    public void FillOptionFields()
+    {
         foreach (string key in keyToOptionField.Keys)
         {
             keyToOptionField[key].text = RobotOptions.GetValue(key);

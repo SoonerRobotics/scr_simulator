@@ -8,7 +8,12 @@ public class CompassScript : MonoBehaviour
 {
 
     public TextMeshProUGUI textMeshProUgui;
-    public GameObject body;
+    public GameObject robot;
+
+    public void InitCompass()
+    {
+        this.robot = LevelInitalizer.robot;
+    }
 
     // Via https://gist.github.com/adrianstevens/8163205
     public static string DegreesToCardinal(double degrees)
@@ -20,7 +25,10 @@ public class CompassScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float heading = body.transform.rotation.eulerAngles.y;
-        textMeshProUgui.text = $"{heading:0}° {DegreesToCardinal(heading)}";
+        if (robot)
+        {
+            float heading = robot.transform.rotation.eulerAngles.y;
+            textMeshProUgui.text = $"{heading:0}° {DegreesToCardinal(heading)}";
+        }
     }
 }
