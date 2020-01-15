@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 79d992af8d293a346ade7e1113139280, type: 3}
-  m_Name: Empty World
+  m_Name: Barrel Maze
   m_EditorClassIdentifier: 
-  levelName: Empty World
-  levelId: 2
+  levelName: Barrel Maze
+  levelId: 1

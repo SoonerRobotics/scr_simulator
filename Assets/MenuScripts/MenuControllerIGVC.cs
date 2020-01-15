@@ -9,76 +9,142 @@ using System;
 
 public class MenuControllerIGVC : MonoBehaviour
 {
+    public GameObject togglePrefab;
 
-    public string jsonPath = "config.json";
+    [Header("Levels")]
+    public LevelScriptableObject[] levels;
+    public ToggleGroup togglesGroup;
+    public RectTransform togglesParent;
+    private LevelScriptableObject activeLevel;
 
-    public GameObject CameraTopic;
-    public GameObject IMUTopic;
-    public GameObject VelocityTopic;
-    public GameObject GpsTopic;
-    public GameObject LaserScanTopic;
-    public GameObject MotorsTopic;
-    public GameObject RosBridgeTopic;
-    public GameObject Autonomous;
-    //public GameObject LevelID;
+    [Header("Robots")]
+    public RobotScriptableObject[] robots;
+    public ToggleGroup robotsGroup;
+    public RectTransform robotsParent;
+    private RobotScriptableObject activeRobot;
+    private Dictionary<string, TMP_InputField> keyToOptionField = new Dictionary<string, TMP_InputField>();
+
+    [Header("Options")]
+    public GameObject optionPrefab;
+    public RectTransform optionEntryParent;
+    private List<GameObject> options = new List<GameObject>();
 
     public void Start()
     {
+        // Load up Robot Options
+        RobotOptions.LoadSaved(robots);
 
-        if (File.Exists(jsonPath))
+        bool first = true;
+
+        // Generate level toggles
+        foreach (LevelScriptableObject level in levels)
         {
-            StreamReader reader = new StreamReader(jsonPath);
-            string json_raw = reader.ReadToEnd();
-            MenuValues._instance = JsonUtility.FromJson<MenuValues>(json_raw);
-            reader.Close();
-        } 
-        else
-        {
-            MenuValues._instance = new MenuValues
+            GameObject levelToggle = Instantiate(togglePrefab, togglesParent);
+
+            Toggle toggle = levelToggle.GetComponent<Toggle>();
+            toggle.onValueChanged.AddListener(delegate
             {
-                autonomous = "True",
-                camera_topic = "/igvc/camera/compressed",
-                imu_topic = "/igvc/imu",
-                velocity_topic = "/igvc/velocity",
-                gps_topic = "/igvc/gps",
-                laser_scan_topic = "/scan",
-                motors_topic = "/igvc/motors_raw",
-                ros_bridge_url = "localhost:9090",
-                //level_id = "1"
+                SelectLevel(level);
+            });
+            toggle.group = togglesGroup;
 
-            };
-            StreamWriter writer = new StreamWriter(jsonPath, true);
-            writer.WriteLine(JsonUtility.ToJson(MenuValues._instance, true));
-            writer.Close();
+            if (first)
+            {
+                toggle.isOn = true;
+                first = false;
+            }
+
+            TextMeshProUGUI text = levelToggle.GetComponentInChildren<TextMeshProUGUI>();
+            text.text = level.levelName;
         }
 
-        CameraTopic.GetComponent<TMP_InputField>().text = MenuValues._instance.camera_topic;
-        IMUTopic.GetComponent<TMP_InputField>().text = MenuValues._instance.imu_topic;
-        VelocityTopic.GetComponent<TMP_InputField>().text = MenuValues._instance.velocity_topic;
-        GpsTopic.GetComponent<TMP_InputField>().text = MenuValues._instance.gps_topic;
-        LaserScanTopic.GetComponent<TMP_InputField>().text = MenuValues._instance.laser_scan_topic;
-        MotorsTopic.GetComponent<TMP_InputField>().text = MenuValues._instance.motors_topic;
-        RosBridgeTopic.GetComponent<TMP_InputField>().text = MenuValues._instance.ros_bridge_url;
-        //LevelID.GetComponent<TMP_InputField>().text = MenuValues._instance.level_id;
-        Autonomous.GetComponent<Toggle>().isOn = MenuValues._instance.autonomous.Equals("True");
+        first = true;
+
+        // Generate robot toggles
+        foreach (RobotScriptableObject robot in robots)
+        {
+            GameObject robotToggle = Instantiate(togglePrefab, robotsParent);
+
+            Toggle toggle = robotToggle.GetComponent<Toggle>();
+            toggle.onValueChanged.AddListener(delegate
+            {
+                SelectRobot(robot);
+            });
+            toggle.group = robotsGroup;
+
+            if (first)
+            {
+                toggle.isOn = true;
+                first = false;
+            }
+
+
+            TextMeshProUGUI text = robotToggle.GetComponentInChildren<TextMeshProUGUI>();
+            text.text = robot.robotName;
+        }
     }
 
-    public void UpdateDemFieldsYo()
+    public void SelectLevel(LevelScriptableObject activeLevel)
     {
-        MenuValues._instance.camera_topic = CameraTopic.GetComponent<TMP_InputField>().text;
-        MenuValues._instance.imu_topic = IMUTopic.GetComponent<TMP_InputField>().text;
-        MenuValues._instance.velocity_topic = VelocityTopic.GetComponent<TMP_InputField>().text;
-        MenuValues._instance.gps_topic = GpsTopic.GetComponent<TMP_InputField>().text;
-        MenuValues._instance.laser_scan_topic = LaserScanTopic.GetComponent<TMP_InputField>().text;
-        MenuValues._instance.motors_topic = MotorsTopic.GetComponent<TMP_InputField>().text;
-        MenuValues._instance.ros_bridge_url = RosBridgeTopic.GetComponent<TMP_InputField>().text;
-        //MenuValues._instance.level_id = LevelID.GetComponent<TMP_InputField>().text;
-        MenuValues._instance.autonomous = Autonomous.GetComponent<Toggle>().isOn.ToString();
+        this.activeLevel = activeLevel;
+    }
+
+    public void SelectRobot(RobotScriptableObject activeRobot)
+    {
+        this.activeRobot = activeRobot;
+
+        // Delete existing options
+        foreach(GameObject option in options)
+        {
+            Destroy(option);
+        }
+
+        // Make new ones for the new robot
+        foreach(Option option in activeRobot.options)
+        {
+            GameObject optionObj = Instantiate(optionPrefab, optionEntryParent);
+            options.Add(optionObj);
+
+            TextMeshProUGUI text = optionObj.GetComponentInChildren<TextMeshProUGUI>();
+            text.text = option.name;
+
+            TMP_InputField input_field = optionObj.GetComponentInChildren<TMP_InputField>();
+            input_field.text = RobotOptions.GetValue(activeRobot.name + option.name);
+            input_field.onEndEdit.AddListener(delegate
+            {
+                RobotOptions.SetValue(activeRobot.name + option.name, input_field.text);
+            });
+            keyToOptionField[activeRobot.name + option.name] = input_field;
+        }
+    }
+
+    public void SaveOptions()
+    {
+        RobotOptions.Save();
+    }
+
+    public void LoadOptions()
+    {
+        RobotOptions.LoadSaved(robots);
+
+        foreach (string key in keyToOptionField.Keys)
+        {
+            keyToOptionField[key].text = RobotOptions.GetValue(key);
+        }
+    }
+
+    public void DefaultOptions()
+    {
+        RobotOptions.LoadDefaults(robots);
+
+        foreach (string key in keyToOptionField.Keys)
+        {
+            keyToOptionField[key].text = RobotOptions.GetValue(key);
+        }
     }
 
     public void PlaySim()
     {
-        UpdateDemFieldsYo();
-        SceneManager.LoadScene(Int32.Parse(MenuValues._instance.level_id));
+        SceneManager.LoadScene(activeLevel.levelId);
     }
 }
