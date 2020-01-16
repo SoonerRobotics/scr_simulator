@@ -13,7 +13,7 @@ public class RobotOptions
         {
             foreach (Option option in robot.options)
             {
-                string key = robot.name + option.name;
+                string key = robot.robotName + option.name;
                 dict[key] = PlayerPrefs.GetString(key, option.defaultValue);
             }
         }
@@ -25,7 +25,7 @@ public class RobotOptions
         {
             foreach (Option option in robot.options)
             {
-                string key = robot.name + option.name;
+                string key = robot.robotName + option.name;
                 dict[key] = option.defaultValue;
             }
         }

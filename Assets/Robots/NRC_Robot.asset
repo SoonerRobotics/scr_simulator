@@ -24,5 +24,7 @@ MonoBehaviour:
     defaultValue: /nrc/velocity
   - name: Motors Topic
     defaultValue: /nrc/motors
+  - name: ROS Bridge IP
+    defaultValue: localhost:9090
   - name: Autonomous
     defaultValue: True

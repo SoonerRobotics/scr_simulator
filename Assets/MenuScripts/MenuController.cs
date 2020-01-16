@@ -129,12 +129,12 @@ public class MenuController : MonoBehaviour
             text.text = option.name;
 
             TMP_InputField input_field = optionObj.GetComponentInChildren<TMP_InputField>();
-            input_field.text = RobotOptions.GetValue(activeRobot.name + option.name);
+            input_field.text = RobotOptions.GetValue(activeRobot.robotName + option.name);
             input_field.onEndEdit.AddListener(delegate
             {
-                RobotOptions.SetValue(activeRobot.name + option.name, input_field.text);
+                RobotOptions.SetValue(activeRobot.robotName + option.name, input_field.text);
             });
-            keyToOptionField[activeRobot.name + option.name] = input_field;
+            keyToOptionField[activeRobot.robotName + option.name] = input_field;
         }
     }
 

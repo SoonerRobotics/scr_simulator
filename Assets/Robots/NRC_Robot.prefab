@@ -382,9 +382,9 @@ GameObject:
   - component: {fileID: 3740033819105132850}
   - component: {fileID: 3740033819105132849}
   - component: {fileID: 3740033819105132847}
-  - component: {fileID: 3740033819105132851}
+  - component: {fileID: -9219959582639567049}
   m_Layer: 0
-  m_Name: NRC_ROBOT
+  m_Name: NRC_Robot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -526,7 +526,7 @@ MonoBehaviour:
   TimeStep: 0
   left: 0
   right: 0
---- !u!114 &3740033819105132851
+--- !u!114 &-9219959582639567049
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -535,7 +535,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3740033819105132858}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 805b868d5fd588441988892328e67723, type: 3}
+  m_Script: {fileID: 11500000, guid: 818296627547bef478e5ace9a7589c56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3740033819154644750

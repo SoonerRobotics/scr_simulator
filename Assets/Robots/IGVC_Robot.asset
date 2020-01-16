@@ -28,5 +28,7 @@ MonoBehaviour:
     defaultValue: /scan
   - name: Motors Topic
     defaultValue: /igvc/motors_raw
+  - name: ROS Bridge IP
+    defaultValue: localhost:9090
   - name: Autonomous
     defaultValue: True
