@@ -1,11 +1,11 @@
-# SCR IGVC 2020 Simulator
+# SCR Simulator for ROS
 
 ## Linux Run Instructions
 
-1. Download the latest release from https://github.com/SoonerRobotics/igvc_simulator_2020/releases
+1. Download the latest release from https://github.com/SoonerRobotics/scr_simulator/releases
 2. Unzip it to the directory of your choice.
-3. Run `sudo chmod +x igvc_simulator_2020.x86_64" to mark the simulator as executable.
-4. Run the simulator using `./igvc_simulator_2020.x86_64`
+3. Run `sudo chmod +x scr_simulator.x86_64" to mark the simulator as executable.
+4. Run the simulator using `./scr_simulator.x86_64`
 
 ## ROS Setup
 
