@@ -11,7 +11,6 @@ namespace RosSharp.RosBridgeClient
         public float turnMod = 1f;
         public float wheelRadius = 0.127f;
         public float L = 0.6096f;
-        public float Q = 0.3456f;
         public float drag = 0.85f;
 
         public float vl = 0;
@@ -32,8 +31,8 @@ namespace RosSharp.RosBridgeClient
         {
 
             float psi = transform.rotation.eulerAngles.y * Mathf.Deg2Rad;
-            float left = 0;
-            float right = 0;
+            float left;
+            float right;
             if (useController)
             {
                 left = Mathf.Pow(Input.GetAxis("Vertical"), 3);
