@@ -36,13 +36,14 @@ public class MenuController : MonoBehaviour
         if (!alreadyInit)
         {
             RobotOptions.LoadSaved(robots);
-            activeRobot = robots[0];
-            activeLevel = levels[0];
         }
         else
         {
             FillOptionFields();
         }
+
+        string robotNameToLoad = PlayerPrefs.GetString("lastRobot", robots[0].robotName);
+        int levelIdToLoad = PlayerPrefs.GetInt("lastLevel", levels[0].levelId);
 
         bool first = true;
         // Generate level toggles
@@ -57,14 +58,9 @@ public class MenuController : MonoBehaviour
             });
             toggle.group = togglesGroup;
 
-            if (!alreadyInit && first)
+            if (level.levelId == levelIdToLoad)
             {
-                toggle.isOn = true;
-                first = false;
-            }
-
-            if (alreadyInit && level == activeLevel)
-            {
+                activeLevel = level;
                 toggle.isOn = true;
             }
 
@@ -85,14 +81,9 @@ public class MenuController : MonoBehaviour
             });
             toggle.group = robotsGroup;
 
-            if (!alreadyInit && first)
+            if (robot.robotName == robotNameToLoad)
             {
-                toggle.isOn = true;
-                first = false;
-            }
-
-            if (alreadyInit && robot == activeRobot)
-            {
+                activeRobot = robot;
                 toggle.isOn = true;
             }
 
@@ -107,14 +98,16 @@ public class MenuController : MonoBehaviour
     public void SelectLevel(LevelScriptableObject activeLevel)
     {
         MenuController.activeLevel = activeLevel;
+        PlayerPrefs.SetInt("lastLevel", activeLevel.levelId);
     }
 
     public void SelectRobot(RobotScriptableObject activeRobot)
     {
         MenuController.activeRobot = activeRobot;
+        PlayerPrefs.SetString("lastRobot", activeRobot.robotName);
 
         // Delete existing options
-        foreach(GameObject option in options)
+        foreach (GameObject option in options)
         {
             Destroy(option);
         }
