@@ -14,7 +14,7 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
     public class Motors : Message
     {
         [JsonIgnore]
-        public const string RosMessageName = "igvc_msgs/Motors";
+        public const string RosMessageName = "igvc_msgs/motors";
 
         public float left;
         public float right;

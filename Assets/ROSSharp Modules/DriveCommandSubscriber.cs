@@ -8,16 +8,25 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Nrc
     {
         private SimpleCarController car;
 
+        private DriveStatusPublisher pubby;
+
         protected override void Start()
         {
             base.Start();
             car = GetComponent<SimpleCarController>();
+            pubby = GetComponent<DriveStatusPublisher>();
         }
 
         protected override void ReceiveMessage(DriveCommand motors)
         {
-            //car.leftControl = motors.left;
-            //car.rightControl = motors.right;
+            float curHeading = pubby.message.yaw;
+
+            float delta = motors.heading - curHeading;
+            delta = (delta + 180) % 360 - 180;
+
+            car.leftControl = motors.speed + (delta / 180);
+            car.rightControl = motors.speed - (delta / 180);
+
         }
     }
 }

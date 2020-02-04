@@ -449,7 +449,7 @@ MonoBehaviour:
   vr: 0
   leftControl: 0
   rightControl: 0
-  useController: 1
+  useController: 0
 --- !u!114 &3740033819105132854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -509,7 +509,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Topic: 
-  tf: {fileID: 0}
+  tf: {fileID: 3740033819105132855}
 --- !u!114 &2905964048366893341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -524,6 +524,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Topic: 
   TimeStep: 0
+  tf: {fileID: 3740033819105132855}
 --- !u!1 &3740033819154644750
 GameObject:
   m_ObjectHideFlags: 0

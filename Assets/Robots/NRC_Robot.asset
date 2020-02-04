@@ -18,12 +18,10 @@ MonoBehaviour:
   options:
   - name: Camera Topic
     defaultValue: /nrc/camera/compressed
-  - name: IMU Topic
-    defaultValue: /nrc/imu
-  - name: Velocity Topic
-    defaultValue: /nrc/velocity
-  - name: Motors Topic
-    defaultValue: /nrc/motors
+  - name: Drive Status Topic
+    defaultValue: /nrc/sensor_data
+  - name: Drive Command Topic
+    defaultValue: /nrc/cmd
   - name: ROS Bridge IP
     defaultValue: localhost:9090
   - name: Autonomous

@@ -14,7 +14,7 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
     public class Velocity : Message
     {
         [JsonIgnore]
-        public const string RosMessageName = "igvc_msgs/Velocity";
+        public const string RosMessageName = "igvc_msgs/velocity";
 
         public float leftVel;
         public float rightVel;

@@ -16,7 +16,7 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
     public class Ekf_state : Message
     {
         [JsonIgnore]
-        public const string RosMessageName = "igvc_msgs/Ekf_state";
+        public const string RosMessageName = "igvc_msgs/ekf_state";
 
         public Header header;
         public double[] x_k;

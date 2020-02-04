@@ -14,7 +14,7 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
     public class Imuodom : Message
     {
         [JsonIgnore]
-        public const string RosMessageName = "igvc_msgs/Imuodom";
+        public const string RosMessageName = "igvc_msgs/imuodom";
 
         public float acceleration;
         public float heading;

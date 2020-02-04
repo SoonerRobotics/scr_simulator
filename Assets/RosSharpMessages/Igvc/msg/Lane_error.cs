@@ -14,7 +14,7 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
     public class Lane_error : Message
     {
         [JsonIgnore]
-        public const string RosMessageName = "igvc_msgs/Lane_error";
+        public const string RosMessageName = "igvc_msgs/lane_error";
 
         public float error;
 

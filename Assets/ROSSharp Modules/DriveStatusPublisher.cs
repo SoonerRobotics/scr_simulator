@@ -6,7 +6,7 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Nrc
 {
     public class DriveStatusPublisher : UnityPublisher<DriveStatus>
     {
-        private DriveStatus message;
+        public DriveStatus message;
         public Transform tf;
 
         private SimpleCarController c;

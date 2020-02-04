@@ -16,7 +16,7 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
     public class Ekf_convergence : Message
     {
         [JsonIgnore]
-        public const string RosMessageName = "igvc_msgs/Ekf_convergence";
+        public const string RosMessageName = "igvc_msgs/ekf_convergence";
 
         public Header header;
         public double data;

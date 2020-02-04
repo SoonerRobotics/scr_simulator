@@ -14,7 +14,7 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
     public class Gps : Message
     {
         [JsonIgnore]
-        public const string RosMessageName = "igvc_msgs/Gps";
+        public const string RosMessageName = "igvc_msgs/gps";
 
         public double latitude;
         public double longitude;
