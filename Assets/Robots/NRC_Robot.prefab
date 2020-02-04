@@ -54,6 +54,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -268,6 +269,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -379,10 +381,9 @@ GameObject:
   - component: {fileID: 3740033819105132857}
   - component: {fileID: 3740033819105132854}
   - component: {fileID: 3740033819105132852}
-  - component: {fileID: 3740033819105132850}
-  - component: {fileID: 3740033819105132849}
-  - component: {fileID: 3740033819105132847}
   - component: {fileID: -9219959582639567049}
+  - component: {fileID: 9192940057474134934}
+  - component: {fileID: 2905964048366893341}
   m_Layer: 0
   m_Name: NRC_Robot
   m_TagString: Untagged
@@ -443,10 +444,11 @@ MonoBehaviour:
   turnMod: 1
   wheelRadius: 0.0635
   L: 0.28
-  Q: 0.3456
   drag: 0.85
   vl: 0
   vr: 0
+  leftControl: 0
+  rightControl: 0
   useController: 1
 --- !u!114 &3740033819105132854
 MonoBehaviour:
@@ -460,9 +462,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff98778ae051cfd40a6e4effdf851ebd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Timeout: 10
+  SecondsTimeout: 10
   Serializer: 0
-  Protocol: 0
+  protocol: 0
   RosBridgeServerUrl: ws://localhost:9090
 --- !u!114 &3740033819105132852
 MonoBehaviour:
@@ -482,50 +484,6 @@ MonoBehaviour:
   resolutionWidth: 640
   resolutionHeight: 480
   qualityLevel: 50
---- !u!114 &3740033819105132850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3740033819105132858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afe39e33efbd8e44692f63c6c203967e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Topic: /igvc/imu
-  tf: {fileID: 3740033819105132855}
---- !u!114 &3740033819105132849
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3740033819105132858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81657e5bea1760e46a9dc99654ff306a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Topic: /igvc/velocity
-  rb: {fileID: 3740033819105132856}
---- !u!114 &3740033819105132847
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3740033819105132858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f0fe44209a15904b976a01dbd6e2a36, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Topic: /igvc/motors_raw
-  TimeStep: 0
-  left: 0
-  right: 0
 --- !u!114 &-9219959582639567049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -538,6 +496,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 818296627547bef478e5ace9a7589c56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &9192940057474134934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3740033819105132858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cceee2921f8ccc409a35ae13677109b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Topic: 
+  tf: {fileID: 0}
+--- !u!114 &2905964048366893341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3740033819105132858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2b35ee3f3eea854085dc8ffc433382a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Topic: 
+  TimeStep: 0
 --- !u!1 &3740033819154644750
 GameObject:
   m_ObjectHideFlags: 0
@@ -708,6 +694,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -800,6 +787,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -878,6 +866,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

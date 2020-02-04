@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
-namespace RosSharp.RosBridgeClient
+namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
 {
-    public class GPSPublisher : Publisher<Messages.IGVC.GPS>
+    public class GPSPublisher : UnityPublisher<Gps>
     {
-        private Messages.IGVC.GPS message;
+        private Gps message;
         public Transform tf;
 
         private System.Random random;
@@ -13,7 +13,7 @@ namespace RosSharp.RosBridgeClient
         {
             base.Start();
             random = new System.Random();
-            message = new Messages.IGVC.GPS();
+            message = new Gps();
         }
 
         public float getRandNormal(float mean, float stdDev)

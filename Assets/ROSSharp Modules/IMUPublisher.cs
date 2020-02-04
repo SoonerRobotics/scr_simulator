@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RosSharp.RosBridgeClient
+namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
 {
-    public class IMUPublisher : Publisher<Messages.IGVC.IMUOdom>
+    public class IMUPublisher : UnityPublisher<Imuodom>
     {
-        private Messages.IGVC.IMUOdom message;
+        private Imuodom message;
         public Transform tf;
 
         private SimpleCarController c;
@@ -16,7 +16,7 @@ namespace RosSharp.RosBridgeClient
         {
             base.Start();
             c = GetComponent<SimpleCarController>();
-            message = new Messages.IGVC.IMUOdom();
+            message = new Imuodom();
         }
 
         void FixedUpdate()

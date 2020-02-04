@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RosSharp.RosBridgeClient
+namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
 {
-    public class VelocityPublisher : Publisher<Messages.IGVC.Velocity>
+    public class VelocityPublisher : UnityPublisher<Velocity>
     {
-        private Messages.IGVC.Velocity message;
+        private Velocity message;
         private SimpleCarController c;
         public Rigidbody rb;
 
@@ -14,7 +14,7 @@ namespace RosSharp.RosBridgeClient
         {
             base.Start();
             c = GetComponent<SimpleCarController>();
-            message = new Messages.IGVC.Velocity();
+            message = new Velocity();
         }
 
         void FixedUpdate()

@@ -45,7 +45,6 @@ public class MenuController : MonoBehaviour
         string robotNameToLoad = PlayerPrefs.GetString("lastRobot", robots[0].robotName);
         int levelIdToLoad = PlayerPrefs.GetInt("lastLevel", levels[0].levelId);
 
-        bool first = true;
         // Generate level toggles
         foreach (LevelScriptableObject level in levels)
         {
@@ -67,8 +66,6 @@ public class MenuController : MonoBehaviour
             TextMeshProUGUI text = levelToggle.GetComponentInChildren<TextMeshProUGUI>();
             text.text = level.levelName;
         }
-
-        first = true;
         // Generate robot toggles
         foreach (RobotScriptableObject robot in robots)
         {

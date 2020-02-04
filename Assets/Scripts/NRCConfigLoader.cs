@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using RosSharp.RosBridgeClient.MessageTypes.Nrc;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,25 +13,22 @@ namespace RosSharp.RosBridgeClient
         private SimpleCarController simpleCarController;
         private RosConnector rosConnector;
         private ImagePublisher imagePublisher;
-        private IMUPublisher iMUPublisher;
-        private VelocityPublisher velocityPublisher;
-        private MotorsSubscriber motorsSubscriber;
+        private DriveStatusPublisher driveStatusPublisher;
+        private DriveCommandSubscriber driveCommandSubscriber;
 
         void Awake()
         {
             simpleCarController = this.GetComponent<SimpleCarController>();
             rosConnector = this.GetComponent<RosConnector>();
             imagePublisher = this.GetComponent<ImagePublisher>();
-            iMUPublisher = this.GetComponent<IMUPublisher>();
-            velocityPublisher = this.GetComponent<VelocityPublisher>();
-            motorsSubscriber = this.GetComponent<MotorsSubscriber>();
+            driveStatusPublisher = this.GetComponent<DriveStatusPublisher>();
+            driveCommandSubscriber = this.GetComponent<DriveCommandSubscriber>();
 
             simpleCarController.useController = !RobotOptions.GetValue(robotName + "Autonomous").Equals("True");
             rosConnector.RosBridgeServerUrl = "ws://" + RobotOptions.GetValue(robotName + "ROS Bridge IP");
             imagePublisher.Topic = RobotOptions.GetValue(robotName + "Camera Topic");
-            iMUPublisher.Topic = RobotOptions.GetValue(robotName + "IMU Topic");
-            velocityPublisher.Topic = RobotOptions.GetValue(robotName + "Velocity Topic");
-            motorsSubscriber.Topic = RobotOptions.GetValue(robotName + "Motors Topic");
+            driveStatusPublisher.Topic = RobotOptions.GetValue(robotName + "Drive Status Topic");
+            driveCommandSubscriber.Topic = RobotOptions.GetValue(robotName + "Drive Command Topic");
         }
     }
 }

@@ -2,22 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RosSharp.RosBridgeClient
+namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
 {
-    public class MotorsSubscriber : Subscriber<Messages.IGVC.Motors>
+    public class MotorsSubscriber : UnitySubscriber<Motors>
     {
-        public float left;
-        public float right;
+        private SimpleCarController car;
 
         protected override void Start()
         {
             base.Start();
+            car = GetComponent<SimpleCarController>();
         }
 
-        protected override void ReceiveMessage(Messages.IGVC.Motors motors)
+        protected override void ReceiveMessage(Motors motors)
         {
-            left = motors.left;
-            right = motors.right;
+            car.leftControl = motors.left;
+            car.rightControl = motors.right;
         }
     }
 }

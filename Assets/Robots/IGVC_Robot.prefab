@@ -247,11 +247,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1d2050cf1070714a80b8fc8266743d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedMod: 2
+  speedMod: 3
   turnMod: 1
   wheelRadius: 0.127
   L: 0.6096
-  Q: 0.3456
   drag: 0.85
   vl: 0
   vr: 0

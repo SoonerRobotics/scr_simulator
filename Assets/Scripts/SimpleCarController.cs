@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using RosSharp.RosBridgeClient.MessageTypes.Igvc;
 
 namespace RosSharp.RosBridgeClient
 {
@@ -15,6 +16,9 @@ namespace RosSharp.RosBridgeClient
 
         public float vl = 0;
         public float vr = 0;
+
+        public float leftControl = 0;
+        public float rightControl = 0;
 
         public bool useController = false;
 
@@ -40,8 +44,8 @@ namespace RosSharp.RosBridgeClient
             }
             else
             {
-                left = ms.left;
-                right = ms.right;
+                left = leftControl;
+                right = rightControl;
             }
 
             float psi_dot = (vl - vr) / L;
