@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
 {
-    public class MotorsSubscriber : UnitySubscriber<Motors>
+    public class IGVCMotorsSubscriber : UnitySubscriber<Motors>
     {
         private SimpleCarController car;
 

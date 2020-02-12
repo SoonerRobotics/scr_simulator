@@ -519,12 +519,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3740033819105132858}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2b35ee3f3eea854085dc8ffc433382a, type: 3}
+  m_Script: {fileID: 11500000, guid: c4e82c4c4431d734caf9c4489410979e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Topic: 
   TimeStep: 0
-  tf: {fileID: 3740033819105132855}
 --- !u!1 &3740033819154644750
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,7 +17,7 @@ namespace RosSharp.RosBridgeClient
         private IMUPublisher iMUPublisher;
         private VelocityPublisher velocityPublisher;
         private GPSPublisher gPSPublisher;
-        private MotorsSubscriber motorsSubscriber;
+        private IGVCMotorsSubscriber motorsSubscriber;
 
         void Awake()
         {
@@ -28,7 +28,7 @@ namespace RosSharp.RosBridgeClient
             iMUPublisher = this.GetComponent<IMUPublisher>();
             velocityPublisher = this.GetComponent<VelocityPublisher>();
             gPSPublisher = this.GetComponent<GPSPublisher>();
-            motorsSubscriber = this.GetComponent<MotorsSubscriber>();
+            motorsSubscriber = this.GetComponent<IGVCMotorsSubscriber>();
 
             simpleCarController.useController = !RobotOptions.GetValue(robotName + "Autonomous").Equals("True");
             rosConnector.RosBridgeServerUrl = "ws://" + RobotOptions.GetValue(robotName + "ROS Bridge IP");

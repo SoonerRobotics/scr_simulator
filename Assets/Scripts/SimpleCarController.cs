@@ -22,13 +22,8 @@ namespace RosSharp.RosBridgeClient
 
         public bool useController = false;
 
-        private Rigidbody rb;
-        private MotorsSubscriber ms;
-
         public void Start()
         {
-            this.rb = this.GetComponent<Rigidbody>();
-            this.ms = this.GetComponent<MotorsSubscriber>();
         }
 
         public void FixedUpdate()

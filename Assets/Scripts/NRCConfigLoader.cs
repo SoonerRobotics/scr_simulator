@@ -14,7 +14,7 @@ namespace RosSharp.RosBridgeClient
         private RosConnector rosConnector;
         private ImagePublisher imagePublisher;
         private DriveStatusPublisher driveStatusPublisher;
-        private DriveCommandSubscriber driveCommandSubscriber;
+        private NRCMotorsSubscriber motorsSubscriber;
 
         void Awake()
         {
@@ -22,13 +22,13 @@ namespace RosSharp.RosBridgeClient
             rosConnector = this.GetComponent<RosConnector>();
             imagePublisher = this.GetComponent<ImagePublisher>();
             driveStatusPublisher = this.GetComponent<DriveStatusPublisher>();
-            driveCommandSubscriber = this.GetComponent<DriveCommandSubscriber>();
+            motorsSubscriber = this.GetComponent<NRCMotorsSubscriber>();
 
             simpleCarController.useController = !RobotOptions.GetValue(robotName + "Autonomous").Equals("True");
             rosConnector.RosBridgeServerUrl = "ws://" + RobotOptions.GetValue(robotName + "ROS Bridge IP");
             imagePublisher.Topic = RobotOptions.GetValue(robotName + "Camera Topic");
             driveStatusPublisher.Topic = RobotOptions.GetValue(robotName + "Drive Status Topic");
-            driveCommandSubscriber.Topic = RobotOptions.GetValue(robotName + "Drive Command Topic");
+            motorsSubscriber.Topic = RobotOptions.GetValue(robotName + "Motors Topic");
         }
     }
 }
