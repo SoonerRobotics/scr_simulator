@@ -14,6 +14,7 @@ limitations under the License.
 */
 
 using UnityEngine;
+using System.Collections;
 
 namespace RosSharp.RosBridgeClient
 {
@@ -29,7 +30,8 @@ namespace RosSharp.RosBridgeClient
         protected override void Start()
         {
             base.Start();
-            InitializeMessage();
+
+            StartCoroutine(InitializeMessage());
         }
 
         private void FixedUpdate()
@@ -41,8 +43,14 @@ namespace RosSharp.RosBridgeClient
             }
         }
 
-        private void InitializeMessage()
+        private IEnumerator InitializeMessage()
         {
+            // Attempt to fix possible race condition by waiting for laser scan reader?
+            while (!(laserScanReader))
+            {
+                yield return new WaitForSeconds(0.5f);
+            }
+
             scanPeriod = (float)laserScanReader.samples / (float)laserScanReader.update_rate;
 
             message = new MessageTypes.Sensor.LaserScan

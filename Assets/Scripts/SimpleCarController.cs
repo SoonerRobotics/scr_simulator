@@ -30,12 +30,12 @@ namespace RosSharp.RosBridgeClient
         {
 
             float psi = transform.rotation.eulerAngles.y * Mathf.Deg2Rad;
-            float left;
-            float right;
+            float left, right;
+
             if (useController)
             {
-                left = Mathf.Pow(Input.GetAxis("Vertical"), 3);
-                right = -Mathf.Pow(Input.GetAxis("Vertical2"), 3);
+                left = Mathf.Pow(Input.GetAxis("Vertical"), 3) * speedMod;
+                right = -Mathf.Pow(Input.GetAxis("Vertical2"), 3) * speedMod;
             }
             else
             {
@@ -51,9 +51,9 @@ namespace RosSharp.RosBridgeClient
             float dot_x = (vr + (vl - vr) / 4.0f) * Mathf.Sin(psi);
             float dot_y = (vr + (vl - vr) / 4.0f) * Mathf.Cos(psi);
 
-            transform.Translate(new Vector3(dot_x, 0, dot_y) * Time.deltaTime * speedMod, Space.World);
+            transform.Translate(new Vector3(dot_x, 0, dot_y) * Time.fixedDeltaTime, Space.World);
 
-            transform.Rotate(new Vector3(0, psi_dot * Mathf.Rad2Deg, 0) * Time.deltaTime * turnMod, Space.World);
+            transform.Rotate(new Vector3(0, psi_dot * Mathf.Rad2Deg, 0) * Time.fixedDeltaTime, Space.World);
 
         }
     }
