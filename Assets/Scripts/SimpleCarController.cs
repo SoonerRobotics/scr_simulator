@@ -14,8 +14,8 @@ namespace RosSharp.RosBridgeClient
         public float L = 0.6096f;
         public float drag = 0.85f;
 
-        public float vl = 0;
-        public float vr = 0;
+        public float vl = 0; // angular velocities
+        public float vr = 0; // (radians per second)
 
         public float leftControl = 0;
         public float rightControl = 0;
@@ -34,22 +34,22 @@ namespace RosSharp.RosBridgeClient
 
             if (useController)
             {
-                left = Mathf.Pow(Input.GetAxis("Vertical"), 3) * speedMod;
-                right = -Mathf.Pow(Input.GetAxis("Vertical2"), 3) * speedMod;
+                left = Mathf.Pow(Input.GetAxis("Vertical"), 3) * speedMod / wheelRadius;
+                right = -Mathf.Pow(Input.GetAxis("Vertical2"), 3) * speedMod / wheelRadius;
             }
             else
             {
-                left = leftControl;
-                right = rightControl;
+                left = leftControl / wheelRadius;
+                right = rightControl / wheelRadius;
             }
 
-            float psi_dot = (vl - vr) / L;
+            float psi_dot = wheelRadius * (vl - vr) / L;
 
             vl = (1.0f - drag) * left + drag * vl;
             vr = (1.0f - drag) * right + drag * vr;
 
-            float dot_x = (vr + (vl - vr) / 4.0f) * Mathf.Sin(psi);
-            float dot_y = (vr + (vl - vr) / 4.0f) * Mathf.Cos(psi);
+            float dot_x = wheelRadius / 2.0f * (vl + vr) * Mathf.Sin(psi);
+            float dot_y = wheelRadius / 2.0f * (vl + vr) * Mathf.Cos(psi);
 
             transform.Translate(new Vector3(dot_x, 0, dot_y) * Time.fixedDeltaTime, Space.World);
 
