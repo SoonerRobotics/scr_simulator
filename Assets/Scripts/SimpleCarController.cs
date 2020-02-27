@@ -34,8 +34,10 @@ namespace RosSharp.RosBridgeClient
 
             if (useController)
             {
-                left = Mathf.Pow(Input.GetAxis("Vertical"), 3) * speedMod / wheelRadius;
-                right = -Mathf.Pow(Input.GetAxis("Vertical2"), 3) * speedMod / wheelRadius;
+                float horiz = Mathf.Pow(Input.GetAxis("Vertical"), 3);
+                float vertical = Input.GetAxis("Horizontal");
+                left = (horiz * vertical + horiz) * speedMod / wheelRadius;
+                right = (-horiz * vertical + horiz) * speedMod / wheelRadius;
             }
             else
             {
