@@ -36,6 +36,8 @@ namespace RosSharp.RosBridgeClient
         public float[] ranges;
         public float[] intensities;
 
+        public float noiseStdDev = 0.1f;
+
         public void Start()
         {
             directions = new Vector3[samples];
@@ -57,6 +59,16 @@ namespace RosSharp.RosBridgeClient
             return ranges;
         }
 
+        public float getRandNormal(float mean, float stdDev)
+        {
+            float u1 = 1.0f - Random.value; //uniform(0,1] random doubles
+            float u2 = 1.0f - Random.value;
+            float randStdNormal = Mathf.Sqrt(-2.0f * Mathf.Log(u1)) *
+                         Mathf.Sin(2.0f * Mathf.PI * u2); //random normal(0,1)
+
+            return stdDev * randStdNormal;
+        }
+
         private void MeasureDistance()
         {
             rays = new Ray[samples];
@@ -70,8 +82,12 @@ namespace RosSharp.RosBridgeClient
 
                 raycastHits[i] = new RaycastHit();
                 if (Physics.Raycast(rays[i], out raycastHits[i], range_max))
-                    if (raycastHits[i].distance >= range_min && raycastHits[i].distance <= range_max)
-                        ranges[i] = raycastHits[i].distance;
+                {
+                    // Get distance and add some noise
+                    float distance = raycastHits[i].distance + getRandNormal(0f, noiseStdDev);
+                    if (distance >= range_min && distance <= range_max)
+                        ranges[i] = distance;
+                }
             }
         }
     }
