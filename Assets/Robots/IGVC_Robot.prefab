@@ -191,6 +191,7 @@ GameObject:
   - component: {fileID: 6116572216260438474}
   - component: {fileID: 6116572216260438475}
   - component: {fileID: 6116572216260438484}
+  - component: {fileID: 185712431425618641}
   - component: {fileID: 6116572216260438472}
   m_Layer: 0
   m_Name: IGVC_Robot
@@ -322,6 +323,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Topic: /igvc/imu
   tf: {fileID: 6116572216260438476}
+  accelNoiseStdDev: 0.15
+  headingNoiseStdDev: 1
 --- !u!114 &6116572216260438474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -336,6 +339,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Topic: /igvc/velocity
   rb: {fileID: 6116572216260438467}
+  velocityNoiseStdDev: 0.05
 --- !u!114 &6116572216260438475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -350,6 +354,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Topic: /igvc/gps
   tf: {fileID: 6116572216260438476}
+  latNoiseStdDev: 1.843
+  lonNoiseStdDev: 2.138
+  lat0Pos: 35.19488
+  lon0Pos: -97.43862
 --- !u!114 &6116572216260438484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -364,6 +372,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Topic: /igvc/motors_raw
   TimeStep: 0
+--- !u!114 &185712431425618641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6116572216260438465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8097d13f534045449982a13cdd51f787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Topic: /sim/true_pose
+  tf: {fileID: 6116572216260438476}
 --- !u!114 &6116572216260438472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -704,6 +726,7 @@ MonoBehaviour:
   range_max: 10
   ranges: []
   intensities: []
+  noiseStdDev: 0.1
 --- !u!1 &6116572217397061390
 GameObject:
   m_ObjectHideFlags: 0
