@@ -63,3 +63,5 @@ crashlytics-build.properties
 
 # Ignore config
 config.json
+Assets/StreamingAssets/build_info
+Assets/StreamingAssets/build_info.meta
