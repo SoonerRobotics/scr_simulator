@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/NRC_Land.unity
     guid: 93ff5cf7b2427cd4cbc86d09b60fddb7
+  - enabled: 1
+    path: Assets/Scenes/Lane_Maze.unity
+    guid: 174bd6999884e864bb2aa51fb30a9f53
   m_configObjects: {}

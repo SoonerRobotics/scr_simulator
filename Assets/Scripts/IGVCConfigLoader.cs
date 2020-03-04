@@ -32,7 +32,10 @@ namespace RosSharp.RosBridgeClient
 
             simpleCarController.useController = !RobotOptions.GetValue(robotName + "Autonomous").Equals("True");
             rosConnector.RosBridgeServerUrl = "ws://" + RobotOptions.GetValue(robotName + "ROS Bridge IP");
-            imagePublisher.Topic = RobotOptions.GetValue(robotName + "Camera Topic");
+            if (RobotOptions.Exists(robotName + "Camera Topic"))
+            {
+                imagePublisher.Topic = RobotOptions.GetValue(robotName + "Camera Topic");
+            }
             laserScanPublisher.Topic = RobotOptions.GetValue(robotName + "Laser Scan Topic");
             iMUPublisher.Topic = RobotOptions.GetValue(robotName + "IMU Topic");
             velocityPublisher.Topic = RobotOptions.GetValue(robotName + "Velocity Topic");

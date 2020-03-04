@@ -41,6 +41,11 @@ public class RobotOptions
         dict[key] = value;
     }
 
+    public static bool Exists(string key)
+    {
+        return dict.ContainsKey(key);
+    }
+
     public static void Save()
     {
         foreach (string key in dict.Keys)
