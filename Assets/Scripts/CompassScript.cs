@@ -10,6 +10,8 @@ public class CompassScript : MonoBehaviour
     public TextMeshProUGUI textMeshProUgui;
     public GameObject robot;
 
+    private static string[] caridnals = { "N", "NE", "E", "SE", "S", "SW", "W", "NW", "N" };
+
     public void InitCompass()
     {
         this.robot = LevelInitalizer.robot;
@@ -18,10 +20,14 @@ public class CompassScript : MonoBehaviour
     // Via https://gist.github.com/adrianstevens/8163205
     public static string DegreesToCardinal(double degrees)
     {
-        string[] caridnals = { "N", "NE", "E", "SE", "S", "SW", "W", "NW", "N" };
         return caridnals[ (int)Math.Round(((double)degrees % 360) / 45) ];
     }
-    
+
+    private void Start()
+    {
+        caridnals = ConfigLoader.Instance.configExample.caridnals;
+    }
+
     // Update is called once per frame
     void Update()
     {
