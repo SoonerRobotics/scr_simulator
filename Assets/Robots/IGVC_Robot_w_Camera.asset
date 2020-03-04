@@ -10,12 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91daf2032ec7cbc47a4ecbed071e8d2c, type: 3}
-  m_Name: IGVC_Robot
+  m_Name: IGVC_Robot_w_Camera
   m_EditorClassIdentifier: 
-  robotName: IGVC
-  robotPrefab: {fileID: 6116572216260438465, guid: fc16d9ea6156982428568ec5678e576b,
+  robotName: IGVC w/ Cam
+  robotPrefab: {fileID: 6116572216260438465, guid: 6e1912bd5bf627749881f13614c02c35,
     type: 3}
   options:
+  - name: Camera Topic
+    defaultValue: /igvc/camera/compressed
   - name: IMU Topic
     defaultValue: /igvc/imu
   - name: Velocity Topic

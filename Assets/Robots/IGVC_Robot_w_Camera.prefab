@@ -194,7 +194,7 @@ GameObject:
   - component: {fileID: 185712431425618641}
   - component: {fileID: 6116572216260438472}
   m_Layer: 0
-  m_Name: IGVC_Robot
+  m_Name: IGVC_Robot_w_Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -283,7 +283,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6116572216260438465}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a908e83b1e7ce9e428caae2838615cc3, type: 3}
   m_Name: 
