@@ -10,15 +10,19 @@ public class ConfigLoader : MonoBehaviour
 {
     public static ConfigLoader Instance;
 
-    public ConfigExample configExample;
+    public SensorsConfig sensors;
+    public ControlConfig control;
 
     void Start()
     {
+        if (Instance)
+        {
+            return;
+        }
         Instance = this;
 
-        configExample = new ConfigExample("cfgExample");
-        Debug.Log($"cfgExample: Loaded Camera Speed -> {configExample.cameraSpeed}");
-        Debug.Log($"cfgExample: Loaded Directions -> {JsonConvert.SerializeObject(configExample.caridnals)}");
+        sensors = new SensorsConfig("sensors");
+        control = new ControlConfig("control");
 
         DontDestroyOnLoad(this);
     }

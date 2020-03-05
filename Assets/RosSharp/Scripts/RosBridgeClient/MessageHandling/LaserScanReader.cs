@@ -45,6 +45,8 @@ namespace RosSharp.RosBridgeClient
             intensities = new float[samples];
             rays = new Ray[samples];
             raycastHits = new RaycastHit[samples];
+
+            noiseStdDev = ConfigLoader.Instance.sensors.lidar.distanceNoise;
         }
 
         public float[] Scan()

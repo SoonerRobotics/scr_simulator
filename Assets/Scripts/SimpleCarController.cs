@@ -11,26 +11,31 @@ namespace RosSharp.RosBridgeClient
         public float speedMod = 1f;
         public float turnMod = 1f;
         public float wheelRadius = 0.127f;
-        public float L = 0.6096f;
-        public float drag = 0.85f;
+        public float axleLength = 0.6096f;
+        public float drag = 0.15f;
 
-        public float vl = 0; // angular velocities
-        public float vr = 0; // (radians per second)
+        public float vl, vr = 0; // angular velocities (radians per second)
+
+        public float left, right = 0;
 
         public float leftControl = 0;
         public float rightControl = 0;
 
         public bool useController = false;
 
+        public bool useAngular = true;
+
         public void Start()
         {
+            useAngular = ConfigLoader.Instance.control.motors.useAngularVelocity;
+            drag = ConfigLoader.Instance.control.motors.velocityDecay;
+            speedMod = ConfigLoader.Instance.control.manual.fullSpeed;
         }
 
         public void FixedUpdate()
         {
 
             float psi = transform.rotation.eulerAngles.y * Mathf.Deg2Rad;
-            float left, right;
 
             if (useController)
             {
@@ -41,14 +46,19 @@ namespace RosSharp.RosBridgeClient
             }
             else
             {
-                left = leftControl / wheelRadius;
-                right = rightControl / wheelRadius;
+                left = leftControl;
+                right = rightControl;
+                if (!useAngular)
+                {
+                    left /= wheelRadius;
+                    right /= wheelRadius;
+                }
             }
 
-            float psi_dot = wheelRadius * (vl - vr) / L;
+            float psi_dot = wheelRadius * (vl - vr) / axleLength;
 
-            vl = (1.0f - drag) * left + drag * vl;
-            vr = (1.0f - drag) * right + drag * vr;
+            vl = drag * left + (1.0f - drag) * vl;
+            vr = drag * right + (1.0f - drag) * vr;
 
             float dot_x = wheelRadius / 2.0f * (vl + vr) * Mathf.Sin(psi);
             float dot_y = wheelRadius / 2.0f * (vl + vr) * Mathf.Cos(psi);

@@ -23,11 +23,6 @@ public class CompassScript : MonoBehaviour
         return caridnals[ (int)Math.Round(((double)degrees % 360) / 45) ];
     }
 
-    private void Start()
-    {
-        caridnals = ConfigLoader.Instance.configExample.caridnals;
-    }
-
     // Update is called once per frame
     void Update()
     {

@@ -443,14 +443,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speedMod: 2
   turnMod: 1
-  wheelRadius: 0.0635
-  L: 0.28
+  wheelRadius: 0.058
+  axleLength: 0.2
   drag: 0.85
   vl: 0
   vr: 0
+  left: 0
+  right: 0
   leftControl: 0
   rightControl: 0
   useController: 0
+  useAngular: 1
 --- !u!114 &3740033819105132854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -511,6 +514,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Topic: 
   tf: {fileID: 3740033819105132855}
+  accelNoiseStdDev: 0.15
+  headingNoiseStdDev: 1
+  velocityNoiseStdDev: 0.05
+  ccw: 1
+  radians: 1
 --- !u!114 &2905964048366893341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -550,6 +558,7 @@ GameObject:
   - component: {fileID: 3740033819154644747}
   - component: {fileID: 3740033819154644748}
   - component: {fileID: 3740033819154644749}
+  - component: {fileID: 4225462876088201662}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -622,6 +631,19 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3740033819154644750}
   m_Enabled: 1
+--- !u!114 &4225462876088201662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3740033819154644750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 513adee24e13a744b839f50d35f0485c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 0.1
 --- !u!1 &3740033819163482710
 GameObject:
   m_ObjectHideFlags: 0

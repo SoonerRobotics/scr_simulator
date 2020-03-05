@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.IO;
 using System;
+using UnityEditor;
 
 public class MenuController : MonoBehaviour
 {
@@ -145,6 +146,11 @@ public class MenuController : MonoBehaviour
         RobotOptions.LoadDefaults(robots);
 
         FillOptionFields();
+    }
+
+    public void OpenConfigFolder()
+    {
+        OpenInFileBrowser.Open($"{Application.persistentDataPath}/Config/");
     }
 
     public void FillOptionFields()

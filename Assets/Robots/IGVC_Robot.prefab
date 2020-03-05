@@ -192,6 +192,7 @@ GameObject:
   - component: {fileID: 6116572216260438475}
   - component: {fileID: 6116572216260438484}
   - component: {fileID: 185712431425618641}
+  - component: {fileID: 1603697777774665651}
   - component: {fileID: 6116572216260438472}
   m_Layer: 0
   m_Name: IGVC_Robot
@@ -253,13 +254,16 @@ MonoBehaviour:
   speedMod: 2.2727273
   turnMod: 1
   wheelRadius: 0.127
-  L: 0.6096
+  axleLength: 0.6096
   drag: 0.85
   vl: 0
   vr: 0
+  left: 0
+  right: 0
   leftControl: 0
   rightControl: 0
   useController: 1
+  useAngular: 1
 --- !u!114 &6116572216260438477
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,6 +329,8 @@ MonoBehaviour:
   tf: {fileID: 6116572216260438476}
   accelNoiseStdDev: 0.15
   headingNoiseStdDev: 1
+  ccw: 1
+  radians: 1
 --- !u!114 &6116572216260438474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -386,6 +392,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Topic: /sim/true_pose
   tf: {fileID: 6116572216260438476}
+--- !u!114 &1603697777774665651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6116572216260438465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3425b4815f3aa21428d00bbe44bf4fcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Topic: /sim/motors_raw
 --- !u!114 &6116572216260438472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -409,6 +428,7 @@ GameObject:
   - component: {fileID: 6116572216309536752}
   - component: {fileID: 6116572216309536759}
   - component: {fileID: 6116572216309536758}
+  - component: {fileID: 3259930005838977835}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -481,6 +501,19 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6116572216309536757}
   m_Enabled: 1
+--- !u!114 &3259930005838977835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6116572216309536757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 513adee24e13a744b839f50d35f0485c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 0.1
 --- !u!1 &6116572216334250669
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,6 +17,11 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
         {
             base.Start();
             message = new Gps();
+
+            lat0Pos = ConfigLoader.Instance.sensors.gps.latStart;
+            lon0Pos = ConfigLoader.Instance.sensors.gps.lonStart;
+            latNoiseStdDev = ConfigLoader.Instance.sensors.gps.latNoise;
+            lonNoiseStdDev = ConfigLoader.Instance.sensors.gps.lonNoise;
         }
 
         public float getRandNormal(float mean, float stdDev)
