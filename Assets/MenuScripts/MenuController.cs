@@ -150,7 +150,7 @@ public class MenuController : MonoBehaviour
 
     public void OpenConfigFolder()
     {
-        EditorUtility.RevealInFinder($"{Application.persistentDataPath}/Config/");
+        OpenInFileBrowser.Open($"{Application.persistentDataPath}/Config/");
     }
 
     public void FillOptionFields()
