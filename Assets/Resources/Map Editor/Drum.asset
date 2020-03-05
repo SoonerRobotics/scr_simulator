@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f465f912f19749944b2d7ab63ad549ae, type: 3}
+  m_Name: Drum
+  m_EditorClassIdentifier: 
+  Name: Barrel
+  Identifier: prefab_barrel
+  Reference: {fileID: 4816438928983653123, guid: 1e50ac60ab171d44f9546a2a0d84befb,
+    type: 3}
