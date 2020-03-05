@@ -18,12 +18,6 @@ public static class OpenInFileBrowser
 		}
 	}
 
-	[UnityEditor.MenuItem("Window/Test OpenInFileBrowser")]
-	public static void Test()
-	{
-		Open(UnityEngine.Application.dataPath);
-	}
-
 	public static void OpenInMac(string path)
 	{
 		bool openInsidesOfFolder = false;
