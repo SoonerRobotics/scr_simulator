@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 public class ConfigFile
 {
@@ -15,7 +16,7 @@ public class ConfigFile
 
     public ConfigFile(string file)
     {
-        configFolderPath = $"{Directory.GetCurrentDirectory()}/Config/";
+        configFolderPath = $"{Application.persistentDataPath}/Config/";
         if (!Directory.Exists(configFolderPath))
         {
             Directory.CreateDirectory(configFolderPath);
@@ -46,7 +47,7 @@ public class ConfigFile
         if (File.Exists(path))
         {
             string serializedContent = JsonConvert.SerializeObject(child, Formatting.Indented);
-            File.WriteAllText(path, JsonConvert.SerializeObject(child));
+            File.WriteAllText(path, serializedContent);
             return true;
         }
         else

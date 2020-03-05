@@ -17,6 +17,8 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
             base.Start();
             c = GetComponent<SimpleCarController>();
             message = new Velocity();
+
+            velocityNoiseStdDev = ConfigLoader.Instance.sensors.encoders.velocityNoise;
         }
         public float getRandNormal(float mean, float stdDev)
         {

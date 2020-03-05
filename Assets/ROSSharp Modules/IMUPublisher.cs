@@ -12,6 +12,9 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
         public float accelNoiseStdDev = 0.15f;
         public float headingNoiseStdDev = 1f;
 
+        public bool ccw = true;
+        public bool radians = true;
+
         private SimpleCarController c;
         private float lastVelocity = float.PositiveInfinity;
 
@@ -20,6 +23,11 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
             base.Start();
             c = GetComponent<SimpleCarController>();
             message = new Imuodom();
+
+            accelNoiseStdDev = ConfigLoader.Instance.sensors.imu.accelNoise;
+            headingNoiseStdDev = ConfigLoader.Instance.sensors.imu.headingNoise;
+            ccw = ConfigLoader.Instance.sensors.imu.headingCCW;
+            radians = ConfigLoader.Instance.sensors.imu.headingRadians;
         }
 
         public float getRandNormal(float mean, float stdDev)
@@ -37,14 +45,23 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
 
             if (lastVelocity == float.PositiveInfinity)
             {
-                lastVelocity = (c.vr + c.vl) / c.L;
+                lastVelocity = (c.vr + c.vl) / c.axleLength;
                 return;
             }
 
-            float accel = ((c.vr + c.vl) / c.L - lastVelocity) / Time.fixedDeltaTime;
-            lastVelocity = (c.vr + c.vl) / c.L;
+            float accel = ((c.vr + c.vl) / c.axleLength - lastVelocity) / Time.fixedDeltaTime;
+            lastVelocity = (c.vr + c.vl) / c.axleLength;
 
-            message.heading = tf.rotation.eulerAngles.y + getRandNormal(0, headingNoiseStdDev);
+            message.heading = tf.rotation.eulerAngles.y;
+            if (ccw)
+            {
+                message.heading = 360 - message.heading;
+            }
+            if (radians)
+            {
+                message.heading *= Mathf.Deg2Rad;
+            }
+            message.heading += getRandNormal(0, headingNoiseStdDev);
             message.acceleration = accel + getRandNormal(0, accelNoiseStdDev);
             Publish(message);
         }
