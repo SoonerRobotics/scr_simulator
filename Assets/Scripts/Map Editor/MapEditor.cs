@@ -47,13 +47,14 @@ public class MapEditor : MonoBehaviour
         public string mapAuthor;
         /// <summary>
         /// The last time the map was edited (generally the last save)
+        /// Defaulted to the time it was created
         /// </summary>
-        public DateTime mapLastEditedAt;
+        public DateTime mapLastEditedAt = DateTime.Now;
         /// <summary>
         /// The list of objects as seen in the map, generated on map save. 
         /// This is used to load the map into the map loader scene
         /// </summary>
-        public List<CustomMapObject> mapObjects;
+        public List<CustomMapObject> mapObjects = new List<CustomMapObject>();
 
         public void Save()
         {

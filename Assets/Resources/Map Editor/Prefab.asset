@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f465f912f19749944b2d7ab63ad549ae, type: 3}
-  m_Name: Drum
+  m_Name: Prefab
   m_EditorClassIdentifier: 
-  Name: Barrel
-  Identifier: prefab_barrel
-  Reference: {fileID: 8746249411476904793, guid: 1e50ac60ab171d44f9546a2a0d84befb,
+  Name: Cylinder
+  Identifier: prefab_cylinder
+  Reference: {fileID: 4093917763495279551, guid: 54f3a5378026f254ba383f08e361b438,
     type: 3}
