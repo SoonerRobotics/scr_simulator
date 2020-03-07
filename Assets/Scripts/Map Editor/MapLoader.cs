@@ -17,9 +17,9 @@ public class MapLoader : MonoBehaviour
             } else
             {
                 GameObject newObject = Instantiate(selectedPrefab.Reference);
-                newObject.transform.position = obj.position;
-                newObject.transform.rotation = Quaternion.Euler(obj.rotation);
-                newObject.transform.localScale = obj.scale;
+                newObject.transform.position = obj.position.GetVector3();
+                newObject.transform.rotation = Quaternion.Euler(obj.rotation.GetVector3());
+                newObject.transform.localScale = obj.scale.GetVector3();
                 loadedObjects++;
             }
         }

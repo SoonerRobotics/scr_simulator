@@ -5,4 +5,5 @@ using UnityEngine;
 public class ObjectInfo : MonoBehaviour
 {
     public PrefabScriptableObject prefab;
+    public string uniqueIdentifier;
 }

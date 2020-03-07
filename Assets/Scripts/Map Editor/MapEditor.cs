@@ -21,13 +21,21 @@ public class MapEditor : MonoBehaviour
     private void Start()
     {
         SavePath = $"{Application.persistentDataPath}/Maps/";
+        if(!Directory.Exists(SavePath))
+        {
+            Directory.CreateDirectory(SavePath);
+        }
+
         Prefabs = Resources.LoadAll<PrefabScriptableObject>("Map Editor").ToList();
         foreach(var prefab in Prefabs)
         {
-            Debug.Log($"Loaded Prefab -> {prefab.Name}:{prefab.Identifier}");
+            Debug.Log($"Loaded Custom Prefab -> {prefab.Name}:{prefab.Identifier}");
         }
 
-        if(activeMap != null && !activeMap.mapName.Equals(string.Empty))
+        var maps = CustomMap.GetStoredMaps();
+        activeMap = maps[0];
+
+        if(!activeMap.mapName.Equals(string.Empty)) // This means we have a map!
         {
             mapLoader = gameObject.AddComponent<MapLoader>();
             mapLoader.Load(activeMap, Prefabs);
@@ -59,7 +67,53 @@ public class MapEditor : MonoBehaviour
         public void Save()
         {
             string fileName = mapName.Replace(" ", "_").Replace(",", "_").Replace("\'", "").Replace(".", "_"); // Regex to verify file name maybe? This is temporary and a note for later
-            File.WriteAllText($"{SavePath}/{mapName}.json", JsonConvert.SerializeObject(this));
+            File.WriteAllText($"{SavePath}/{mapName}.json", JsonConvert.SerializeObject(this, Formatting.Indented)); // To save file space, change this back to regular formatting.
+
+            Debug.Log("Saving to: " + SavePath + "/" + fileName);
+        }
+
+        public void UpdateObject(GameObject obj)
+        {
+            if (obj == null)
+            {
+                return;
+            }
+
+            ObjectInfo info = obj.GetComponent<ObjectInfo>();
+            if (info == null)
+                return;
+
+            var entity = mapObjects.Where(y => y.uniqueIdentifier.Equals(info.uniqueIdentifier)).FirstOrDefault();
+            if (entity == null)
+                return;
+
+            entity.position = new CustomMapObject.CustomMapVector3(obj.transform.position);
+            entity.rotation = new CustomMapObject.CustomMapVector3(obj.transform.rotation.eulerAngles);
+            entity.scale = new CustomMapObject.CustomMapVector3(obj.transform.localScale);
+        }
+
+        private void RemoveObject(GameObject obj, ObjectInfo info)
+        {
+            var entity = mapObjects.Where(y => y.uniqueIdentifier.Equals(info.uniqueIdentifier)).FirstOrDefault();
+            if (entity == null)
+                return;
+
+            Destroy(obj);
+            mapObjects.Remove(entity);
+        }
+
+        public void AddObject(GameObject obj, ObjectInfo info)
+        {
+            CustomMapObject newObj = new CustomMapObject();
+            newObj.position = new CustomMapObject.CustomMapVector3(obj.transform.position);
+            newObj.rotation = new CustomMapObject.CustomMapVector3(obj.transform.rotation.eulerAngles);
+            newObj.scale = new CustomMapObject.CustomMapVector3(obj.transform.localScale);
+            newObj.prefabIdentifier = info.prefab.Identifier;
+            newObj.uniqueIdentifier = StringUtilities.RandomString(16);
+            info.uniqueIdentifier = newObj.uniqueIdentifier;
+
+            Debug.Log("Adding Object: " + JsonConvert.SerializeObject(newObj));
+            mapObjects.Add(newObj);
         }
 
         /// <summary>
@@ -98,21 +152,44 @@ public class MapEditor : MonoBehaviour
             /// Dont touch this, otherwise everything will probably break.
             /// </summary>
             public string prefabIdentifier;
+            /// <summary>
+            /// A unique identifier tied to the object used for various tasks.
+            /// Dont touch this either, its randomly generated
+            /// </summary>
+            public string uniqueIdentifier;
             [SerializeField]
             /// <summary>
             /// The position of the object (from transform.position)
             /// </summary>
-            public Vector3 position;
+            public CustomMapVector3 position;
             [SerializeField]
             /// <summary>
             /// The rotation of the object (from transform.rotation)
             /// </summary>
-            public Vector3 rotation;
+            public CustomMapVector3 rotation;
             [SerializeField]
             /// <summary>
             /// The scale of the object (from transform.localScale)
             /// </summary>
-            public Vector3 scale;
+            public CustomMapVector3 scale;
+
+            [Serializable]
+            public class CustomMapVector3
+            {
+                public float x, y, z;
+                
+                public Vector3 GetVector3()
+                {
+                    return new Vector3(x, y, z);
+                }
+
+                public CustomMapVector3(Vector3 vec)
+                {
+                    x = vec.x;
+                    y = vec.y;
+                    z = vec.z;
+                }
+            }
         }
     }
 }

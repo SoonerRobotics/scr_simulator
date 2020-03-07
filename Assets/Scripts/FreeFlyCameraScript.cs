@@ -47,8 +47,13 @@ public class FreeFlyCameraScript : MonoBehaviour
     /// </summary>
     private bool looking = false;
 
+    public bool Disabled = false;
+
     void Update()
     {
+        if (Disabled)
+            return;
+
         var fastMode = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
         var movementSpeed = fastMode ? this.fastMovementSpeed : this.movementSpeed;
 

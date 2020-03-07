@@ -6,26 +6,34 @@ using static UnityEngine.GUI;
 
 public class Mapper : MonoBehaviour
 {
-    public MapEditor Editor;
-    public bool DrawUI = false;
+    #region Variables
+    // Primary References
+    private MapEditor Editor;
+    private FreeFlyCameraScript FreeFly;
 
-    private int TagStorage = 0;
-
-    public GameObject SelectedObject;
-    public GameObject SelectedPrefab;
-    public GameObject update_draggingObject;
+    // GUI Containers
     public GameObject CreateMapMenu;
     public GameObject PrefabListingMenu;
-    private float timeout = 0;
-    public bool update_leftCickHold = false;
 
+    // GUI References
     public GameObject ScrollbarContentObject;
     public GameObject PrefabButtonObject;
 
-    public bool Disabled = false;
+    // Object References
+    private GameObject SelectedObject;
 
-    public Vector2 scrollPosition;
+    // General References
+    private bool DrawUI = false; // Whether or not we should actually draw the UI (debug ui)
+    private bool Disabled = false; // Whether or not our input is disabled
+    private bool ClickedMouseLeft = false; 
+    private bool HoldingMouseLeft = false;
 
+    private int TagStorage = 0;
+
+    private float timeout = 0;
+    #endregion
+
+    #region Unity Functions
     public void OnGUI()
     {
         if (!DrawUI)
@@ -37,49 +45,6 @@ public class Mapper : MonoBehaviour
         Label(new Rect(5, 5, sizeOfText.x + 5, sizeOfText.y + 5), debugText);
     }
 
-    private void ResetSelectedObject()
-    {
-        if (SelectedObject == null)
-            return;
-
-        SelectedObject.layer = TagStorage;
-        SelectedObject = null;
-        TagStorage = 0;
-        update_leftCickHold = false;
-        update_draggingObject = null;
-    }
-
-    private void OnSelectedPrefabChanged(int index)
-    {
-        var prefab = Editor.Prefabs[index];
-        SelectedPrefab = Instantiate(prefab.Reference);
-    }
-    
-    public void OnMapCreated()
-    {
-        Editor.activeMap = new MapEditor.CustomMap();
-        Editor.activeMap.mapName = CreateMapMenu.transform.GetChild(0).GetChild(0).GetChild(1).GetChild(0).GetChild(1).GetComponent<TMPro.TMP_InputField>().text; // This is terrible
-        Editor.activeMap.mapAuthor = CreateMapMenu.transform.GetChild(0).GetChild(0).GetChild(1).GetChild(1).GetChild(1).GetComponent<TMPro.TMP_InputField>().text; // This is terrible
-
-        // We need to verify data first! Then let the user do this, otherwise show error mesasge?
-        Disabled = false;
-        CreateMapMenu.SetActive(false);
-        PrefabListingMenu.SetActive(true);
-    }
-
-    private void AddObject(GameObject obj)
-    {
-        if(Editor.activeMap != null)
-        {
-            PrefabScriptableObject prefab = obj.GetComponent<PrefabScriptableObject>();
-        } else
-        {
-            Disabled = true;
-            CreateMapMenu.SetActive(true);
-            PrefabListingMenu.SetActive(false);
-        }
-    }
-
     void Update()
     {
         if (Editor == null)
@@ -87,22 +52,9 @@ public class Mapper : MonoBehaviour
             Editor = FindObjectOfType<MapEditor>();
             if (Editor != null)
             {
-                // Found the editor, treat this as our 'start' statement
-                DrawUI = true;
-
-                for(int i = 0; i < Editor.Prefabs.Count; i++)
-                {
-                    var prefab = Editor.Prefabs[i];
-
-                    var obj = Instantiate(PrefabButtonObject, ScrollbarContentObject.transform);
-                    obj.transform.GetChild(1).GetComponent<TMPro.TMP_Text>().text = prefab.Name;
-                    int copy = i; // For some reason Lambdas (below) really hate not using a copy in a for loop? So here you go Mr. Lambda
-                    obj.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(new UnityEngine.Events.UnityAction(() => OnSelectedPrefabChanged(copy)));
-                }
-            } else
-            {
-                return; // Still have not found the editor :(
+                Initialize();
             }
+            return;
         }
 
         if (Disabled)
@@ -113,77 +65,189 @@ public class Mapper : MonoBehaviour
 
         // Literally rewrite everything below this line, its trash.
 
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0)) // Get left click
         {
-            if(SelectedPrefab != null)
+            if (!ClickedMouseLeft && !HoldingMouseLeft)
             {
-                SelectedPrefab = null;
-                if(Input.GetKey(KeyCode.LeftShift))
-                {
-                    RaycastHit hit;
-                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                    if (Physics.Raycast(ray, out hit, 100.0f))
-                    {
-                        SelectedPrefab.transform.position = new Vector3(hit.point.x, SelectedPrefab.transform.position.y, hit.point.z);
-                    }
-                }
-                timeout = Time.time + 0.25f;
+                ClickedMouseLeft = true;
+                timeout = Time.time + 0.1f;
                 return;
-            } else
+            }
+            else
             {
-                RaycastHit hit;
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out hit, 100.0f))
-                {
-                    if (hit.transform.gameObject.tag == "Stuck")
-                        return;
+                HoldingMouseLeft = true;
+                ClickedMouseLeft = false;
+            }
 
-                    ResetSelectedObject();
-
-                    SelectedObject = hit.transform.gameObject;
-                    TagStorage = SelectedObject.layer;
-                    SelectedObject.layer = 8;
-                    timeout = Time.time + 0.08f;
-                }
-                else
-                {
-                    ResetSelectedObject();
-                }
-                return; // Skip the next drag frame just incase 
+            OnHoldLeftClick();
+            // Handle holding mouse left here
+        }
+        else
+        {
+            if (ClickedMouseLeft && !HoldingMouseLeft)
+            {
+                OnLeftClick();
+                ClickedMouseLeft = false;
+            }
+            else if (!ClickedMouseLeft && HoldingMouseLeft)
+            {
+                OnStopHoldingLeftClick();
+                HoldingMouseLeft = false;
             }
         }
 
-        if(Input.GetMouseButton(0)) // While left click is being held
+        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.S))
         {
-            if(!update_leftCickHold)
-            {
-                RaycastHit hit;
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out hit, 100.0f))
-                {
-                    if (hit.transform.gameObject.tag == "Stuck")
-                        return;
+            // Ctrl + S for quick save
+            if (Editor.activeMap.mapName.Equals(""))
+                return;
 
-                    update_draggingObject = hit.transform.gameObject;
-                    update_leftCickHold = true;
-                }   
-            }
+            Editor.activeMap.Save();
+        }
+    }
+    #endregion
 
-            if(update_draggingObject != null)
-            {
-                RaycastHit hit;
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out hit, 100.0f))
-                {
-                    update_draggingObject.transform.position = new Vector3(hit.point.x, update_draggingObject.transform.position.y, hit.point.z);
-                }
-            }
+    #region Other Functions
+    /// <summary>
+    /// Disable or enable input
+    /// </summary>
+    /// <param name="status"></param>
+    private void SetAllowInput(bool status)
+    {
+        Disabled = !status;
+        FreeFly.Disabled = !status;
+    }
+
+    /// <summary>
+    /// Resets the select object
+    /// </summary>
+    private void ResetSelectedObject()
+    {
+        if (SelectedObject == null)
+            return;
+
+        SelectedObject.layer = TagStorage;
+        SelectedObject = null;
+        TagStorage = 0;
+    }
+
+    /// <summary>
+    /// Calls when a user spawns a prefab.
+    /// TODO: Change the name and stuff
+    /// </summary>
+    /// <param name="index">The index of the prefab in the prefab list</param>
+    private void OnSelectedPrefabChanged(int index)
+    {
+        if (!Editor.activeMap.mapName.Equals(""))
+        {
+            var prefab = Editor.Prefabs[index];
+            var pref = Instantiate(prefab.Reference);
+            var info = pref.AddComponent<ObjectInfo>();
+            info.prefab = prefab;
+            CompleteObject(pref);
+        }
+        else
+        {
+            SetAllowInput(false);
+            CreateMapMenu.SetActive(true);
+            PrefabListingMenu.SetActive(false);
+        }
+    }
+    
+    /// <summary>
+    /// Called when the user creates a map using the map creation screen
+    /// </summary>
+    public void OnMapCreated()
+    {
+        Editor.activeMap = new MapEditor.CustomMap();
+        Editor.activeMap.mapName = CreateMapMenu.transform.GetChild(0).GetChild(0).GetChild(1).GetChild(0).GetChild(1).GetComponent<TMPro.TMP_InputField>().text; // This is terrible
+        Editor.activeMap.mapAuthor = CreateMapMenu.transform.GetChild(0).GetChild(0).GetChild(1).GetChild(1).GetChild(1).GetComponent<TMPro.TMP_InputField>().text; // This is terrible
+
+        // We need to verify data first! Then let the user do this, otherwise show error mesasge?
+        SetAllowInput(true);
+        CreateMapMenu.SetActive(false);
+        PrefabListingMenu.SetActive(true);
+    }
+
+    /// <summary>
+    /// Saves the object into the map editor
+    /// </summary>
+    /// <param name="obj"></param>
+    private void CompleteObject(GameObject obj)
+    {
+        ObjectInfo info = obj.GetComponent<ObjectInfo>();
+        if(info == null)
+        {
+            Debug.LogError("Failed to find info for object: " + obj);
+            return;
+        }
+
+        Editor.activeMap.AddObject(obj, info);
+    }
+
+    /// <summary>
+    /// Called when the user left clicks
+    /// </summary>
+    private void OnLeftClick()
+    {
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit, 100.0f))
+        {
+            ResetSelectedObject();
+            if (hit.transform.gameObject.GetComponent<ObjectInfo>() == null)
+                return;
+
+            SelectedObject = hit.transform.gameObject;
+            TagStorage = SelectedObject.layer;
+            SelectedObject.layer = 8;
+            timeout = Time.time + 0.08f;
         } else
         {
-            if(update_leftCickHold)
+            ResetSelectedObject();
+        }
+    }
+
+    /// <summary>
+    /// Called whilst the user is holding left click
+    /// </summary>
+    private void OnHoldLeftClick()
+    {
+        if(SelectedObject != null)
+        {
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out hit, 100.0f))
             {
-                ResetSelectedObject();
+                SelectedObject.transform.position = new Vector3(hit.point.x, SelectedObject.transform.position.y, hit.point.z);
             }
         }
     }
+
+    /// <summary>
+    /// Initializes the Mapper script, used instead of start because we need to make sure the MapEditor object exists.
+    /// </summary>
+    private void Initialize()
+    {
+        DrawUI = true;
+
+        for (int i = 0; i < Editor.Prefabs.Count; i++)
+        {
+            var prefab = Editor.Prefabs[i];
+
+            var obj = Instantiate(PrefabButtonObject, ScrollbarContentObject.transform);
+            obj.transform.GetChild(1).GetComponent<TMPro.TMP_Text>().text = prefab.Name;
+            int copy = i; // For some reason Lambdas (below) really hate not using a copy in a for loop? So here you go Mr. Lambda
+            obj.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(new UnityEngine.Events.UnityAction(() => OnSelectedPrefabChanged(copy)));
+        }
+
+        FreeFly = GetComponent<FreeFlyCameraScript>();
+    }
+
+    private void OnStopHoldingLeftClick()
+    {
+        Editor.activeMap.UpdateObject(SelectedObject); // Whilst SelectedObject can be null, UpdateObject has a check for it!
+        ResetSelectedObject();
+    }
+    #endregion
 }
