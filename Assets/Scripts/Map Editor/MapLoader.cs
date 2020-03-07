@@ -20,6 +20,11 @@ public class MapLoader : MonoBehaviour
                 newObject.transform.position = obj.position.GetVector3();
                 newObject.transform.rotation = Quaternion.Euler(obj.rotation.GetVector3());
                 newObject.transform.localScale = obj.scale.GetVector3();
+
+                var info = newObject.AddComponent<ObjectInfo>();
+                info.uniqueIdentifier = obj.uniqueIdentifier;
+                info.prefab = selectedPrefab;
+
                 loadedObjects++;
             }
         }

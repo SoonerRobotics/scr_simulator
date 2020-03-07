@@ -104,6 +104,11 @@ public class Mapper : MonoBehaviour
 
             Editor.activeMap.Save();
         }
+
+        if(Input.GetKeyDown(KeyCode.Tab))
+        {
+            PrefabListingMenu.SetActive(!PrefabListingMenu.activeSelf);
+        }
     }
     #endregion
 

@@ -32,9 +32,6 @@ public class MapEditor : MonoBehaviour
             Debug.Log($"Loaded Custom Prefab -> {prefab.Name}:{prefab.Identifier}");
         }
 
-        var maps = CustomMap.GetStoredMaps();
-        activeMap = maps[0];
-
         if(!activeMap.mapName.Equals(string.Empty)) // This means we have a map!
         {
             mapLoader = gameObject.AddComponent<MapLoader>();
