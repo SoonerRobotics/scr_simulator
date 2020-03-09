@@ -16,7 +16,7 @@ public class EditorHandle : MonoBehaviour
     private void Start()
     {
         Color c = Color.red;
-        switch(Direction)
+        switch (Direction)
         {
             case HandleDirection.X:
                 {
@@ -51,8 +51,7 @@ public class EditorHandle : MonoBehaviour
 
     public enum HandleType
     { 
-        Move,
-        Scale
+        Move
     }
 
     public enum HandleDirection

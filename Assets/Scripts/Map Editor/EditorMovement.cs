@@ -39,27 +39,15 @@ public class EditorMovement : MonoBehaviour
                 if (editorHandle.Direction == EditorHandle.HandleDirection.X)
                 {
                     var desiredDirection = (forward * moveY + right * moveX).x * 5f;
-
-                    if(editorHandle.Type == EditorHandle.HandleType.Move)
-                        parent.position += new Vector3(desiredDirection * Time.deltaTime * 6, 0, 0);
-                    else
-                        parent.localScale += new Vector3(desiredDirection * Time.deltaTime * 6, 0, 0);
+                    parent.position += new Vector3(desiredDirection * Time.deltaTime * 6, 0, 0);
                 } else if (editorHandle.Direction == EditorHandle.HandleDirection.Y)
                 {
                     var desiredDirection = -(forward * moveY + right * moveX).y * 15f;
-
-                    if (editorHandle.Type == EditorHandle.HandleType.Move)
-                        parent.position += new Vector3(0, desiredDirection * Time.deltaTime * 6, 0);
-                    else
-                        parent.localScale += new Vector3(0, desiredDirection * Time.deltaTime * 6, 0);
+                    parent.position += new Vector3(0, desiredDirection * Time.deltaTime * 6, 0);
                 } else if (editorHandle.Direction == EditorHandle.HandleDirection.Z)
                 {
                     var desiredDirection = (forward * moveY + right * moveX).z * 5f;
-
-                    if (editorHandle.Type == EditorHandle.HandleType.Move)
-                        parent.position += new Vector3(0, 0, desiredDirection * Time.deltaTime * 6);
-                    else
-                        parent.localScale += new Vector3(0, 0, desiredDirection * Time.deltaTime * 6);
+                    parent.position += new Vector3(0, 0, desiredDirection * Time.deltaTime * 6);
                 }
             }
         } else
