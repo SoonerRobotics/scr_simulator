@@ -35,7 +35,7 @@ public class UIController : MonoBehaviour
 
     public void Menu()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene((int)GameScenes.SceneMenu);
     }
     public void Quit()
     {

@@ -44,7 +44,7 @@ public class MenuController : MonoBehaviour
         }
 
         string robotNameToLoad = PlayerPrefs.GetString("lastRobot", robots[0].robotName);
-        int levelIdToLoad = PlayerPrefs.GetInt("lastLevel", levels[0].levelId);
+        int levelIdToLoad = PlayerPrefs.GetInt("lastLevel", (int)levels[0].levelId);
 
         // Generate level toggles
         foreach (LevelScriptableObject level in levels)
@@ -58,7 +58,7 @@ public class MenuController : MonoBehaviour
             });
             toggle.group = togglesGroup;
 
-            if (level.levelId == levelIdToLoad)
+            if ((int)level.levelId == levelIdToLoad)
             {
                 activeLevel = level;
                 toggle.isOn = true;
@@ -96,7 +96,7 @@ public class MenuController : MonoBehaviour
     public void SelectLevel(LevelScriptableObject activeLevel)
     {
         MenuController.activeLevel = activeLevel;
-        PlayerPrefs.SetInt("lastLevel", activeLevel.levelId);
+        PlayerPrefs.SetInt("lastLevel", (int)activeLevel.levelId);
     }
 
     public void SelectRobot(RobotScriptableObject activeRobot)
@@ -163,6 +163,6 @@ public class MenuController : MonoBehaviour
 
     public void PlaySim()
     {
-        SceneManager.LoadScene(activeLevel.levelId);
+        SceneManager.LoadScene((int)activeLevel.levelId);
     }
 }

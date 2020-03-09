@@ -8,5 +8,5 @@ using UnityEngine.Serialization;
 public class LevelScriptableObject : ScriptableObject
 {
     public string levelName;
-    public int levelId;
+    public GameScenes levelId;
 }

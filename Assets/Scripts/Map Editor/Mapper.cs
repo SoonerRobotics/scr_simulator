@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static UnityEngine.GUI;
 
@@ -14,6 +15,9 @@ public class Mapper : MonoBehaviour
     // GUI Containers
     public GameObject CreateMapMenu;
     public GameObject PrefabListingMenu;
+    public GameObject EscapeMenu;
+    public GameObject LoadMapMenu; // Should also be a prefab
+    public GameObject SettingsMenu; // Should probably just be a prefab
 
     // GUI References
     public GameObject ScrollbarContentObject;
@@ -55,6 +59,19 @@ public class Mapper : MonoBehaviour
                 Initialize();
             }
             return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if(CreateMapMenu.activeSelf)
+            {
+                CreateMapMenu.SetActive(false);
+                SetAllowInput(true);
+                return;
+            }  
+
+            SetAllowInput(EscapeMenu.activeSelf);
+            EscapeMenu.SetActive(!EscapeMenu.activeSelf);
         }
 
         if (Disabled)
@@ -112,6 +129,34 @@ public class Mapper : MonoBehaviour
     }
     #endregion
 
+    #region Escape Menu
+    public void OnGameQuit()
+    {
+        #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+        #else
+              Application.Quit();
+        #endif
+    }
+    public void OnReturnToMenu()
+    {
+        SceneManager.LoadScene((int)GameScenes.SceneMenu);
+    }
+    public void OnGameSave()
+    {
+        if (!Editor.activeMap.mapName.Equals(""))
+        {
+            Editor.activeMap.Save();
+        }
+        else
+        {
+            SetAllowInput(false);
+            CreateMapMenu.SetActive(true);
+            EscapeMenu.SetActive(false);
+        }
+    }
+    #endregion
+
     #region Other Functions
     /// <summary>
     /// Disable or enable input
@@ -143,6 +188,9 @@ public class Mapper : MonoBehaviour
     /// <param name="index">The index of the prefab in the prefab list</param>
     private void OnSelectedPrefabChanged(int index)
     {
+        if (Disabled)
+            return;
+
         if (!Editor.activeMap.mapName.Equals(""))
         {
             var prefab = Editor.Prefabs[index];
@@ -155,7 +203,6 @@ public class Mapper : MonoBehaviour
         {
             SetAllowInput(false);
             CreateMapMenu.SetActive(true);
-            PrefabListingMenu.SetActive(false);
         }
     }
     
@@ -171,7 +218,6 @@ public class Mapper : MonoBehaviour
         // We need to verify data first! Then let the user do this, otherwise show error mesasge?
         SetAllowInput(true);
         CreateMapMenu.SetActive(false);
-        PrefabListingMenu.SetActive(true);
     }
 
     /// <summary>
