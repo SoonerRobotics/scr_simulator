@@ -31,7 +31,7 @@ public class EditorMovement : MonoBehaviour
     {
         if(Input.GetMouseButton(0))
         {
-            if(editorHandle == null || editorHandle.gameObject == null)
+            if (editorHandle == null || editorHandle.gameObject == null)
             {
                 RaycastHit hit;
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -54,19 +54,31 @@ public class EditorMovement : MonoBehaviour
                 if (parent == null)
                     return;
 
-                var forward = Camera.main.transform.forward.normalized;
-                var right = Camera.main.transform.right.normalized;
+                Vector3 forward = Camera.main.transform.forward.normalized;
+                Vector3 right = Camera.main.transform.right.normalized;
+                Vector3 up = Camera.main.transform.up.normalized;
 
-                var desiredDirection = (forward * moveY + right * moveX).x * 5f;
+                float desiredDirection;
                 Vector3 editedValue;
                 if (editorHandle.Direction == EditorHandle.HandleDirection.X)
+                {
+                    desiredDirection = (forward * moveY + right * moveX).x * 5f;
                     editedValue = new Vector3(desiredDirection * Time.deltaTime * 6, 0, 0);
+                }
                 else if (editorHandle.Direction == EditorHandle.HandleDirection.Y)
+                {
+                    desiredDirection = (up * moveY).y * 5f;
                     editedValue = new Vector3(0, desiredDirection * Time.deltaTime * 6, 0);
+                }
                 else if (editorHandle.Direction == EditorHandle.HandleDirection.Z)
+                {
+                    desiredDirection = (right * moveY - forward * moveX).x * 5f;
                     editedValue = new Vector3(0, 0, desiredDirection * Time.deltaTime * 6);
+                }
                 else
+                {
                     editedValue = Vector3.zero;
+                }
 
                 if (editorHandle.Type == EditorHandle.HandleType.Move)
                     parent.position += editedValue;
