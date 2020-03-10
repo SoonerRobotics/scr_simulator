@@ -107,7 +107,6 @@ public class FreeFlyCameraScript : MonoBehaviour
         float axis = Mouse.current.scroll.y.ReadValue();
         if (axis != 0)
         {
-            Debug.Log(axis);
             var zoomSensitivity = fastMode ? this.fastZoomSensitivity : this.zoomSensitivity;
             transform.position = transform.position + transform.forward * (10 / axis) * zoomSensitivity;
             // Mouse.current.scroll.y.ReadValue() returns either 120 or -120 (atleast on a corsair mouse), so to prevent over-scrolling, we divide 10 by that value to get a more realistic number!

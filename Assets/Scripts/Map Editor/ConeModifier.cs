@@ -39,7 +39,6 @@ public class ConeModifier : MonoBehaviour
 			float z = Mathf.Sin(r) * radius;
 			vertices[i + 1] = new Vector3(x, 0f, z);
 
-			Debug.Log(ratio);
 			uv[i + 1] = new Vector2(ratio, 0f);
 		}
 		vertices[subdivisions + 1] = new Vector3(0f, height, 0f);

@@ -38,20 +38,29 @@ public class EditorHandle : MonoBehaviour
         renderer.material = handleMaterial;
         renderer.material.color = c;
 
-
-        renderer = transform.parent.GetComponent<Renderer>();
+        Transform parent = GetStick();
+        renderer = parent.GetComponent<Renderer>();
         renderer.material = handleMaterial;
-        renderer.material.color = c;
+        renderer.material.color = c;    
+    }
+
+    public Transform GetStick()
+    {
+        return transform.parent.parent.GetChild(1).transform;
     }
 
     public Transform GetParent()
     {
-        return transform.parent.parent;
+        if (transform.parent == null || transform.parent.parent == null)
+            return null;
+
+        return transform.parent.parent.parent;
     }
 
     public enum HandleType
     { 
-        Move
+        Move,
+        Scale
     }
 
     public enum HandleDirection
