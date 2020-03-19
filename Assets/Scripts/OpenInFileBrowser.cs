@@ -18,7 +18,15 @@ public static class OpenInFileBrowser
 		}
 	}
 
-	public static void OpenInMac(string path)
+    public static bool IsInUbuntu
+    {
+        get
+        {
+            return UnityEngine.SystemInfo.operatingSystem.IndexOf("Ubuntu") != -1;
+        }
+    }
+
+    public static void OpenInMac(string path)
 	{
 		bool openInsidesOfFolder = false;
 
@@ -80,7 +88,19 @@ public static class OpenInFileBrowser
 		}
 	}
 
-	public static void Open(string path)
+    public static void OpenInUbuntu(string path)
+    {
+        try
+        {
+            System.Diagnostics.Process.Start("xdg-open", path);
+        }
+        catch (System.ComponentModel.Win32Exception e)
+        {
+            e.HelpLink = ""; // do anything with this variable to silence warning about not using it
+        }
+    }
+
+    public static void Open(string path)
 	{
 		if (IsInWinOS)
 		{
@@ -90,10 +110,15 @@ public static class OpenInFileBrowser
 		{
 			OpenInMac(path);
 		}
+        else if (IsInUbuntu)
+        {
+            OpenInUbuntu(path);
+        }
 		else // couldn't determine OS
 		{
 			OpenInWin(path);
 			OpenInMac(path);
-		}
+            OpenInUbuntu(path);
+        }
 	}
 }

@@ -1,6 +1,5 @@
 ﻿using RosSharp.RosBridgeClient.MessageTypes.Igvc;
-using System.Collections;
-using System.Collections.Generic;
+using RosSharp.RosBridgeClient.MessageTypes.Sensor;
 using UnityEngine;
 
 namespace RosSharp.RosBridgeClient
@@ -8,10 +7,9 @@ namespace RosSharp.RosBridgeClient
     public class IGVCConfigLoader : MonoBehaviour
     {
 
-        private string robotName = "IGVC";
+        public string robotName = "IGVC";
 
         private SimpleCarController simpleCarController;
-        private RosConnector rosConnector;
         private ImagePublisher imagePublisher;
         private LaserScanPublisher laserScanPublisher;
         private IMUPublisher iMUPublisher;
@@ -22,7 +20,6 @@ namespace RosSharp.RosBridgeClient
         void Awake()
         {
             simpleCarController = this.GetComponent<SimpleCarController>();
-            rosConnector = this.GetComponent<RosConnector>();
             imagePublisher = this.GetComponent<ImagePublisher>();
             laserScanPublisher = this.GetComponent<LaserScanPublisher>();
             iMUPublisher = this.GetComponent<IMUPublisher>();
@@ -31,7 +28,7 @@ namespace RosSharp.RosBridgeClient
             motorsSubscriber = this.GetComponent<IGVCMotorsSubscriber>();
 
             simpleCarController.useController = !RobotOptions.GetValue(robotName + "Autonomous").Equals("True");
-            rosConnector.RosBridgeServerUrl = "ws://" + RobotOptions.GetValue(robotName + "ROS Bridge IP");
+            //rosConnector.RosBridgeServerUrl = "ws://" + RobotOptions.GetValue(robotName + "ROS Bridge IP");
             if (RobotOptions.Exists(robotName + "Camera Topic"))
             {
                 imagePublisher.Topic = RobotOptions.GetValue(robotName + "Camera Topic");

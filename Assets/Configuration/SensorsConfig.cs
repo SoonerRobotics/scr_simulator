@@ -11,17 +11,14 @@ public class CFG_LIDAR
 
 public class CFG_IMU
 {
-    [JsonProperty("Heading CCW")]
-    public bool headingCCW = true;
-
-    [JsonProperty("Heading Radians")]
-    public bool headingRadians = true;
-
     [JsonProperty("Acceleration Noise Std Dev")]
     public float accelNoise = 0.15f;
 
-    [JsonProperty("Heading Noise Std Dev")]
-    public float headingNoise = 1f;
+    [JsonProperty("Orientation Noise Std Dev")]
+    public float orientationNoise = 0.017f;
+
+    [JsonProperty("Angular Velocity Noise Std Dev")]
+    public float angularVelocityNoise = 0.017f;
 }
 
 public class CFG_Encoders

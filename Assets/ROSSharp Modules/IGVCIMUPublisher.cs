@@ -2,34 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RosSharp.RosBridgeClient.MessageTypes.Nrc
+namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
 {
-    public class DriveStatusPublisher : UnityPublisher<DriveStatus>
+    public class IGVCIMUPublisher : UnityPublisher<Imuodom>
     {
-        public DriveStatus message;
+        private Imuodom message;
         public Transform tf;
 
-        private SimpleCarController c;
-        private float lastVelocity = float.PositiveInfinity;
-
         public float accelNoiseStdDev = 0.15f;
-        public float headingNoiseStdDev = 1f;
-
-        public float velocityNoiseStdDev = 0.05f;
+        public float headingNoiseStdDev = 0.017f;
 
         public bool ccw = true;
         public bool radians = true;
+
+        private SimpleCarController c;
+        private float lastVelocity = float.PositiveInfinity;
 
         protected override void Start()
         {
             base.Start();
             c = GetComponent<SimpleCarController>();
-            message = new DriveStatus();
-            message.device_id = 1;
+            message = new Imuodom();
 
             accelNoiseStdDev = ConfigLoader.Instance.sensors.imu.accelNoise;
-            velocityNoiseStdDev = ConfigLoader.Instance.sensors.encoders.velocityNoise;
         }
+
         public float getRandNormal(float mean, float stdDev)
         {
             float u1 = 1.0f - Random.value; //uniform(0,1] random doubles
@@ -52,20 +49,17 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Nrc
             float accel = ((c.vr + c.vl) / c.axleLength - lastVelocity) / Time.fixedDeltaTime;
             lastVelocity = (c.vr + c.vl) / c.axleLength;
 
-            message.yaw = tf.rotation.eulerAngles.y;
+            message.heading = tf.rotation.eulerAngles.y;
             if (ccw)
             {
-                message.yaw = 360 - message.yaw;
+                message.heading = 360 - message.heading;
             }
             if (radians)
             {
-                message.yaw *= Mathf.Deg2Rad;
+                message.heading *= Mathf.Deg2Rad;
             }
-            message.yaw += getRandNormal(0, headingNoiseStdDev);
+            message.heading += getRandNormal(0, headingNoiseStdDev);
             message.acceleration = accel + getRandNormal(0, accelNoiseStdDev);
-            message.left_speed = c.vl + getRandNormal(0, velocityNoiseStdDev);
-            message.right_speed = c.vr + getRandNormal(0, velocityNoiseStdDev);
-
             Publish(message);
         }
     }

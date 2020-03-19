@@ -32,11 +32,6 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Geometry
             rotation = new UnityEngine.Quaternion();
         }
 
-        private void Update()
-        {
-            Publish(message);
-        }
-
         void FixedUpdate()
         {
             relPosition = tf.position - startPos;
@@ -49,6 +44,8 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Geometry
             quaternion.x = rotation.x;
             quaternion.y = rotation.y;
             quaternion.z = rotation.z;
+
+            Publish(message);
         }
     }
 }

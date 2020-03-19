@@ -7,6 +7,7 @@ using TMPro;
 using System.IO;
 using System;
 using UnityEditor;
+using RosSharp.RosBridgeClient;
 
 public class MenuController : MonoBehaviour
 {
@@ -30,6 +31,7 @@ public class MenuController : MonoBehaviour
     public GameObject optionPrefab;
     public RectTransform optionEntryParent;
     private List<GameObject> options = new List<GameObject>();
+    public Button RunButton;
 
     public void Start()
     {
@@ -91,6 +93,24 @@ public class MenuController : MonoBehaviour
         }
 
         alreadyInit = true;
+
+        if (RosConnector.instance.Connected)
+        {
+            RunButton.interactable = true;
+            RunButton.GetComponent<TextMeshProUGUI>().text = "Run";
+        }
+    }
+
+    private void OnROSConnect()
+    {
+        RunButton.interactable = true;
+        RunButton.GetComponentInChildren<TextMeshProUGUI>().text = "Run";
+    }
+
+    private void OnROSClose()
+    {
+        RunButton.interactable = false;
+        RunButton.GetComponentInChildren<TextMeshProUGUI>().text = "Waiting for RosBridge...";
     }
 
     public void SelectLevel(LevelScriptableObject activeLevel)
@@ -164,5 +184,18 @@ public class MenuController : MonoBehaviour
     public void PlaySim()
     {
         SceneManager.LoadScene(activeLevel.levelId);
+    }
+
+    private void Update()
+    {
+        if (RunButton.interactable == true && RosConnector.instance.Connected == false)
+        {
+            OnROSClose();
+        }
+
+        if (RunButton.interactable == false && RosConnector.instance.Connected == true)
+        {
+            OnROSConnect();
+        }
     }
 }

@@ -16,7 +16,7 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
             car = GetComponent<SimpleCarController>();
         }
 
-        void Update()
+        void FixedUpdate()
         {
             message.left = car.left;
             message.right = car.right;

@@ -25,6 +25,10 @@ namespace RosSharp.RosBridgeClient
 
         public bool useAngular = true;
 
+        public Vector3 linear_vel { get; private set; } = new Vector3();
+        public Vector3 angular_vel { get; private set; } = new Vector3();
+        public Vector3 accel { get; private set; } = new Vector3();
+
         public void Start()
         {
             useAngular = ConfigLoader.Instance.control.motors.useAngularVelocity;
@@ -63,9 +67,17 @@ namespace RosSharp.RosBridgeClient
             float dot_x = wheelRadius / 2.0f * (vl + vr) * Mathf.Sin(psi);
             float dot_y = wheelRadius / 2.0f * (vl + vr) * Mathf.Cos(psi);
 
-            transform.Translate(new Vector3(dot_x, 0, dot_y) * Time.fixedDeltaTime, Space.World);
+            Vector3 new_linear_vel = new Vector3(dot_x, 0, dot_y);
 
-            transform.Rotate(new Vector3(0, psi_dot * Mathf.Rad2Deg, 0) * Time.fixedDeltaTime, Space.World);
+            accel = (new_linear_vel - linear_vel) / Time.fixedDeltaTime;
+
+            linear_vel = new_linear_vel;
+
+            transform.Translate(linear_vel * Time.fixedDeltaTime, Space.World);
+
+            angular_vel = new Vector3(0, psi_dot, 0);
+
+            transform.Rotate(angular_vel * Mathf.Rad2Deg * Time.fixedDeltaTime, Space.World);
 
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using RosSharp.RosBridgeClient;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,12 +8,6 @@ public class UIController : MonoBehaviour
 {
     private bool isPaused = false;
     public GameObject pauseUI;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     public void Pause()
     {
@@ -48,6 +43,11 @@ public class UIController : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Escape))
         {
             Pause();
+        }
+
+        if (RosConnector.instance.Connected == false)
+        {
+            SceneManager.LoadScene(0);
         }
     }
 }

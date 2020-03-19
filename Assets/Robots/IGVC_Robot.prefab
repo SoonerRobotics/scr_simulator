@@ -184,16 +184,15 @@ GameObject:
   - component: {fileID: 6116572216260438476}
   - component: {fileID: 6116572216260438467}
   - component: {fileID: 6116572216260438466}
-  - component: {fileID: 6116572216260438477}
   - component: {fileID: 6116572216260438479}
   - component: {fileID: 6116572216260438478}
-  - component: {fileID: 6116572216260438473}
   - component: {fileID: 6116572216260438474}
   - component: {fileID: 6116572216260438475}
   - component: {fileID: 6116572216260438484}
   - component: {fileID: 185712431425618641}
   - component: {fileID: 1603697777774665651}
   - component: {fileID: 6116572216260438472}
+  - component: {fileID: 6193012776527190307}
   m_Layer: 0
   m_Name: IGVC_Robot
   m_TagString: Untagged
@@ -264,22 +263,6 @@ MonoBehaviour:
   rightControl: 0
   useController: 1
   useAngular: 1
---- !u!114 &6116572216260438477
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6116572216260438465}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff98778ae051cfd40a6e4effdf851ebd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SecondsTimeout: 10
-  Serializer: 0
-  protocol: 0
-  RosBridgeServerUrl: ws://localhost:9090
 --- !u!114 &6116572216260438479
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,24 +296,6 @@ MonoBehaviour:
   Topic: /scan
   laserScanReader: {fileID: 6116572216897894781}
   FrameId: Unity
---- !u!114 &6116572216260438473
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6116572216260438465}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afe39e33efbd8e44692f63c6c203967e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Topic: /igvc/imu
-  tf: {fileID: 6116572216260438476}
-  accelNoiseStdDev: 0.15
-  headingNoiseStdDev: 1
-  ccw: 1
-  radians: 1
 --- !u!114 &6116572216260438474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -417,6 +382,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 805b868d5fd588441988892328e67723, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6193012776527190307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6116572216260438465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bedd522ebafb354397c6049a0a8d903, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Topic: /igvc/imu
 --- !u!1 &6116572216309536757
 GameObject:
   m_ObjectHideFlags: 0
