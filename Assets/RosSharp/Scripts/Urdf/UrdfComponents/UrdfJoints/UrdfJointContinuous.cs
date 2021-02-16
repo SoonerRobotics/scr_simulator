@@ -19,14 +19,13 @@ namespace RosSharp.Urdf
 {
     public class UrdfJointContinuous : UrdfJoint
     {
-        public override JointTypes JointType => JointTypes.Continuous;
-
         public static UrdfJoint Create(GameObject linkObject)
         {
             UrdfJointContinuous urdfJoint = linkObject.AddComponent<UrdfJointContinuous>();
-
+            urdfJoint._jointType = JointTypes.Continuous;
             urdfJoint.UnityJoint = linkObject.AddComponent<HingeJoint>();
             urdfJoint.UnityJoint.autoConfigureConnectedAnchor = true;
+            linkObject.AddComponent<HingeJointAngleCalculator>();
 
             return urdfJoint;
         }
@@ -35,7 +34,7 @@ namespace RosSharp.Urdf
 
         public override float GetPosition()
         {
-            return -((HingeJoint)UnityJoint).angle * Mathf.Deg2Rad;
+            return -GetComponent<HingeJointAngleCalculator>().Angle * Mathf.Deg2Rad;
         }
         public override float GetVelocity()
         {

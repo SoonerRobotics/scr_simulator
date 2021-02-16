@@ -24,7 +24,7 @@ namespace RosSharp.RosBridgeClient
 
         protected virtual void Start()
         {
-            GetComponent<RosConnector>().RosSocket.AdvertiseService<Tin, Tout>(ServiceName, ServiceCallHandler);
+            RosConnector.instance.RosSocket.AdvertiseService<Tin, Tout>(ServiceName, ServiceCallHandler);
         }
 
         protected abstract bool ServiceCallHandler(Tin request, out Tout response);

@@ -94,10 +94,10 @@ public class MenuController : MonoBehaviour
 
         alreadyInit = true;
 
-        if (RosConnector.instance.Connected)
+        if (RosConnector.instance.IsConnected.WaitOne(0))
         {
             RunButton.interactable = true;
-            RunButton.GetComponent<TextMeshProUGUI>().text = "Run";
+            RunButton.GetComponentInChildren<TextMeshProUGUI>().text = "Run";
         }
     }
 
@@ -188,12 +188,13 @@ public class MenuController : MonoBehaviour
 
     private void Update()
     {
-        if (RunButton.interactable == true && RosConnector.instance.Connected == false)
+        bool connected = RosConnector.instance.IsConnected.WaitOne(0);
+        if (RunButton.interactable == true && connected == false)
         {
             OnROSClose();
         }
 
-        if (RunButton.interactable == false && RosConnector.instance.Connected == true)
+        if (RunButton.interactable == false && connected == true)
         {
             OnROSConnect();
         }

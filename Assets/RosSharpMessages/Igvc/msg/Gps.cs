@@ -7,28 +7,30 @@
  * <https://github.com/siemens/ros-sharp> 
  */
 
-using Newtonsoft.Json;
+
 
 namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
 {
     public class Gps : Message
     {
-        [JsonIgnore]
         public const string RosMessageName = "igvc_msgs/gps";
 
-        public double latitude;
-        public double longitude;
+        public double latitude { get; set; }
+        public double longitude { get; set; }
+        public bool hasSignal { get; set; }
 
         public Gps()
         {
             this.latitude = 0.0;
             this.longitude = 0.0;
+            this.hasSignal = true;
         }
 
-        public Gps(double latitude, double longitude)
+        public Gps(double latitude, double longitude, bool hasSignal)
         {
             this.latitude = latitude;
             this.longitude = longitude;
+            this.hasSignal = hasSignal;
         }
     }
 }

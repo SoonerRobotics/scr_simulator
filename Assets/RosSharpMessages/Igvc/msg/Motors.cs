@@ -7,17 +7,16 @@
  * <https://github.com/siemens/ros-sharp> 
  */
 
-using Newtonsoft.Json;
+
 
 namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
 {
     public class Motors : Message
     {
-        [JsonIgnore]
         public const string RosMessageName = "igvc_msgs/motors";
 
-        public float left;
-        public float right;
+        public float left { get; set; }
+        public float right { get; set; }
 
         public Motors()
         {

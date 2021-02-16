@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91daf2032ec7cbc47a4ecbed071e8d2c, type: 3}
+  m_Name: IGVC_Robot_2020_w_Camera
+  m_EditorClassIdentifier: 
+  robotName: IGVC20 w/ Cam
+  robotPrefab: {fileID: 6116572216260438465, guid: 6e1912bd5bf627749881f13614c02c35,
+    type: 3}
+  options:
+  - name: Camera Topic
+    defaultValue: /igvc/camera/compressed
+  - name: IMU Topic
+    defaultValue: /igvc/imu
+  - name: Velocity Topic
+    defaultValue: /igvc/velocity
+  - name: GPS Topic
+    defaultValue: /igvc/gps
+  - name: Laser Scan Topic
+    defaultValue: /scan
+  - name: Motors Topic
+    defaultValue: /igvc/motors_raw
+  - name: ROS Bridge IP
+    defaultValue: localhost:9090
+  - name: Autonomous
+    defaultValue: True

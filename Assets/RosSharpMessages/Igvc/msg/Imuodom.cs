@@ -7,17 +7,16 @@
  * <https://github.com/siemens/ros-sharp> 
  */
 
-using Newtonsoft.Json;
+
 
 namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
 {
     public class Imuodom : Message
     {
-        [JsonIgnore]
         public const string RosMessageName = "igvc_msgs/imuodom";
 
-        public float acceleration;
-        public float heading;
+        public float acceleration { get; set; }
+        public float heading { get; set; }
 
         public Imuodom()
         {

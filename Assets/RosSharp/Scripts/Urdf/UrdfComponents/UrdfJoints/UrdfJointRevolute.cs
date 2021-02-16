@@ -1,4 +1,4 @@
-﻿/*
+/*
 © Siemens AG, 2018-2019
 Author: Suzannah Smith (suzannah.smith@siemens.com)
 
@@ -19,17 +19,16 @@ using UnityEngine;
 namespace RosSharp.Urdf
 {
     public class UrdfJointRevolute : UrdfJoint
-    {
-        public override JointTypes JointType => JointTypes.Revolute;
-        
+    {                
         public static UrdfJoint Create(GameObject linkObject)
         {
             UrdfJointRevolute urdfJoint = linkObject.AddComponent<UrdfJointRevolute>();
-
+            urdfJoint._jointType = JointTypes.Revolute;
             urdfJoint.UnityJoint = linkObject.AddComponent<HingeJoint>();
             urdfJoint.UnityJoint.autoConfigureConnectedAnchor = true;
             ((HingeJoint)urdfJoint.UnityJoint).useLimits = true;
             linkObject.AddComponent<HingeJointLimitsManager>();
+            linkObject.AddComponent<HingeJointAngleCalculator>();
 
             return urdfJoint;
         }
@@ -38,7 +37,7 @@ namespace RosSharp.Urdf
         
         public override float GetPosition()
         {
-            return -((HingeJoint)UnityJoint).angle * Mathf.Deg2Rad;
+            return -GetComponent<HingeJointAngleCalculator>().Angle * Mathf.Deg2Rad;
         }
 
         public override float GetVelocity()
@@ -90,8 +89,8 @@ namespace RosSharp.Urdf
         {
             HingeJointLimitsManager hingeJointLimits = GetComponent<HingeJointLimitsManager>();
             return new Joint.Limit(
-                Math.Round(hingeJointLimits.LargeAngleLimitMin * Mathf.Deg2Rad, RoundDigits),
-                Math.Round(hingeJointLimits.LargeAngleLimitMax * Mathf.Deg2Rad, RoundDigits),
+                Math.Round(hingeJointLimits.LargeAngleLimitMax * -1.0f * Mathf.Deg2Rad, RoundDigits),
+                Math.Round(hingeJointLimits.LargeAngleLimitMin * -1.0f * Mathf.Deg2Rad, RoundDigits),
                 EffortLimit,
                 VelocityLimit);
         }

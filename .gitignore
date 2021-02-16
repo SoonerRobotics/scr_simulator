@@ -65,3 +65,6 @@ crashlytics-build.properties
 config.json
 Assets/StreamingAssets/build_info
 Assets/StreamingAssets/build_info.meta
+
+# Ignore vscode
+.vscode/

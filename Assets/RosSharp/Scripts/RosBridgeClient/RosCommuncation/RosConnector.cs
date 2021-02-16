@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 using System;
+using System.Threading;
 using RosSharp.RosBridgeClient.Protocols;
 using UnityEngine;
 
@@ -24,33 +25,36 @@ namespace RosSharp.RosBridgeClient
     public class RosConnector : MonoBehaviour
     {
         public static RosConnector instance;
-
-        public int Timeout = 3;
+        public int SecondsTimeout = 10;
 
         public RosSocket RosSocket { get; private set; }
         public RosSocket.SerializerEnum Serializer;
-        public Protocol Protocol;
+        public Protocol protocol;
         public string RosBridgeServerUrl = "ws://192.168.0.1:9090";
 
-        public bool Connected { get; private set; } = false;
+        public ManualResetEvent IsConnected { get; private set; }
 
-        public void Awake()
+        public virtual void Awake()
         {
             if (instance)
                 return;
 
             instance = this;
-            RosSocket = ConnectToRos(Protocol, RosBridgeServerUrl, OnConnected, OnClosed, Serializer);
             DontDestroyOnLoad(this);
-            Connect();
+            
+            IsConnected = new ManualResetEvent(false);
+            new Thread(ConnectAndWait).Start();
         }
 
-        private void Connect()
+        protected void ConnectAndWait()
         {
-            RosSocket.protocol.Connect();
+            RosSocket = ConnectToRos(protocol, RosBridgeServerUrl, OnConnected, OnClosed, Serializer);
+
+            if (!IsConnected.WaitOne(SecondsTimeout * 1000))
+                Debug.LogWarning("Failed to connect to RosBridge at: " + RosBridgeServerUrl);
         }
 
-        public static RosSocket ConnectToRos(Protocol protocolType, string serverUrl, EventHandler onConnected = null, EventHandler onClosed = null, RosSocket.SerializerEnum serializer = RosSocket.SerializerEnum.JSON)
+        public static RosSocket ConnectToRos(Protocol protocolType, string serverUrl, EventHandler onConnected = null, EventHandler onClosed = null, RosSocket.SerializerEnum serializer = RosSocket.SerializerEnum.Microsoft)
         {
             IProtocol protocol = ProtocolInitializer.GetProtocol(protocolType, serverUrl);
             protocol.OnConnected += onConnected;
@@ -61,22 +65,19 @@ namespace RosSharp.RosBridgeClient
 
         private void OnApplicationQuit()
         {
-            if (RosSocket != null)
-                RosSocket.Close();
+            RosSocket.Close();
         }
 
         private void OnConnected(object sender, EventArgs e)
         {
-            Connected = true;
+            IsConnected.Set();
             Debug.Log("Connected to RosBridge: " + RosBridgeServerUrl);
         }
 
-        private async void OnClosed(object sender, EventArgs e)
+        private void OnClosed(object sender, EventArgs e)
         {
-            Connected = false;
-            Debug.Log("Disconnected from RosBridge: " + RosBridgeServerUrl + ". Retrying in " + Timeout + " seconds.");
-            await System.Threading.Tasks.Task.Delay(Timeout * 1000);
-            Connect();
+            IsConnected.Reset();
+            Debug.Log("Disconnected from RosBridge: " + RosBridgeServerUrl);
         }
     }
 }
