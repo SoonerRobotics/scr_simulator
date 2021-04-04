@@ -30,6 +30,10 @@ namespace RosSharp.RosBridgeClient
         protected virtual void Start()
         {
             rosConnector = RosConnector.instance;
+            if (rosConnector == null || MenuController.runningWithoutROS || !rosConnector.IsConnected.WaitOne(0)) {
+                Destroy(this);
+                return;
+            }
             new Thread(Subscribe).Start();
         }
 

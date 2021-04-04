@@ -13,6 +13,7 @@ public class MenuController : MonoBehaviour
 {
     public GameObject togglePrefab;
     private static bool alreadyInit = false;
+    public static bool runningWithoutROS = false;
 
     [Header("Levels")]
     public LevelScriptableObject[] levels;
@@ -26,9 +27,11 @@ public class MenuController : MonoBehaviour
     public RectTransform robotsParent;
     public static RobotScriptableObject activeRobot { get; private set; }
     private Dictionary<string, TMP_InputField> keyToOptionField = new Dictionary<string, TMP_InputField>();
+    private Dictionary<string, Toggle> keyToToggleField = new Dictionary<string, Toggle>();
 
     [Header("Options")]
     public GameObject optionPrefab;
+    public GameObject optionTogglePrefab;
     public RectTransform optionEntryParent;
     private List<GameObject> options = new List<GameObject>();
     public Button RunButton;
@@ -133,19 +136,40 @@ public class MenuController : MonoBehaviour
         // Make new ones for the new robot
         foreach(Option option in activeRobot.options)
         {
-            GameObject optionObj = Instantiate(optionPrefab, optionEntryParent);
-            options.Add(optionObj);
+            if (option.type == OptionType.String) {
+                GameObject optionObj = Instantiate(optionPrefab, optionEntryParent);
+                options.Add(optionObj);
 
-            TextMeshProUGUI text = optionObj.GetComponentInChildren<TextMeshProUGUI>();
-            text.text = option.name;
+                TextMeshProUGUI text = optionObj.GetComponentInChildren<TextMeshProUGUI>();
+                text.text = option.name;
 
-            TMP_InputField input_field = optionObj.GetComponentInChildren<TMP_InputField>();
-            input_field.text = RobotOptions.GetValue(activeRobot.robotName + option.name);
-            input_field.onEndEdit.AddListener(delegate
-            {
-                RobotOptions.SetValue(activeRobot.robotName + option.name, input_field.text);
-            });
-            keyToOptionField[activeRobot.robotName + option.name] = input_field;
+                TMP_InputField input_field = optionObj.GetComponentInChildren<TMP_InputField>();
+                input_field.text = RobotOptions.GetValue(activeRobot.robotName + option.name);
+                input_field.onEndEdit.AddListener(delegate
+                {
+                    RobotOptions.SetValue(activeRobot.robotName + option.name, input_field.text);
+                });
+                keyToOptionField[activeRobot.robotName + option.name] = input_field;
+            } else if (option.type == OptionType.Boolean) {
+                GameObject optionObj = Instantiate(optionTogglePrefab, optionEntryParent);
+                options.Add(optionObj);
+
+                Toggle toggle = optionObj.GetComponent<Toggle>();
+                toggle.onValueChanged.AddListener(delegate
+                {
+                    RobotOptions.SetValue(activeRobot.robotName + option.name, toggle.isOn ? "True" : "False");
+                });
+
+                if (RobotOptions.GetValue(activeRobot.robotName + option.name) == "True")
+                {
+                    toggle.isOn = true;
+                }
+
+
+                TextMeshProUGUI text = optionObj.GetComponentInChildren<TextMeshProUGUI>();
+                text.text = option.name;
+                keyToToggleField[activeRobot.robotName + option.name] = toggle;
+            }
         }
     }
 
@@ -179,10 +203,21 @@ public class MenuController : MonoBehaviour
         {
             keyToOptionField[key].text = RobotOptions.GetValue(key);
         }
+        foreach (string key in keyToToggleField.Keys)
+        {
+            keyToToggleField[key].isOn = RobotOptions.GetValue(key) == "True";
+        }
     }
 
     public void PlaySim()
     {
+        runningWithoutROS = false;
+        SceneManager.LoadScene(activeLevel.levelId);
+    }
+
+    public void PlaySimWithoutROS()
+    {
+        runningWithoutROS = true;
         SceneManager.LoadScene(activeLevel.levelId);
     }
 

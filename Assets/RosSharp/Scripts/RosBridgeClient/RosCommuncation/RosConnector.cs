@@ -25,9 +25,10 @@ namespace RosSharp.RosBridgeClient
     public class RosConnector : MonoBehaviour
     {
         public static RosConnector instance;
-        public int SecondsTimeout = 10;
+        public float SecondsTimeout = 1.0f;
 
         public RosSocket RosSocket { get; private set; }
+        private Thread SocketThread;
         public RosSocket.SerializerEnum Serializer;
         public Protocol protocol;
         public string RosBridgeServerUrl = "ws://192.168.0.1:9090";
@@ -43,14 +44,18 @@ namespace RosSharp.RosBridgeClient
             DontDestroyOnLoad(this);
             
             IsConnected = new ManualResetEvent(false);
-            new Thread(ConnectAndWait).Start();
+            SocketThread = new Thread(ConnectAndWait);
+            SocketThread.Start();
         }
 
         protected void ConnectAndWait()
         {
             RosSocket = ConnectToRos(protocol, RosBridgeServerUrl, OnConnected, OnClosed, Serializer);
 
-            if (!IsConnected.WaitOne(SecondsTimeout * 1000))
+            while (!IsConnected.WaitOne((int)(SecondsTimeout * 1000)))
+                if (RosSocket == null) {
+                    break;
+                }
                 Debug.LogWarning("Failed to connect to RosBridge at: " + RosBridgeServerUrl);
         }
 
@@ -65,7 +70,16 @@ namespace RosSharp.RosBridgeClient
 
         private void OnApplicationQuit()
         {
-            RosSocket.Close();
+            if (RosSocket != null) {
+                RosSocket.Close();
+            }
+
+            // Necessary as this is also our flag to stop running threads
+            RosSocket = null;
+
+            if (SocketThread != null) {
+                SocketThread.Join((int)(SecondsTimeout * 1000));
+            }
         }
 
         private void OnConnected(object sender, EventArgs e)
@@ -78,6 +92,13 @@ namespace RosSharp.RosBridgeClient
         {
             IsConnected.Reset();
             Debug.Log("Disconnected from RosBridge: " + RosBridgeServerUrl);
+
+            RosSocket.Close();
+            RosSocket = null;
+            SocketThread.Join((int)(SecondsTimeout * 1000));
+
+            SocketThread = new Thread(ConnectAndWait);
+            SocketThread.Start();
         }
     }
 }

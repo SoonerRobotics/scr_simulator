@@ -12,6 +12,7 @@ namespace RosSharp.RosBridgeClient
         public float turnMod = 1f;
         public float wheelRadius = 0.127f;
         public float axleLength = 0.6096f;
+        public float minSpeed = 0.1f;
         public float drag = 0.15f;
 
         public float vl, vr = 0; // angular velocities (radians per second)
@@ -60,6 +61,14 @@ namespace RosSharp.RosBridgeClient
             }
 
             float psi_dot = wheelRadius * (vl - vr) / axleLength;
+
+            if (Mathf.Abs(drag * left) < minSpeed) {
+                left = 0;
+            }
+
+            if (Mathf.Abs(drag * right) < minSpeed) {
+                right = 0;
+            }
 
             vl = drag * left + (1.0f - drag) * vl;
             vr = drag * right + (1.0f - drag) * vr;

@@ -24,6 +24,10 @@ namespace RosSharp.RosBridgeClient
 
         protected virtual void Start()
         {
+            if (RosConnector.instance == null || MenuController.runningWithoutROS || !RosConnector.instance.IsConnected.WaitOne(0)) {
+                Destroy(this);
+                return;
+            }
             RosConnector.instance.RosSocket.AdvertiseService<Tin, Tout>(ServiceName, ServiceCallHandler);
         }
 

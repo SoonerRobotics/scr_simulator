@@ -7,7 +7,8 @@ using UnityEngine;
 public class CompassScript : MonoBehaviour
 {
 
-    public TextMeshProUGUI textMeshProUgui;
+    public TextMeshProUGUI textDegrees;
+    public TextMeshProUGUI textRadians;
     public GameObject robot;
 
     private static string[] caridnals = { "N", "NE", "E", "SE", "S", "SW", "W", "NW", "N" };
@@ -29,7 +30,12 @@ public class CompassScript : MonoBehaviour
         if (robot)
         {
             float heading = robot.transform.rotation.eulerAngles.y;
-            textMeshProUgui.text = $"{heading:0}° {DegreesToCardinal(heading)}";
+            textDegrees.text = $"{heading:0}° {DegreesToCardinal(heading)}";
+            float adjHeading = 90 - heading;
+            if (adjHeading < 0) {
+                adjHeading += 360;
+            }
+            textRadians.text = $"{adjHeading / 180.0 * Math.PI:0.0}";
         }
     }
 }

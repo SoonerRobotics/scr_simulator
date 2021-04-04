@@ -16,13 +16,18 @@ MonoBehaviour:
   robotPrefab: {fileID: 3740033819105132858, guid: f3a15cf1802b0fa44be70ad9399c2bb2,
     type: 3}
   options:
+  - name: Autonomous
+    type: 1
+    defaultValue: True
   - name: Camera Topic
+    type: 0
     defaultValue: /nrc/camera/compressed
   - name: Drive Status Topic
+    type: 0
     defaultValue: /nrc/sensor_data
   - name: Motors Topic
+    type: 0
     defaultValue: /nrc/motors
   - name: ROS Bridge IP
+    type: 0
     defaultValue: localhost:9090
-  - name: Autonomous
-    defaultValue: True

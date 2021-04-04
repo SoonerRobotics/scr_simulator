@@ -16,17 +16,24 @@ MonoBehaviour:
   robotPrefab: {fileID: 6116572216260438465, guid: baf0859a325349b4c81dc4f6e0ec3023,
     type: 3}
   options:
+  - name: Autonomous
+    type: 1
+    defaultValue: True
   - name: IMU Topic
+    type: 0
     defaultValue: /igvc/imu
   - name: Velocity Topic
+    type: 0
     defaultValue: /igvc/velocity
   - name: GPS Topic
+    type: 0
     defaultValue: /igvc/gps
   - name: Laser Scan Topic
+    type: 0
     defaultValue: /scan
   - name: Motors Topic
+    type: 0
     defaultValue: /igvc/motors_raw
   - name: ROS Bridge IP
+    type: 0
     defaultValue: localhost:9090
-  - name: Autonomous
-    defaultValue: True
