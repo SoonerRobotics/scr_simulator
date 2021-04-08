@@ -19,9 +19,11 @@ public class LevelInitalizer : MonoBehaviour
             Vector3 pos = spawnLocation.transform.position;
             Quaternion rot = spawnLocation.transform.rotation;
 
-            GameObject robotObj = Instantiate(MenuController.activeRobot.robotPrefab, pos, rot);
-            robot = robotObj;
-            onRobotInstantiate.Invoke();
+            if (MenuController.activeRobot != null) {
+                GameObject robotObj = Instantiate(MenuController.activeRobot.robotPrefab, pos, rot);
+                robot = robotObj;
+                onRobotInstantiate.Invoke();
+            }
 
             Destroy(spawnLocation);
         }

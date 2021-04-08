@@ -45,7 +45,7 @@ public class UIController : MonoBehaviour
             Pause();
         }
 
-        if (!MenuController.runningWithoutROS && RosConnector.instance.IsConnected.WaitOne(0) == false)
+        if (!MenuController.runningWithoutROS && (RosConnector.instance == null || RosConnector.instance.IsConnected.WaitOne(0) == false))
         {
             SceneManager.LoadScene(0);
         }

@@ -8,6 +8,8 @@ namespace RosSharp.RosBridgeClient
     {
 
         public string robotName = "IGVC";
+        public Camera mainCamera;
+        public Camera robotCamera;
 
         private SimpleCarController simpleCarController;
         private ImagePublisher imagePublisher;
@@ -16,6 +18,7 @@ namespace RosSharp.RosBridgeClient
         private VelocityPublisher velocityPublisher;
         private GPSPublisher gPSPublisher;
         private IGVCMotorsSubscriber motorsSubscriber;
+
 
         void Awake()
         {
@@ -32,6 +35,15 @@ namespace RosSharp.RosBridgeClient
             if (RobotOptions.Exists(robotName + "Camera Topic"))
             {
                 imagePublisher.Topic = RobotOptions.GetValue(robotName + "Camera Topic");
+            }
+            if (RobotOptions.GetValue(robotName + "Publish Camera").Equals("True")) {
+                imagePublisher.enabled = true;
+                robotCamera.enabled = true;
+            }
+            if (RobotOptions.Exists(robotName + "Show Camera View") && RobotOptions.GetValue(robotName + "Show Camera View").Equals("True")) {
+                mainCamera.enabled = false;
+                robotCamera.enabled = true;
+                robotCamera.targetDisplay = 0;
             }
             laserScanPublisher.Topic = RobotOptions.GetValue(robotName + "Laser Scan Topic");
             iMUPublisher.Topic = RobotOptions.GetValue(robotName + "IMU Topic");

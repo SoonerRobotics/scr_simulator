@@ -37,13 +37,15 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Geometry
             relPosition = tf.position - startPos;
             rotation = tf.rotation;
 
+            // Unity to ROS conversions
             point.x = relPosition.z;
             point.y = -relPosition.x;
             point.z = relPosition.y;
-            quaternion.w = rotation.w;
+            
+            quaternion.w = -rotation.z;
             quaternion.x = rotation.x;
-            quaternion.y = rotation.y;
-            quaternion.z = rotation.z;
+            quaternion.y = -rotation.y;
+            quaternion.z = rotation.w;
 
             Publish(message);
         }

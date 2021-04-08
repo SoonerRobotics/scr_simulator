@@ -19,6 +19,9 @@ MonoBehaviour:
   - name: Autonomous
     type: 1
     defaultValue: True
+  - name: Publish Camera
+    type: 1
+    defaultValue: False
   - name: IMU Topic
     type: 0
     defaultValue: /igvc/imu

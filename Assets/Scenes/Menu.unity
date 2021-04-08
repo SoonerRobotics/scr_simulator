@@ -2423,14 +2423,13 @@ MonoBehaviour:
   levels:
   - {fileID: 11400000, guid: c2411721f85370247a3d41fbb8f7cf78, type: 2}
   - {fileID: 11400000, guid: d86587b471cabf042b28b90a088721ae, type: 2}
-  - {fileID: 11400000, guid: 55cf02cc4436c14479446a1cdb55bf13, type: 2}
   - {fileID: 11400000, guid: 131184c045fde904a881be9109c3bd19, type: 2}
+  - {fileID: 11400000, guid: 55cf02cc4436c14479446a1cdb55bf13, type: 2}
   togglesGroup: {fileID: 2062170973}
   togglesParent: {fileID: 1817359497}
   robots:
   - {fileID: 11400000, guid: 1d1195ee9028cdb4cab1c37cd7e325a8, type: 2}
   - {fileID: 11400000, guid: 2398f1b0e5f31f24eb9ace0fa90d71b8, type: 2}
-  - {fileID: 11400000, guid: 67eb80711f1066548986effe380548fe, type: 2}
   - {fileID: 11400000, guid: c07e59656dc503c4cb7e233388bd37ac, type: 2}
   robotsGroup: {fileID: 454510292}
   robotsParent: {fileID: 521857490}

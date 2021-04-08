@@ -197,6 +197,7 @@ GameObject:
   - component: {fileID: 1603697777774665651}
   - component: {fileID: 6116572216260438472}
   - component: {fileID: 6193012776527190307}
+  - component: {fileID: 1278972214643715182}
   m_Layer: 0
   m_Name: IGVC_Robot_2020
   m_TagString: Untagged
@@ -258,6 +259,7 @@ MonoBehaviour:
   turnMod: 1
   wheelRadius: 0.127
   axleLength: 0.6096
+  minSpeed: 0.1
   drag: 0.85
   vl: 0
   vr: 0
@@ -387,6 +389,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   robotName: IGVC20
+  mainCamera: {fileID: 6116572216309536759}
+  robotCamera: {fileID: 6116572218028855846}
 --- !u!114 &6193012776527190307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -403,6 +407,22 @@ MonoBehaviour:
   accelNoiseStdDev: 0.15
   orientationNoiseStdDev: 0.017
   angularVelocityNoiseStdDev: 0.017
+--- !u!114 &1278972214643715182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6116572216260438465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff98778ae051cfd40a6e4effdf851ebd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SecondsTimeout: 1
+  Serializer: 0
+  protocol: 0
+  RosBridgeServerUrl: ws://192.168.0.1:9090
 --- !u!1 &6116572216309536757
 GameObject:
   m_ObjectHideFlags: 0

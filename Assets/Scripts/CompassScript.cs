@@ -31,10 +31,7 @@ public class CompassScript : MonoBehaviour
         {
             float heading = robot.transform.rotation.eulerAngles.y;
             textDegrees.text = $"{heading:0}° {DegreesToCardinal(heading)}";
-            float adjHeading = 90 - heading;
-            if (adjHeading < 0) {
-                adjHeading += 360;
-            }
+            float adjHeading = 360 - heading;
             textRadians.text = $"{adjHeading / 180.0 * Math.PI:0.0}";
         }
     }

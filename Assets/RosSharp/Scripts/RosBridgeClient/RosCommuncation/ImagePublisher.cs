@@ -36,6 +36,11 @@ namespace RosSharp.RosBridgeClient
         protected override void Start()
         {
             base.Start();
+
+            // Make sure the event handler never executes if we dont want it.
+            if (RosConnector.instance == null || MenuController.runningWithoutROS || !RosConnector.instance.IsConnected.WaitOne(0)) {
+                return;
+            }
             InitializeGameObject();
             InitializeMessage();
             Camera.onPostRender += UpdateImage;
