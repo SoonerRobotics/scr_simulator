@@ -36,14 +36,20 @@ namespace RosSharp.RosBridgeClient
             {
                 imagePublisher.Topic = RobotOptions.GetValue(robotName + "Camera Topic");
             }
+            if (RobotOptions.Exists(robotName + "Show Camera View") && RobotOptions.GetValue(robotName + "Show Camera View").Equals("True")) {
+                robotCamera.targetDisplay = 0;
+                robotCamera.enabled = true;
+                mainCamera.enabled = false;
+
+                // If we are publishing the camera, we need to duplicate it because the publishing script
+                // will override the camera output.
+                if(RobotOptions.GetValue(robotName + "Publish Camera").Equals("True")) {
+                    GameObject robotCameraDupe = Instantiate(robotCamera.gameObject, robotCamera.gameObject.transform.parent);
+                }
+            }
             if (RobotOptions.GetValue(robotName + "Publish Camera").Equals("True")) {
                 imagePublisher.enabled = true;
                 robotCamera.enabled = true;
-            }
-            if (RobotOptions.Exists(robotName + "Show Camera View") && RobotOptions.GetValue(robotName + "Show Camera View").Equals("True")) {
-                mainCamera.enabled = false;
-                robotCamera.enabled = true;
-                robotCamera.targetDisplay = 0;
             }
             laserScanPublisher.Topic = RobotOptions.GetValue(robotName + "Laser Scan Topic");
             iMUPublisher.Topic = RobotOptions.GetValue(robotName + "IMU Topic");
