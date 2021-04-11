@@ -82,6 +82,25 @@ namespace RosSharp.RosBridgeClient
             }
         }
 
+        public void Reset() {
+            Debug.Log("Resetting RosBridge!");
+
+            if (RosSocket != null) {
+                RosSocket.Close();
+            }
+
+            // Necessary as this is also our flag to stop running threads
+            RosSocket = null;
+
+            if (SocketThread != null) {
+                SocketThread.Join();
+            }
+
+            IsConnected = new ManualResetEvent(false);
+            SocketThread = new Thread(ConnectAndWait);
+            SocketThread.Start();
+        }
+
         private void OnConnected(object sender, EventArgs e)
         {
             IsConnected.Set();
@@ -95,7 +114,7 @@ namespace RosSharp.RosBridgeClient
 
             RosSocket.Close();
             RosSocket = null;
-            SocketThread.Join((int)(SecondsTimeout * 1000));
+            SocketThread.Join();
 
             SocketThread = new Thread(ConnectAndWait);
             SocketThread.Start();
