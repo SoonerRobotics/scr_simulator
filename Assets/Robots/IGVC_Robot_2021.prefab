@@ -288,8 +288,8 @@ MonoBehaviour:
   turnMod: 1
   wheelRadius: 0.127
   axleLength: 0.76
-  minSpeed: 0.1
-  drag: 0.85
+  minSpeed: 0.05
+  drag: 0.4
   vl: 0
   vr: 0
   left: 0

@@ -51,7 +51,9 @@ namespace RosSharp.RosBridgeClient
                 imagePublisher.enabled = true;
                 robotCamera.enabled = true;
             }
-            laserScanPublisher.Topic = RobotOptions.GetValue(robotName + "Laser Scan Topic");
+            if (RobotOptions.Exists(robotName + "Laser Scan Topic")) {
+                laserScanPublisher.Topic = RobotOptions.GetValue(robotName + "Laser Scan Topic");
+            }
             iMUPublisher.Topic = RobotOptions.GetValue(robotName + "IMU Topic");
             velocityPublisher.Topic = RobotOptions.GetValue(robotName + "Velocity Topic");
             gPSPublisher.Topic = RobotOptions.GetValue(robotName + "GPS Topic");
