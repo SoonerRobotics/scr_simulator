@@ -13,6 +13,9 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
         public float lat0Pos = 35.194881f;
         public float lon0Pos = -97.438621f;
 
+        public float pubPeriod = 1.0f;
+        private float nextPub = 0.0f;
+
         protected override void Start()
         {
             base.Start();
@@ -36,10 +39,13 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
 
         void FixedUpdate()
         {
-            Vector3 pos = tf.position;
-            message.latitude = (pos.z + getRandNormal(0, latNoiseStdDev)) / 110944.12 + lat0Pos;
-            message.longitude = (pos.x + getRandNormal(0, lonNoiseStdDev)) / 91071.17 + lon0Pos;
-            Publish(message);
+            if (Time.time > nextPub) {
+                nextPub = Time.time + pubPeriod;
+                Vector3 pos = tf.position;
+                message.latitude = (pos.z + getRandNormal(0, latNoiseStdDev)) / 110944.12 + lat0Pos;
+                message.longitude = (pos.x + getRandNormal(0, lonNoiseStdDev)) / 91071.17 + lon0Pos;
+                Publish(message);
+            }
         }
     }
 }
