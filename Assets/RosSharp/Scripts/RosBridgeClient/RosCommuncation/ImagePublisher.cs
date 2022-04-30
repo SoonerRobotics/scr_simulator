@@ -29,6 +29,8 @@ namespace RosSharp.RosBridgeClient
         [Range(0, 100)]
         public int qualityLevel = 50;
 
+        private float previousScanTime = 0;
+
         private MessageTypes.Sensor.CompressedImage message;
         private Texture2D texture2D;
         private Rect rect;
@@ -49,8 +51,12 @@ namespace RosSharp.RosBridgeClient
         private void UpdateImage(Camera _camera)
         {
             if (texture2D != null && _camera == this.ImageCamera)
-                UpdateMessage();
-        }
+                if (Time.realtimeSinceStartup >= previousScanTime + 0.5)
+                {
+                    UpdateMessage();
+                    previousScanTime = Time.realtimeSinceStartup;
+                }        
+            }
 
         private void InitializeGameObject()
         {

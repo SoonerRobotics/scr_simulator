@@ -251,6 +251,7 @@ MonoBehaviour:
   lonNoiseStdDev: 2.138
   lat0Pos: 35.19488
   lon0Pos: -97.43862
+  pubPeriod: 1
 --- !u!114 &6116572216260438484
 MonoBehaviour:
   m_ObjectHideFlags: 0
