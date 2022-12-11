@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Empty_World.unity
     guid: a8c0ffda51a8bcc4daa084b044117bd9
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Lane_Maze.unity
     guid: 174bd6999884e864bb2aa51fb30a9f53
   - enabled: 1

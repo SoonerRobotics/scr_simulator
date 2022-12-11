@@ -53,7 +53,7 @@ namespace RosSharp.RosBridgeClient
             {
                 left = leftControl;
                 right = rightControl;
-                Debug.Log("Speed in: " + left + ", " + right);
+                // Debug.Log("Speed in: " + left + ", " + right);
                 if (!useAngular)
                 {
                     left /= wheelRadius;
@@ -74,7 +74,7 @@ namespace RosSharp.RosBridgeClient
             vl = drag * left + (1.0f - drag) * vl;
             vr = drag * right + (1.0f - drag) * vr;
 
-            Debug.Log("Speed out: " + vl + ", " + vr);
+            // Debug.Log("Speed out: " + vl + ", " + vr);
 
             float dot_x = wheelRadius / 2.0f * (vl + vr) * Mathf.Sin(psi);
             float dot_y = wheelRadius / 2.0f * (vl + vr) * Mathf.Cos(psi);

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91daf2032ec7cbc47a4ecbed071e8d2c, type: 3}
-  m_Name: IGVC_Robot_2021
+  m_Name: IGVC_Robot_2023
   m_EditorClassIdentifier: 
-  robotName: IGVC21
-  robotPrefab: {fileID: 6116572216260438465, guid: baf0859a325349b4c81dc4f6e0ec3023,
+  robotName: IGVC23
+  robotPrefab: {fileID: 6116572216260438465, guid: 9fd252ac9b73f7940987ed9a3d572556,
     type: 3}
   options:
   - name: Autonomous
@@ -25,18 +25,12 @@ MonoBehaviour:
   - name: Show Camera View
     type: 1
     defaultValue: False
-  - name: IMU Topic
-    type: 0
-    defaultValue: /igvc/imu
   - name: Velocity Topic
     type: 0
     defaultValue: /igvc/velocity
   - name: GPS Topic
     type: 0
     defaultValue: /igvc/gps
-  - name: Laser Scan Topic
-    type: 0
-    defaultValue: /scan
   - name: Motors Topic
     type: 0
     defaultValue: /igvc/motors_raw

@@ -1,4 +1,5 @@
-﻿using RosSharp.RosBridgeClient.MessageTypes.Igvc;
+﻿using RosSharp.RosBridgeClient.MessageTypes.Autonav;
+using RosSharp.RosBridgeClient.MessageTypes.Igvc;
 using RosSharp.RosBridgeClient.MessageTypes.Sensor;
 using UnityEngine;
 
@@ -15,9 +16,9 @@ namespace RosSharp.RosBridgeClient
         private ImagePublisher imagePublisher;
         private LaserScanPublisher laserScanPublisher;
         private IMUPublisher iMUPublisher;
-        private VelocityPublisher velocityPublisher;
+        private VelocityPublisherIGVC23 velocityPublisher;
         private GPSPublisher gPSPublisher;
-        private IGVCMotorsSubscriber motorsSubscriber;
+        private IGVCMotorsSubscriberIGVC23 motorsSubscriber;
 
 
         void Awake()
@@ -26,9 +27,9 @@ namespace RosSharp.RosBridgeClient
             imagePublisher = this.GetComponent<ImagePublisher>();
             laserScanPublisher = this.GetComponent<LaserScanPublisher>();
             iMUPublisher = this.GetComponent<IMUPublisher>();
-            velocityPublisher = this.GetComponent<VelocityPublisher>();
+            velocityPublisher = this.GetComponent<VelocityPublisherIGVC23>();
             gPSPublisher = this.GetComponent<GPSPublisher>();
-            motorsSubscriber = this.GetComponent<IGVCMotorsSubscriber>();
+            motorsSubscriber = this.GetComponent<IGVCMotorsSubscriberIGVC23>();
 
             simpleCarController.useController = !RobotOptions.GetValue(robotName + "Autonomous").Equals("True");
             //rosConnector.RosBridgeServerUrl = "ws://" + RobotOptions.GetValue(robotName + "ROS Bridge IP");
@@ -54,7 +55,9 @@ namespace RosSharp.RosBridgeClient
             if (RobotOptions.Exists(robotName + "Laser Scan Topic")) {
                 laserScanPublisher.Topic = RobotOptions.GetValue(robotName + "Laser Scan Topic");
             }
-            iMUPublisher.Topic = RobotOptions.GetValue(robotName + "IMU Topic");
+            if (RobotOptions.Exists(robotName + "IMU Topic")) {
+                iMUPublisher.Topic = RobotOptions.GetValue(robotName + "IMU Topic");
+            }
             velocityPublisher.Topic = RobotOptions.GetValue(robotName + "Velocity Topic");
             gPSPublisher.Topic = RobotOptions.GetValue(robotName + "GPS Topic");
             motorsSubscriber.Topic = RobotOptions.GetValue(robotName + "Motors Topic");
