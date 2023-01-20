@@ -19,7 +19,7 @@ roslaunch rosbridge_server rosbridge_websocket.launch
 
 ## ROS 2 Setup
 
-Install ROS2 Bridge (for Humble) using `sudo apt-get install ros-humble-rosbridge-server`
+Install ROS Bridge (for Humble) using `sudo apt-get install ros-humble-rosbridge-server`
 
 Run ROS Bridge for the simulator using
 ```
