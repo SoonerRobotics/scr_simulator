@@ -37,7 +37,6 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Sensor
 
         void FixedUpdate()
         {
-            message.header.Update();
 
             Quaternion orientation = c.transform.rotation;
 

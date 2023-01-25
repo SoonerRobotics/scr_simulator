@@ -14,7 +14,6 @@ namespace RosSharp.RosBridgeClient
 
         private SimpleCarController simpleCarController;
         private ImagePublisher imagePublisher;
-        private LaserScanPublisher laserScanPublisher;
         private IMUPublisher iMUPublisher;
         private VelocityPublisherIGVC23 velocityPublisher;
         private GPSPublisher gPSPublisher;
@@ -25,7 +24,6 @@ namespace RosSharp.RosBridgeClient
         {
             simpleCarController = this.GetComponent<SimpleCarController>();
             imagePublisher = this.GetComponent<ImagePublisher>();
-            laserScanPublisher = this.GetComponent<LaserScanPublisher>();
             iMUPublisher = this.GetComponent<IMUPublisher>();
             velocityPublisher = this.GetComponent<VelocityPublisherIGVC23>();
             gPSPublisher = this.GetComponent<GPSPublisher>();
@@ -51,9 +49,6 @@ namespace RosSharp.RosBridgeClient
             if (RobotOptions.GetValue(robotName + "Publish Camera").Equals("True")) {
                 imagePublisher.enabled = true;
                 robotCamera.enabled = true;
-            }
-            if (RobotOptions.Exists(robotName + "Laser Scan Topic")) {
-                laserScanPublisher.Topic = RobotOptions.GetValue(robotName + "Laser Scan Topic");
             }
             if (RobotOptions.Exists(robotName + "IMU Topic")) {
                 iMUPublisher.Topic = RobotOptions.GetValue(robotName + "IMU Topic");

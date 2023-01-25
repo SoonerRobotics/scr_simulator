@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
-namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
+namespace RosSharp.RosBridgeClient.MessageTypes.Autonav
 {
-    public class GPSPublisher : UnityPublisher<Gps>
+    public class GPSPublisher : UnityPublisher<GPSFeedback>
     {
-        private Gps message;
+        private GPSFeedback message;
         public Transform tf;
 
         public float latNoiseStdDev = 1.843f;
@@ -19,7 +19,8 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
         protected override void Start()
         {
             base.Start();
-            message = new Gps();
+            message = new GPSFeedback();
+            message.is_locked = true;
 
             lat0Pos = ConfigLoader.Instance.sensors.gps.latStart;
             lon0Pos = ConfigLoader.Instance.sensors.gps.lonStart;

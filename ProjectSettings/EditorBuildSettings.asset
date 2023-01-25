@@ -15,9 +15,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Empty_World.unity
     guid: a8c0ffda51a8bcc4daa084b044117bd9
   - enabled: 1
-    path: Assets/Scenes/Lane_Maze.unity
-    guid: 174bd6999884e864bb2aa51fb30a9f53
-  - enabled: 1
     path: Assets/Scenes/IGVC_2022.unity
     guid: 0f16f949522322d4cb2f31eaba0767c5
   m_configObjects: {}
