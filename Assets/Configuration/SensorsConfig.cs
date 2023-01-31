@@ -24,7 +24,7 @@ public class CFG_IMU
 public class CFG_Encoders
 {
     [JsonProperty("Velocity Noise Std Dev")]
-    public float velocityNoise = 0.05f;
+    public float velocityNoise = 0.01f;
 }
 
 public class CFG_GPS

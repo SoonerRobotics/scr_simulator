@@ -6,7 +6,7 @@ using UnityEngine;
 public class CFG_Motors
 {
     [JsonProperty("Use Angular Velocity")]
-    public bool useAngularVelocity = true;
+    public bool useAngularVelocity = false;
 
     [JsonProperty("Velocity Decay")]
     public float velocityDecay = 0.15f;
