@@ -25,3 +25,10 @@ Run ROS Bridge for the simulator using
 ```
 ros2 launch rosbridge_server rosbridge_websocket_launch.xml
 ```
+# GPS Waypoints
+```
+North   35.1950387371, -97.438126881
+North Ramp   35.1948972244, -97.4381323712
+South Ramp   35.194868381, -97.4381323712
+South   35.1947223616, -97.438126881
+```
