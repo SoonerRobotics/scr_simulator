@@ -11,6 +11,7 @@ namespace RosSharp.RosBridgeClient
         public float speedMod = 1f;
         public float turnMod = 1f;
         public float wheelRadius = 0.127f;
+        public float distanceBetweenWheels = 0.3f;
         public float axleLength = 0.6096f;
         public float minSpeed = 0.1f;
         public float drag = 0.15f;
@@ -51,8 +52,8 @@ namespace RosSharp.RosBridgeClient
             }
             else
             {
-                left = (forwardControl / wheelRadius) - ((0.3f) * (angularControl / wheelRadius));
-                right = (forwardControl / wheelRadius) + ((0.3f) * (angularControl / wheelRadius));
+                left = (forwardControl / wheelRadius) - (distanceBetweenWheels * (angularControl / wheelRadius));
+                right = (forwardControl / wheelRadius) + (distanceBetweenWheels * (angularControl / wheelRadius));
             }
 
             float psi_dot = wheelRadius * (vl - vr) / axleLength;
