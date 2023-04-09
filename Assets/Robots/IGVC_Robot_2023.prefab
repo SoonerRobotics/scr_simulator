@@ -198,8 +198,8 @@ MonoBehaviour:
   vr: 0
   left: 0
   right: 0
-  leftControl: 0
-  rightControl: 0
+  forwardControl: 0
+  angularControl: 0
   useController: 1
   useAngular: 1
 --- !u!114 &6116572216260438479
@@ -214,7 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a908e83b1e7ce9e428caae2838615cc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Topic: /igvc/camera/compressed
+  Topic: /autonav/camera/compressed
   ImageCamera: {fileID: 6116572218028855846}
   FrameId: Camera
   resolutionWidth: 640
@@ -232,7 +232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4a25a5f284c85140bf2525d776914f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Topic: /igvc/velocity
+  Topic: /autonav/velocity
   rb: {fileID: 6116572216260438467}
   velocityNoiseStdDev: 0.05
 --- !u!114 &6116572216260438475

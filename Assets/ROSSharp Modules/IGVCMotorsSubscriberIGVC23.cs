@@ -16,8 +16,8 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Autonav
 
         protected override void ReceiveMessage(MotorInput motors)
         {
-            car.leftControl = motors.left_motor;
-            car.rightControl = motors.right_motor;
+            car.forwardControl = motors.forward_velocity;
+            car.angularControl = motors.angular_velocity;
         }
     }
 }

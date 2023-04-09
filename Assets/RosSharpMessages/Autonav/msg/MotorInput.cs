@@ -15,21 +15,19 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Autonav
     {
         public const string RosMessageName = "autonav_msgs/MotorInput";
 
-        //  left_motor - float32 - The speed of the left motor
-        public float left_motor { get; set; }
-        //  right_motor - float32 - The speed of the right motor
-        public float right_motor { get; set; }
+        public float forward_velocity { get; set; }
+        public float angular_velocity { get; set; }
 
         public MotorInput()
         {
-            this.left_motor = 0.0f;
-            this.right_motor = 0.0f;
+            this.forward_velocity = 0.0f;
+            this.angular_velocity = 0.0f;
         }
 
-        public MotorInput(float left_motor, float right_motor)
+        public MotorInput(float forward_velocity, float angular_velocity)
         {
-            this.left_motor = left_motor;
-            this.right_motor = right_motor;
+            this.forward_velocity = forward_velocity;
+            this.angular_velocity = angular_velocity;
         }
     }
 }

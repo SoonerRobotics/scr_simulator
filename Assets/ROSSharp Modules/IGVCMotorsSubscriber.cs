@@ -16,8 +16,8 @@ namespace RosSharp.RosBridgeClient.MessageTypes.Igvc
 
         protected override void ReceiveMessage(Motors motors)
         {
-            car.leftControl = motors.left;
-            car.rightControl = motors.right;
+            car.forwardControl = motors.left;
+            car.angularControl = motors.right;
         }
     }
 }
