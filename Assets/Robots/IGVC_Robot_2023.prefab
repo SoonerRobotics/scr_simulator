@@ -191,6 +191,7 @@ MonoBehaviour:
   speedMod: 2.2727273
   turnMod: 1
   wheelRadius: 0.1016
+  distanceBetweenWheels: 0.3
   axleLength: 0.492
   minSpeed: 0.1
   drag: 0.85
@@ -198,8 +199,8 @@ MonoBehaviour:
   vr: 0
   left: 0
   right: 0
-  leftControl: 0
-  rightControl: 0
+  forwardControl: 0
+  angularControl: 0
   useController: 1
   useAngular: 1
 --- !u!114 &6116572216260438479
@@ -214,7 +215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a908e83b1e7ce9e428caae2838615cc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Topic: /igvc/camera/compressed
+  Topic: /autonav/camera/compressed
   ImageCamera: {fileID: 6116572218028855846}
   FrameId: Camera
   resolutionWidth: 640
@@ -232,7 +233,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4a25a5f284c85140bf2525d776914f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Topic: /igvc/velocity
+  Topic: /autonav/velocity
   rb: {fileID: 6116572216260438467}
   velocityNoiseStdDev: 0.05
 --- !u!114 &6116572216260438475
@@ -592,14 +593,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6116572218028855845}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.09089816, y: -0, z: -0, w: 0.9958602}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6116572215990976586}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -10.431, y: 0, z: 0}
 --- !u!20 &6116572218028855846
 Camera:
   m_ObjectHideFlags: 0
