@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 35021b29ea239034eaa45da05c07caff
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 266804
+  packageName: 3D Measurements
+  packageVersion: 1.0.1
+  assetPath: Assets/Editor/Energise Software/3D Measurements/Scripts/MeasureEditorRendering.cs
+  uploadId: 654288

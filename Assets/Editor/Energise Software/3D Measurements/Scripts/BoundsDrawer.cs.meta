@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: da7663525d8f3f24db3c8615ffd61e20
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 266804
+  packageName: 3D Measurements
+  packageVersion: 1.0.1
+  assetPath: Assets/Editor/Energise Software/3D Measurements/Scripts/BoundsDrawer.cs
+  uploadId: 654288

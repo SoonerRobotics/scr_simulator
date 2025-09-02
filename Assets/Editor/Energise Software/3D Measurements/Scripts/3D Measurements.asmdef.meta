@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 1e140c83f57f8774eb03e979ec9b44c1
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 266804
+  packageName: 3D Measurements
+  packageVersion: 1.0.1
+  assetPath: Assets/Editor/Energise Software/3D Measurements/Scripts/3D Measurements.asmdef
+  uploadId: 654288
