@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 32e1b61e88d4c79499c1c1fe6e464846
+timeCreated: 1514468988
+licenseType: Store
+TextScriptImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 987
+  packageName: EasyRoads3D Free v3
+  packageVersion: v3.2.4f3
+  assetPath: Assets/EasyRoads3D/Resources/custom prefabs/_custom prefabs.txt
+  uploadId: 701396
