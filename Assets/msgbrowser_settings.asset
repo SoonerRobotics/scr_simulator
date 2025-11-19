@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c444d6f85828f1b4f9b89c7c387f9ddd, type: 3}
   m_Name: msgbrowser_settings
   m_EditorClassIdentifier: Unity.Robotics.ROSTCPConnector.Editor::Unity.Robotics.ROSTCPConnector.Editor.MessageGeneration.MessageGenBrowserSettings
-  inputPath: C:/Users/dylan/Downloads/igvc_software_2026-main/igvc_software_2026-main/igvc_ws/src/igvc_messages
+  inputPath: C:/Users/dylan/Desktop/igvc_software_2026/igvc_ws/src/igvc_messages
   relativeOutPath: RosMessages
