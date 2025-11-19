@@ -1,3 +1,4 @@
+using RosMessageTypes.IgvcMessages;
 using Unity.Robotics.ROSTCPConnector;
 using UnityEngine;
 
@@ -31,7 +32,11 @@ public class NewMonoBehaviourScript : MonoBehaviour
         
         // TODO: Send the gps waypoint
         _nextSend = Time.time + Interval;
-        double latitude = transform.position.z + LatitudeLength / OriginLatitude;
-        double longitude = transform.position.x + LongitudeLength / OriginLongitude;
+        GPSFeedbackMsg msg = new()
+        {
+            latitude = transform.position.z + LatitudeLength / OriginLatitude,
+            longitude = transform.position.x + LongitudeLength / OriginLongitude
+        };
+        _rosConnection.Publish(Topic, msg);
     }
 }
