@@ -1,55 +1,55 @@
-using RosMessageTypes.IgvcMessages;
-using Unity.Robotics.ROSTCPConnector;
+using SUS.Packets.IGVC._2026;
 using UnityEngine;
 
-public class DrivetrainBehaviour : MonoBehaviour
+namespace Robots
 {
-    private ROSConnection _rosConnection;
-
-    public string InputTopic = "/igvc/motor_input";    
-    public string FeedbackTopic = "/igvc/motor_feedback";
+    public class DrivetrainBehaviour : MonoBehaviour
+    {
+        private SUSConnection _mSusConnection;
     
-    private MotorInputMsg _lastMotorInput;
-    private Vector3 _lastPosition;
-    private Vector3 _lastRotation;
+        private IncomingMotorInput _mLastMotorInput;
+        private Vector3 _mLastPosition;
+        private Vector3 _mLastRotation;
     
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        _rosConnection = ROSConnection.GetOrCreateInstance();
-        _rosConnection.Subscribe<MotorInputMsg>(InputTopic, OnMotorInputReceived);
-    }
-
-    void OnMotorInputReceived(MotorInputMsg msg)
-    {
-        _lastMotorInput = msg;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        Vector2 localVelocity = new Vector2(_lastMotorInput.sideways_velocity, _lastMotorInput.forward_velocity);
-        float localAngular = _lastMotorInput.angular_velocity;
-        
-        // store last position/rotation
-        Vector3 currentPosition = _lastPosition;
-        Vector3 currentRotation = _lastRotation;
-
-        // perform translation/rotation
-        transform.Translate(localVelocity.x * Time.deltaTime, 0, localVelocity.y * Time.deltaTime);
-        transform.Rotate(0, localAngular * Time.deltaTime, 0);
-        
-        // send feedback
-        MotorFeedbackMsg msg = new()
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
+        private void Start()
         {
-            delta_x = currentPosition.x - _lastPosition.x,
-            delta_y = currentPosition.y - _lastPosition.y,
-            delta_theta = currentRotation.y - _lastRotation.y,
-        };
-        _rosConnection.Publish(FeedbackTopic, msg);
+            _mSusConnection = SUSConnection.GetOrCreateInstance();
+            _mSusConnection.Subscribe<IncomingMotorInput>(OnMotorInputReceived);
+        }
+
+        private void OnMotorInputReceived(IncomingMotorInput msg)
+        {
+            _mLastMotorInput = msg;
+        }
+
+        // Update is called once per frame
+        private void Update()
+        {
+            if (_mLastMotorInput == null) return;
+            
+            var localVelocity = new Vector2(_mLastMotorInput.SidewaysVelocity, _mLastMotorInput.ForwardVelocity);
+            var localAngular = _mLastMotorInput.AngularVelocity;
         
-        // update last known position/rotation
-        _lastPosition = currentPosition;
-        _lastRotation = currentRotation;
+            // store last position/rotation
+            var currentPosition = _mLastPosition;
+            var currentRotation = _mLastRotation;
+
+            // perform translation/rotation
+            transform.Translate(localVelocity.x * Time.deltaTime, 0, localVelocity.y * Time.deltaTime);
+            transform.Rotate(0, localAngular * Time.deltaTime, 0);
+        
+            // send feedback
+            var msg = new OutgoingMotorFeedback(
+                currentPosition.x - _mLastPosition.x,
+                currentPosition.y - _mLastPosition.y,
+                currentRotation.y - _mLastRotation.y
+            );
+            _mSusConnection.Write(msg);
+        
+            // update last known position/rotation
+            _mLastPosition = currentPosition;
+            _mLastRotation = currentRotation;
+        }
     }
 }

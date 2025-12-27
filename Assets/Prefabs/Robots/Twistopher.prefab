@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8132471523796785012}
+  - component: {fileID: 6188206059295526743}
   m_Layer: 0
   m_Name: Twistopher
   m_TagString: Untagged
@@ -32,6 +33,18 @@ Transform:
   - {fileID: 3135985529381932829}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6188206059295526743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2924581413065363419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a962bd410918b644d808bf03ed273455, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Robots.DrivetrainBehaviour
 --- !u!1001 &3175032532688054518
 PrefabInstance:
   m_ObjectHideFlags: 0

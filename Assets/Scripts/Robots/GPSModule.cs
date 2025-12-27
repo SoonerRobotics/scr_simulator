@@ -1,42 +1,41 @@
-using RosMessageTypes.IgvcMessages;
-using Unity.Robotics.ROSTCPConnector;
+using SUS.Packets.IGVC._2026;
 using UnityEngine;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+namespace Robots
 {
-    private ROSConnection _rosConnection;
+    public class GpsModule : MonoBehaviour
+    {
+        private SUSConnection _susConnection;
 
-    public string Topic;
-    public double Interval;
-    public double OriginLatitude;
-    public double OriginLongitude;
-    public double LatitudeLength;
-    public double LongitudeLength;
+        public double Interval;
+        public double OriginLatitude;
+        public double OriginLongitude;
+        public double LatitudeLength;
+        public double LongitudeLength;
 
-    private double _nextSend;
+        private double _nextSend;
     
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        _rosConnection = ROSConnection.GetOrCreateInstance();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        // Check if its time to send a new gps
-        if (Time.time < _nextSend)
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
+        void Start()
         {
-            return;
+            _susConnection = SUSConnection.GetOrCreateInstance();
         }
-        
-        // TODO: Send the gps waypoint
-        _nextSend = Time.time + Interval;
-        GPSFeedbackMsg msg = new()
+
+        // Update is called once per frame
+        void Update()
         {
-            latitude = transform.position.z + LatitudeLength / OriginLatitude,
-            longitude = transform.position.x + LongitudeLength / OriginLongitude
-        };
-        _rosConnection.Publish(Topic, msg);
+            // Check if it is time to send a new gps
+            if (Time.time < _nextSend)
+            {
+                return;
+            }
+        
+            _nextSend = Time.time + Interval;
+            OutgoingGPSFeedback msg = new(
+                transform.position.z + LatitudeLength / OriginLatitude,
+                transform.position.x + LongitudeLength / OriginLongitude
+            );
+            _susConnection.Write(msg);
+        }
     }
 }
