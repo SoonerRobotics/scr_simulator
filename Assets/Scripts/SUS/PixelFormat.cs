@@ -1,7 +1,9 @@
 ﻿namespace SUS
 {
-    public enum PixelFormat
+    public enum PixelFormat : byte
     {
-        
+        RGB8,
+        GRAY8,
+        JPEG
     }
 }

@@ -2,6 +2,8 @@
 {
     public enum PacketType : int
     {
-        MotorInput_2026 = 2026_0,
+        R_MOTORINPUT_2026 = 20260,
+        S_MOTORFEEDBACK_2026 = 20261,
+        S_CAMERAFRAME_2026 = 20262,
     }
 }

@@ -1,12 +1,10 @@
-using SUS.Packets.IGVC._2026;
+using SUS;
 using UnityEngine;
 
 namespace Robots
 {
     public class GpsModule : MonoBehaviour
     {
-        private SUSConnection _susConnection;
-
         public double Interval;
         public double OriginLatitude;
         public double OriginLongitude;
@@ -18,7 +16,6 @@ namespace Robots
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-            _susConnection = SUSConnection.GetOrCreateInstance();
         }
 
         // Update is called once per frame
@@ -31,11 +28,14 @@ namespace Robots
             }
         
             _nextSend = Time.time + Interval;
-            OutgoingGPSFeedback msg = new(
-                transform.position.z + LatitudeLength / OriginLatitude,
-                transform.position.x + LongitudeLength / OriginLongitude
-            );
-            _susConnection.Write(msg);
+            // var gps = new GPS
+            // {
+            //     Latitude = transform.position.z + LatitudeLength / OriginLatitude,
+            //     Longitude = transform.position.x + LongitudeLength / OriginLongitude,
+            //     NumSats = 7,
+            //     Fix = 3
+            // };
+            // SusConnection.Instance.Write(gps.ToByteArray());
         }
     }
 }
