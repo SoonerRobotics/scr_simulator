@@ -221,7 +221,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Robots.ImageModule
   enableStreaming: 1
   targetFps: 10
-  imageIdentifier: front_camera
+  imageIdentifier: front_view
   width: 640
   height: 480
   jpegQuality: 70

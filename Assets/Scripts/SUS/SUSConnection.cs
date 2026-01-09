@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
+using Messages;
 using UnityEngine;
 
 namespace SUS
@@ -36,7 +37,7 @@ namespace SUS
                 try
                 {
                     var client = _listener.EndAcceptTcpClient(ar);
-                    int id = _nextClientId++;
+                    var id = _nextClientId++;
 
                     var connection = new ClientConnection(
                         id,
@@ -53,7 +54,7 @@ namespace SUS
                 catch (ObjectDisposedException) { }
                 finally
                 {
-                    BeginAccept(); // continue accepting
+                    BeginAccept();
                 }
             }, null);
         }
@@ -71,10 +72,12 @@ namespace SUS
 
         private void Update()
         {
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 if (!_incomingFrames.TryDequeue(out var entry))
+                {
                     break;
+                }
 
                 HandleFrame(entry.clientId, entry.frame);
             }
@@ -82,34 +85,25 @@ namespace SUS
 
         private void HandleFrame(int clientId, byte[] frame)
         {
-            // 🔥 THIS IS WHERE YOUR FLATBUFFER / FRAME STUFF GOES
-            // Example:
-            // FrameRouter.Route(clientId, frame);
-
             Debug.Log($"Received frame from client {clientId}, {frame.Length} bytes");
         }
 
         private void OnDestroy()
         {
             foreach (var client in _clients.Values)
+            {
                 client.Dispose();
+            }
 
             _listener?.Stop();
         }
-
-        // ========= Public API =========
-
-        public void SendToClient(int clientId, byte[] frame)
-        {
-            if (_clients.TryGetValue(clientId, out var client))
-                client.Send(frame);
-        }
         
-        public void Broadcast(byte[] frame)
+        public void Broadcast(MessageWrapper wrapper)
         {
-            Debug.Log($"Broadcast {frame.Length} bytes to {_clients.Count} clients");
             foreach (var client in _clients.Values)
-                client.Send(frame);
+            {
+                client.Send(wrapper);
+            }
         }
     }
 }

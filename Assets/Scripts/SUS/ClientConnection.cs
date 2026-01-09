@@ -1,4 +1,6 @@
-﻿using SUS.Utils;
+﻿using System.IO;
+using Messages;
+using Messages.Arc;
 using UnityEngine;
 
 namespace SUS
@@ -13,8 +15,6 @@ namespace SUS
         private readonly int _id;
         private readonly TcpClient _client;
         private readonly NetworkStream _stream;
-        private readonly NetworkBinaryReader _reader;
-        private readonly NetworkBinaryWriter _writer;
 
         private readonly Action<int, byte[]> _onFrame;
         private readonly Action<int> _onDisconnect;
@@ -34,8 +34,6 @@ namespace SUS
             _id = id;
             _client = client;
             _stream = client.GetStream();
-            _reader = new NetworkBinaryReader(_stream);
-            _writer = new NetworkBinaryWriter(_stream);
             _onFrame = onFrame;
             _onDisconnect = onDisconnect;
         }
@@ -55,18 +53,11 @@ namespace SUS
             {
                 while (!_cts.IsCancellationRequested)
                 {
-                    // 🔥 FRAME FORMAT ASSUMPTION:
-                    // int length (big-endian) + payload
-                    int length = _reader.ReadInt();
-                    if (length <= 0 || length > 10_000_000)
-                        throw new Exception("Invalid frame length");
-
-                    byte[] frame = _reader.ReadBytes(length);
-                    _onFrame(_id, frame);
                 }
             }
             catch
             {
+                // ignored
             }
             finally
             {
@@ -80,13 +71,13 @@ namespace SUS
             {
                 foreach (var frame in _sendQueue.GetConsumingEnumerable(_cts.Token))
                 {
-                    _writer.WriteInt32BE(frame.Length);
-                    _writer.Write(frame);
-                    _writer.Flush();
+                    _stream.Write(frame, 0, frame.Length);
+                    _stream.Flush();
                 }
             }
             catch
             {
+                // ignored
             }
             finally
             {
@@ -94,7 +85,7 @@ namespace SUS
             }
         }
 
-        public void Send(byte[] frame)
+        public void Send(MessageWrapper wrapper)
         {
             if (_sendQueue.IsAddingCompleted)
             {
@@ -102,7 +93,8 @@ namespace SUS
                 return;
             }
 
-            _sendQueue.Add(frame);
+            // Convert to bytes
+            _sendQueue.Add(MessageWriter.Write(wrapper.Type, wrapper.Data, Endianness.Little));
         }
 
         private int _disposed;
@@ -120,6 +112,7 @@ namespace SUS
             }
             catch
             {
+                // ignored
             }
 
             try
@@ -128,6 +121,7 @@ namespace SUS
             }
             catch
             {
+                // ignored
             }
 
             _onDisconnect(_id);

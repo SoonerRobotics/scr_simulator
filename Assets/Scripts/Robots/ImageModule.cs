@@ -1,6 +1,6 @@
 using Google.FlatBuffers;
+using Messages;
 using SUS;
-using SUS.FlatBuffers;
 using UnityEngine;
 
 namespace Robots
@@ -67,6 +67,7 @@ namespace Robots
             CaptureAndSend();
         }
 
+        // ReSharper disable Unity.PerformanceAnalysis
         private void CaptureAndSend()
         {
             RenderTexture.active = _renderTexture;
@@ -88,7 +89,6 @@ namespace Robots
             var encoding = builder.CreateString("jpeg");
             var identifier = builder.CreateString(imageIdentifier);
             var jpegOffset = ImageFrame.CreateImageDataVector(builder, jpegBytes);
-
             var imageOffset = ImageFrame.CreateImageFrame(
                 builder,
                 (ulong)System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
@@ -101,8 +101,8 @@ namespace Robots
             );
             builder.Finish(imageOffset.Value);
 
-            var wrapper = FlatBufferUtils.FlatBufferWrapper.Create(FlatBufferUtils.FlatBufferType.ImageFrame, builder.SizedByteArray());
-            SusConnection.Instance.Broadcast(wrapper.ToByteArray());
+            var wrapper = MessageWrapper.From(MessageType.ImageFrame, builder.SizedByteArray());
+            SusConnection.Instance.Broadcast(wrapper);
         }
 
         private void OnDestroy()
