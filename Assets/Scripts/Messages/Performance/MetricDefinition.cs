@@ -47,24 +47,14 @@ public struct MetricDefinition : IFlatbufferObject
   public ArraySegment<byte>? GetUnitBytes() { return __p.__vector_as_arraysegment(10); }
 #endif
   public byte[] GetUnitArray() { return __p.__vector_as_array<byte>(10); }
-<<<<<<< HEAD
   public Messages.Performance.MetricAggregate Aggregate { get { int o = __p.__offset(12); return o != 0 ? (Messages.Performance.MetricAggregate)__p.bb.GetSbyte(o + __p.bb_pos) : Messages.Performance.MetricAggregate.Last; } }
 
   public static Offset<Messages.Performance.MetricDefinition> CreateMetricDefinition(FlatBufferBuilder builder,
-=======
-  public Messages.performance.MetricAggregate Aggregate { get { int o = __p.__offset(12); return o != 0 ? (Messages.performance.MetricAggregate)__p.bb.GetSbyte(o + __p.bb_pos) : Messages.performance.MetricAggregate.Last; } }
-
-  public static Offset<Messages.performance.MetricDefinition> CreateMetricDefinition(FlatBufferBuilder builder,
->>>>>>> be59f75216ab0c9450a468f0bd6a41cbb127ace8
       StringOffset subsystemOffset = default(StringOffset),
       StringOffset groupOffset = default(StringOffset),
       StringOffset nameOffset = default(StringOffset),
       StringOffset unitOffset = default(StringOffset),
-<<<<<<< HEAD
       Messages.Performance.MetricAggregate aggregate = Messages.Performance.MetricAggregate.Last) {
-=======
-      Messages.performance.MetricAggregate aggregate = Messages.performance.MetricAggregate.Last) {
->>>>>>> be59f75216ab0c9450a468f0bd6a41cbb127ace8
     builder.StartTable(5);
     MetricDefinition.AddUnit(builder, unitOffset);
     MetricDefinition.AddName(builder, nameOffset);
@@ -79,17 +69,10 @@ public struct MetricDefinition : IFlatbufferObject
   public static void AddGroup(FlatBufferBuilder builder, StringOffset groupOffset) { builder.AddOffset(1, groupOffset.Value, 0); }
   public static void AddName(FlatBufferBuilder builder, StringOffset nameOffset) { builder.AddOffset(2, nameOffset.Value, 0); }
   public static void AddUnit(FlatBufferBuilder builder, StringOffset unitOffset) { builder.AddOffset(3, unitOffset.Value, 0); }
-<<<<<<< HEAD
   public static void AddAggregate(FlatBufferBuilder builder, Messages.Performance.MetricAggregate aggregate) { builder.AddSbyte(4, (sbyte)aggregate, 0); }
   public static Offset<Messages.Performance.MetricDefinition> EndMetricDefinition(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<Messages.Performance.MetricDefinition>(o);
-=======
-  public static void AddAggregate(FlatBufferBuilder builder, Messages.performance.MetricAggregate aggregate) { builder.AddSbyte(4, (sbyte)aggregate, 0); }
-  public static Offset<Messages.performance.MetricDefinition> EndMetricDefinition(FlatBufferBuilder builder) {
-    int o = builder.EndTable();
-    return new Offset<Messages.performance.MetricDefinition>(o);
->>>>>>> be59f75216ab0c9450a468f0bd6a41cbb127ace8
   }
 }
 
@@ -103,11 +86,7 @@ static public class MetricDefinitionVerify
       && verifier.VerifyString(tablePos, 6 /*Group*/, false)
       && verifier.VerifyString(tablePos, 8 /*Name*/, false)
       && verifier.VerifyString(tablePos, 10 /*Unit*/, false)
-<<<<<<< HEAD
       && verifier.VerifyField(tablePos, 12 /*Aggregate*/, 1 /*Messages.Performance.MetricAggregate*/, 1, false)
-=======
-      && verifier.VerifyField(tablePos, 12 /*Aggregate*/, 1 /*Messages.performance.MetricAggregate*/, 1, false)
->>>>>>> be59f75216ab0c9450a468f0bd6a41cbb127ace8
       && verifier.VerifyTableEnd(tablePos);
   }
 }

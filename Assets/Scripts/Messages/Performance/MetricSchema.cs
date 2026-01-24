@@ -20,17 +20,10 @@ public struct MetricSchema : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public MetricSchema __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-<<<<<<< HEAD
   public Messages.Performance.MetricDefinition? Metrics(int j) { int o = __p.__offset(4); return o != 0 ? (Messages.Performance.MetricDefinition?)(new Messages.Performance.MetricDefinition()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
   public int MetricsLength { get { int o = __p.__offset(4); return o != 0 ? __p.__vector_len(o) : 0; } }
 
   public static Offset<Messages.Performance.MetricSchema> CreateMetricSchema(FlatBufferBuilder builder,
-=======
-  public Messages.performance.MetricDefinition? Metrics(int j) { int o = __p.__offset(4); return o != 0 ? (Messages.performance.MetricDefinition?)(new Messages.performance.MetricDefinition()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
-  public int MetricsLength { get { int o = __p.__offset(4); return o != 0 ? __p.__vector_len(o) : 0; } }
-
-  public static Offset<Messages.performance.MetricSchema> CreateMetricSchema(FlatBufferBuilder builder,
->>>>>>> be59f75216ab0c9450a468f0bd6a41cbb127ace8
       VectorOffset metricsOffset = default(VectorOffset)) {
     builder.StartTable(1);
     MetricSchema.AddMetrics(builder, metricsOffset);
@@ -39,7 +32,6 @@ public struct MetricSchema : IFlatbufferObject
 
   public static void StartMetricSchema(FlatBufferBuilder builder) { builder.StartTable(1); }
   public static void AddMetrics(FlatBufferBuilder builder, VectorOffset metricsOffset) { builder.AddOffset(0, metricsOffset.Value, 0); }
-<<<<<<< HEAD
   public static VectorOffset CreateMetricsVector(FlatBufferBuilder builder, Offset<Messages.Performance.MetricDefinition>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
   public static VectorOffset CreateMetricsVectorBlock(FlatBufferBuilder builder, Offset<Messages.Performance.MetricDefinition>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
   public static VectorOffset CreateMetricsVectorBlock(FlatBufferBuilder builder, ArraySegment<Offset<Messages.Performance.MetricDefinition>> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
@@ -51,19 +43,6 @@ public struct MetricSchema : IFlatbufferObject
   }
   public static void FinishMetricSchemaBuffer(FlatBufferBuilder builder, Offset<Messages.Performance.MetricSchema> offset) { builder.Finish(offset.Value); }
   public static void FinishSizePrefixedMetricSchemaBuffer(FlatBufferBuilder builder, Offset<Messages.Performance.MetricSchema> offset) { builder.FinishSizePrefixed(offset.Value); }
-=======
-  public static VectorOffset CreateMetricsVector(FlatBufferBuilder builder, Offset<Messages.performance.MetricDefinition>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
-  public static VectorOffset CreateMetricsVectorBlock(FlatBufferBuilder builder, Offset<Messages.performance.MetricDefinition>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
-  public static VectorOffset CreateMetricsVectorBlock(FlatBufferBuilder builder, ArraySegment<Offset<Messages.performance.MetricDefinition>> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
-  public static VectorOffset CreateMetricsVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<Offset<Messages.performance.MetricDefinition>>(dataPtr, sizeInBytes); return builder.EndVector(); }
-  public static void StartMetricsVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
-  public static Offset<Messages.performance.MetricSchema> EndMetricSchema(FlatBufferBuilder builder) {
-    int o = builder.EndTable();
-    return new Offset<Messages.performance.MetricSchema>(o);
-  }
-  public static void FinishMetricSchemaBuffer(FlatBufferBuilder builder, Offset<Messages.performance.MetricSchema> offset) { builder.Finish(offset.Value); }
-  public static void FinishSizePrefixedMetricSchemaBuffer(FlatBufferBuilder builder, Offset<Messages.performance.MetricSchema> offset) { builder.FinishSizePrefixed(offset.Value); }
->>>>>>> be59f75216ab0c9450a468f0bd6a41cbb127ace8
 }
 
 
@@ -72,11 +51,7 @@ static public class MetricSchemaVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-<<<<<<< HEAD
       && verifier.VerifyVectorOfTables(tablePos, 4 /*Metrics*/, Messages.Performance.MetricDefinitionVerify.Verify, false)
-=======
-      && verifier.VerifyVectorOfTables(tablePos, 4 /*Metrics*/, Messages.performance.MetricDefinitionVerify.Verify, false)
->>>>>>> be59f75216ab0c9450a468f0bd6a41cbb127ace8
       && verifier.VerifyTableEnd(tablePos);
   }
 }

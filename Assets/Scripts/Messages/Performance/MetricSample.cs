@@ -48,28 +48,16 @@ public struct MetricSample : IFlatbufferObject
   public ArraySegment<byte>? GetUnitBytes() { return __p.__vector_as_arraysegment(10); }
 #endif
   public byte[] GetUnitArray() { return __p.__vector_as_array<byte>(10); }
-<<<<<<< HEAD
   public Messages.Performance.MetricAggregate Aggregate { get { int o = __p.__offset(12); return o != 0 ? (Messages.Performance.MetricAggregate)__p.bb.GetSbyte(o + __p.bb_pos) : Messages.Performance.MetricAggregate.Last; } }
   public ulong TimestampUnixMs { get { int o = __p.__offset(14); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
   public double Value { get { int o = __p.__offset(16); return o != 0 ? __p.bb.GetDouble(o + __p.bb_pos) : (double)0.0; } }
 
   public static Offset<Messages.Performance.MetricSample> CreateMetricSample(FlatBufferBuilder builder,
-=======
-  public Messages.performance.MetricAggregate Aggregate { get { int o = __p.__offset(12); return o != 0 ? (Messages.performance.MetricAggregate)__p.bb.GetSbyte(o + __p.bb_pos) : Messages.performance.MetricAggregate.Last; } }
-  public ulong TimestampUnixMs { get { int o = __p.__offset(14); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
-  public double Value { get { int o = __p.__offset(16); return o != 0 ? __p.bb.GetDouble(o + __p.bb_pos) : (double)0.0; } }
-
-  public static Offset<Messages.performance.MetricSample> CreateMetricSample(FlatBufferBuilder builder,
->>>>>>> be59f75216ab0c9450a468f0bd6a41cbb127ace8
       StringOffset subsystemOffset = default(StringOffset),
       StringOffset groupOffset = default(StringOffset),
       StringOffset nameOffset = default(StringOffset),
       StringOffset unitOffset = default(StringOffset),
-<<<<<<< HEAD
       Messages.Performance.MetricAggregate aggregate = Messages.Performance.MetricAggregate.Last,
-=======
-      Messages.performance.MetricAggregate aggregate = Messages.performance.MetricAggregate.Last,
->>>>>>> be59f75216ab0c9450a468f0bd6a41cbb127ace8
       ulong timestamp_unix_ms = 0,
       double value = 0.0) {
     builder.StartTable(7);
@@ -88,7 +76,6 @@ public struct MetricSample : IFlatbufferObject
   public static void AddGroup(FlatBufferBuilder builder, StringOffset groupOffset) { builder.AddOffset(1, groupOffset.Value, 0); }
   public static void AddName(FlatBufferBuilder builder, StringOffset nameOffset) { builder.AddOffset(2, nameOffset.Value, 0); }
   public static void AddUnit(FlatBufferBuilder builder, StringOffset unitOffset) { builder.AddOffset(3, unitOffset.Value, 0); }
-<<<<<<< HEAD
   public static void AddAggregate(FlatBufferBuilder builder, Messages.Performance.MetricAggregate aggregate) { builder.AddSbyte(4, (sbyte)aggregate, 0); }
   public static void AddTimestampUnixMs(FlatBufferBuilder builder, ulong timestampUnixMs) { builder.AddUlong(5, timestampUnixMs, 0); }
   public static void AddValue(FlatBufferBuilder builder, double value) { builder.AddDouble(6, value, 0.0); }
@@ -98,17 +85,6 @@ public struct MetricSample : IFlatbufferObject
   }
   public static void FinishMetricSampleBuffer(FlatBufferBuilder builder, Offset<Messages.Performance.MetricSample> offset) { builder.Finish(offset.Value); }
   public static void FinishSizePrefixedMetricSampleBuffer(FlatBufferBuilder builder, Offset<Messages.Performance.MetricSample> offset) { builder.FinishSizePrefixed(offset.Value); }
-=======
-  public static void AddAggregate(FlatBufferBuilder builder, Messages.performance.MetricAggregate aggregate) { builder.AddSbyte(4, (sbyte)aggregate, 0); }
-  public static void AddTimestampUnixMs(FlatBufferBuilder builder, ulong timestampUnixMs) { builder.AddUlong(5, timestampUnixMs, 0); }
-  public static void AddValue(FlatBufferBuilder builder, double value) { builder.AddDouble(6, value, 0.0); }
-  public static Offset<Messages.performance.MetricSample> EndMetricSample(FlatBufferBuilder builder) {
-    int o = builder.EndTable();
-    return new Offset<Messages.performance.MetricSample>(o);
-  }
-  public static void FinishMetricSampleBuffer(FlatBufferBuilder builder, Offset<Messages.performance.MetricSample> offset) { builder.Finish(offset.Value); }
-  public static void FinishSizePrefixedMetricSampleBuffer(FlatBufferBuilder builder, Offset<Messages.performance.MetricSample> offset) { builder.FinishSizePrefixed(offset.Value); }
->>>>>>> be59f75216ab0c9450a468f0bd6a41cbb127ace8
 }
 
 
@@ -121,11 +97,7 @@ static public class MetricSampleVerify
       && verifier.VerifyString(tablePos, 6 /*Group*/, false)
       && verifier.VerifyString(tablePos, 8 /*Name*/, false)
       && verifier.VerifyString(tablePos, 10 /*Unit*/, false)
-<<<<<<< HEAD
       && verifier.VerifyField(tablePos, 12 /*Aggregate*/, 1 /*Messages.Performance.MetricAggregate*/, 1, false)
-=======
-      && verifier.VerifyField(tablePos, 12 /*Aggregate*/, 1 /*Messages.performance.MetricAggregate*/, 1, false)
->>>>>>> be59f75216ab0c9450a468f0bd6a41cbb127ace8
       && verifier.VerifyField(tablePos, 14 /*TimestampUnixMs*/, 8 /*ulong*/, 8, false)
       && verifier.VerifyField(tablePos, 16 /*Value*/, 8 /*double*/, 8, false)
       && verifier.VerifyTableEnd(tablePos);
