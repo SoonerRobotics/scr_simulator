@@ -24,27 +24,27 @@ namespace Robots
         private void Update()
         {
             // if (_mLastMotorInput == null) return;
-            //
+            
             // var localVelocity = new Vector2(_mLastMotorInput.SidewaysVelocity, _mLastMotorInput.ForwardVelocity);
             // var localAngular = _mLastMotorInput.AngularVelocity;
         
-            // store last position/rotation
+            // // store last position/rotation
             // var currentPosition = _mLastPosition;
             // var currentRotation = _mLastRotation;
-            //
+            
             // // perform translation/rotation
             // transform.Translate(localVelocity.x * Time.deltaTime, 0, localVelocity.y * Time.deltaTime);
             // transform.Rotate(0, localAngular * Time.deltaTime, 0);
         
-            // send feedback
-            // var msg = new OutgoingMotorFeedback(
-            //     currentPosition.x - _mLastPosition.x,
-            //     currentPosition.y - _mLastPosition.y,
-            //     currentRotation.y - _mLastRotation.y
-            // );
-            // SusConnection.Instance.Write(msg);
+            // // send feedback
+            // // var msg = new OutgoingMotorFeedback(
+            // //     currentPosition.x - _mLastPosition.x,
+            // //     currentPosition.y - _mLastPosition.y,
+            // //     currentRotation.y - _mLastRotation.y
+            // // );
+            // // SusConnection.Instance.Write(msg);
         
-            // update last known position/rotation
+            // // update last known position/rotation
             // _mLastPosition = currentPosition;
             // _mLastRotation = currentRotation;
         }
