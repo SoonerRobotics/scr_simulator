@@ -5,6 +5,7 @@
         // 2026
         ImageFrame = 0x01,
         ArcLog = 0x02,
-        Vectornav = 0x03
+        Vectornav = 0x03,
+        CanFrame = 0x04
     }
 }

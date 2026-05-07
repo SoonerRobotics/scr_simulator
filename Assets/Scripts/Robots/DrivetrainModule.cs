@@ -1,3 +1,5 @@
+using Google.FlatBuffers;
+using Messages;
 using SUS;
 using UnityEngine;
 
@@ -5,48 +7,70 @@ namespace Robots
 {
     public class DrivetrainBehaviour : MonoBehaviour
     {
-        // private IncomingMotorInput _mLastMotorInput;
+        private CanFrame? _mLastCanFrame;
         private Vector3 _mLastPosition;
         private Vector3 _mLastRotation;
     
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         private void Start()
         {
-            // SusConnection.Instance.Subscribe<IncomingMotorInput>(OnMotorInputReceived);
+            SusConnection.Instance.Subscribe(MessageType.CanFrame, OnCanFrameReceived);
         }
 
-        // private void OnMotorInputReceived(IncomingMotorInput msg)
-        // {
-        //     _mLastMotorInput = msg;
-        // }
+        private void OnCanFrameReceived(MessageWrapper wrapper)
+        {
+            var frame = CanFrame.GetRootAsCanFrame(
+                new ByteBuffer(wrapper.Data)
+            );
+            _mLastCanFrame = frame;
+        }
 
         // Update is called once per frame
         private void Update()
         {
-            // if (_mLastMotorInput == null) return;
+            if (_mLastCanFrame?.CanId != 0xA)
+            {
+                return;
+            }
             
-            // var localVelocity = new Vector2(_mLastMotorInput.SidewaysVelocity, _mLastMotorInput.ForwardVelocity);
-            // var localAngular = _mLastMotorInput.AngularVelocity;
-        
-            // // store last position/rotation
-            // var currentPosition = _mLastPosition;
-            // var currentRotation = _mLastRotation;
+            // Extract the actual motor command
+            var motorCommand = CanHelper.PacketFromBytes<CanHelper.MotorControlPacket>(_mLastCanFrame.Value.GetCanDataArray());
             
-            // // perform translation/rotation
-            // transform.Translate(localVelocity.x * Time.deltaTime, 0, localVelocity.y * Time.deltaTime);
-            // transform.Rotate(0, localAngular * Time.deltaTime, 0);
+            var localVelocity = new Vector2(motorCommand.SidewaysVelocity, motorCommand.ForwardVelocity);
+            var localAngular = motorCommand.AngularVelocity;
         
-            // // send feedback
-            // // var msg = new OutgoingMotorFeedback(
-            // //     currentPosition.x - _mLastPosition.x,
-            // //     currentPosition.y - _mLastPosition.y,
-            // //     currentRotation.y - _mLastRotation.y
-            // // );
-            // // SusConnection.Instance.Write(msg);
+            // store last position/rotationss
+            var currentPosition = _mLastPosition;
+            var currentRotation = _mLastRotation;
+            
+            // perform translation/rotation
+            transform.Translate(localVelocity.x * Time.deltaTime, 0, localVelocity.y * Time.deltaTime);
+            transform.Rotate(0, localAngular * Time.deltaTime, 0);
         
-            // // update last known position/rotation
-            // _mLastPosition = currentPosition;
-            // _mLastRotation = currentRotation;
+            // send feedback
+            var msg = new CanHelper.MotorOdometryPacket()
+            {
+                RawDeltaX = (short)(currentPosition.x - _mLastPosition.x),
+                RawDeltaY = (short)(currentPosition.y - _mLastPosition.y),
+                RawDeltaTheta = (short)(currentRotation.y - _mLastRotation.y)
+            };
+            var byts = CanHelper.FromMotorOdometry(msg);
+            var builder = new FlatBufferBuilder(1024);
+            var canDataOffset = CanFrame.CreateCanDataVector(builder, byts);
+            var imageOffset = CanFrame.CreateCanFrame(
+                builder,
+                (ulong)System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                0,
+                0xB,
+                canDataOffset
+            );
+            builder.Finish(imageOffset.Value);
+            var wrapper = MessageWrapper.From(MessageType.CanFrame, builder.SizedByteArray());
+            SusConnection.Instance.Broadcast(wrapper);
+            
+            // update last known position/rotation
+            _mLastPosition = currentPosition;
+            _mLastRotation = currentRotation;
         }
     }
 }

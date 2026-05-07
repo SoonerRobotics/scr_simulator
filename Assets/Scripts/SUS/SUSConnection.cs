@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using Messages;
@@ -10,6 +11,7 @@ namespace SUS
     public class SusConnection : MonoBehaviour
     {
         private static SusConnection _instance;
+
         public static SusConnection Instance =>
             _instance ??= new GameObject("@SUSConnection").AddComponent<SusConnection>();
 
@@ -17,7 +19,9 @@ namespace SUS
         private int _nextClientId = 1;
 
         private readonly ConcurrentDictionary<int, ClientConnection> _clients = new();
-        private readonly ConcurrentQueue<(int clientId, byte[] frame)> _incomingFrames = new();
+        private readonly ConcurrentDictionary<int, MessageAccumulator> _accumulators = new();
+        private readonly ConcurrentQueue<(int clientId, MessageWrapper wrapper)> _incomingFrames = new();
+        private readonly Dictionary<MessageType, List<Action<MessageWrapper>>> _subscriptions = new();
 
         private void Start()
         {
@@ -39,6 +43,11 @@ namespace SUS
                     var client = _listener.EndAcceptTcpClient(ar);
                     var id = _nextClientId++;
 
+                    _accumulators[id] = new MessageAccumulator(
+                        Endianness.Little,
+                        wrapper => _incomingFrames.Enqueue((id, wrapper))
+                    );
+
                     var connection = new ClientConnection(
                         id,
                         client,
@@ -51,7 +60,9 @@ namespace SUS
                     Debug.Log($"Client {id} connected");
                     connection.Start();
                 }
-                catch (ObjectDisposedException) { }
+                catch (ObjectDisposedException)
+                {
+                }
                 finally
                 {
                     BeginAccept();
@@ -61,12 +72,14 @@ namespace SUS
 
         private void OnFrameReceived(int clientId, byte[] frame)
         {
-            _incomingFrames.Enqueue((clientId, frame));
+            if (_accumulators.TryGetValue(clientId, out var accumulator))
+                accumulator.Append(frame);
         }
 
         private void OnClientDisconnected(int clientId)
         {
             _clients.TryRemove(clientId, out _);
+            _accumulators.TryRemove(clientId, out _);
             Debug.Log($"Client {clientId} disconnected");
         }
 
@@ -75,34 +88,72 @@ namespace SUS
             for (var i = 0; i < 10; i++)
             {
                 if (!_incomingFrames.TryDequeue(out var entry))
-                {
                     break;
-                }
 
-                HandleFrame(entry.clientId, entry.frame);
+                DispatchToSubscribers(entry.wrapper);
             }
         }
 
-        private void HandleFrame(int clientId, byte[] frame)
+        private void DispatchToSubscribers(MessageWrapper wrapper)
         {
-            Debug.Log($"Received frame from client {clientId}, {frame.Length} bytes");
+            if (!_subscriptions.TryGetValue(wrapper.Type, out var handlers)) return;
+
+            foreach (var handler in handlers)
+            {
+                try
+                {
+                    handler(wrapper);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"Subscriber threw on {wrapper.Type}: {ex}");
+                }
+            }
         }
 
         private void OnDestroy()
         {
             foreach (var client in _clients.Values)
-            {
                 client.Dispose();
-            }
 
             _listener?.Stop();
         }
-        
+
         public void Broadcast(MessageWrapper wrapper)
         {
             foreach (var client in _clients.Values)
-            {
                 client.Send(wrapper);
+        }
+
+        public IDisposable Subscribe(MessageType type, Action<MessageWrapper> handler)
+        {
+            if (!_subscriptions.TryGetValue(type, out var list))
+            {
+                list = new List<Action<MessageWrapper>>();
+                _subscriptions[type] = list;
+            }
+
+            list.Add(handler);
+
+            return new Subscription(() => Unsubscribe(type, handler));
+        }
+
+        private void Unsubscribe(MessageType type, Action<MessageWrapper> handler)
+        {
+            if (_subscriptions.TryGetValue(type, out var list))
+                list.Remove(handler);
+        }
+
+        private sealed class Subscription : IDisposable
+        {
+            private Action _onDispose;
+
+            public Subscription(Action onDispose) => _onDispose = onDispose;
+
+            public void Dispose()
+            {
+                _onDispose?.Invoke();
+                _onDispose = null;
             }
         }
     }
