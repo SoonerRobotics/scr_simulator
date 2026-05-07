@@ -5,6 +5,6 @@
         // 2026
         ImageFrame = 0x01,
         ArcLog = 0x02,
-        Gps = 0x03
+        Vectornav = 0x03
     }
 }

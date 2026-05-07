@@ -6295,34 +6295,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 140847577400259723, guid: c24b3ca0009aa0440be5d0c5c5fad70f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.461
-      objectReference: {fileID: 0}
-    - target: {fileID: 140847577400259723, guid: c24b3ca0009aa0440be5d0c5c5fad70f, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.692
-      objectReference: {fileID: 0}
-    - target: {fileID: 140847577400259723, guid: c24b3ca0009aa0440be5d0c5c5fad70f, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.524
-      objectReference: {fileID: 0}
-    - target: {fileID: 140847577400259723, guid: c24b3ca0009aa0440be5d0c5c5fad70f, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.98971355
-      objectReference: {fileID: 0}
-    - target: {fileID: 140847577400259723, guid: c24b3ca0009aa0440be5d0c5c5fad70f, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.14306365
-      objectReference: {fileID: 0}
-    - target: {fileID: 140847577400259723, guid: c24b3ca0009aa0440be5d0c5c5fad70f, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 140847577400259723, guid: c24b3ca0009aa0440be5d0c5c5fad70f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2924581413065363419, guid: c24b3ca0009aa0440be5d0c5c5fad70f, type: 3}
       propertyPath: m_Name
       value: Twistopher
@@ -6423,7 +6395,7 @@ MonoBehaviour:
   signBottomHeight: 2
   poleRadius: 0.03
   poleExtraHeight: 0.5
-  signText: STOP
+  signText: SOUP
   textScale: 0.05
   textDepthOffset: 0.002
   signMaterial: {fileID: 2100000, guid: d5437a8520fae5a4983d9569997f1e54, type: 2}

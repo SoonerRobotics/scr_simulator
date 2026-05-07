@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8132471523796785012}
   - component: {fileID: 6188206059295526743}
+  - component: {fileID: 8844772530075065658}
   m_Layer: 0
   m_Name: Twistopher
   m_TagString: Untagged
@@ -46,6 +47,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a962bd410918b644d808bf03ed273455, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Robots.DrivetrainBehaviour
+--- !u!114 &8844772530075065658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2924581413065363419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 311d87d100a946a49a4ae805889842bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Robots.VectornavModule
+  interval: 0.25
+  originLatitude: 35.194881
+  originLongitude: -97.438621
+  latitudeLength: 110944.12
+  longitudeLength: 91071.17
 --- !u!1 &5419377497750691203
 GameObject:
   m_ObjectHideFlags: 0
@@ -105,8 +123,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8138905403820076559}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.14455056, y: -0, z: -0, w: 0.9894974}
-  m_LocalPosition: {x: -0.424, y: 0.625, z: -0.08}
+  m_LocalRotation: {x: 0.14306365, y: 0, z: -0, w: 0.98971355}
+  m_LocalPosition: {x: -0.461, y: 0.692, z: -0.524}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

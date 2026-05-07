@@ -22,18 +22,59 @@ public struct VectornavReport : IFlatbufferObject
 
   public ulong Timestamp { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
   public uint SequenceNumber { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
-  public Messages.Location? Location { get { int o = __p.__offset(8); return o != 0 ? (Messages.Location?)(new Messages.Location()).__assign(o + __p.bb_pos, __p.bb) : null; } }
-  public Messages.Orientation? Orientation { get { int o = __p.__offset(10); return o != 0 ? (Messages.Orientation?)(new Messages.Orientation()).__assign(o + __p.bb_pos, __p.bb) : null; } }
-  public ushort NumSatellites { get { int o = __p.__offset(12); return o != 0 ? __p.bb.GetUshort(o + __p.bb_pos) : (ushort)0; } }
-  public sbyte FixQuality { get { int o = __p.__offset(14); return o != 0 ? __p.bb.GetSbyte(o + __p.bb_pos) : (sbyte)0; } }
+  public double Latitude { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetDouble(o + __p.bb_pos) : (double)0.0; } }
+  public double Longitude { get { int o = __p.__offset(10); return o != 0 ? __p.bb.GetDouble(o + __p.bb_pos) : (double)0.0; } }
+  public float Pitch { get { int o = __p.__offset(12); return o != 0 ? __p.bb.GetFloat(o + __p.bb_pos) : (float)0.0f; } }
+  public float Roll { get { int o = __p.__offset(14); return o != 0 ? __p.bb.GetFloat(o + __p.bb_pos) : (float)0.0f; } }
+  public float Yaw { get { int o = __p.__offset(16); return o != 0 ? __p.bb.GetFloat(o + __p.bb_pos) : (float)0.0f; } }
+  public float VelNorth { get { int o = __p.__offset(18); return o != 0 ? __p.bb.GetFloat(o + __p.bb_pos) : (float)0.0f; } }
+  public float VelEast { get { int o = __p.__offset(20); return o != 0 ? __p.bb.GetFloat(o + __p.bb_pos) : (float)0.0f; } }
+  public float VelDown { get { int o = __p.__offset(22); return o != 0 ? __p.bb.GetFloat(o + __p.bb_pos) : (float)0.0f; } }
+  public sbyte NumSatellites { get { int o = __p.__offset(24); return o != 0 ? __p.bb.GetSbyte(o + __p.bb_pos) : (sbyte)0; } }
+  public sbyte FixQuality { get { int o = __p.__offset(26); return o != 0 ? __p.bb.GetSbyte(o + __p.bb_pos) : (sbyte)0; } }
 
-  public static void StartVectornavReport(FlatBufferBuilder builder) { builder.StartTable(6); }
+  public static Offset<Messages.VectornavReport> CreateVectornavReport(FlatBufferBuilder builder,
+      ulong timestamp = 0,
+      uint sequence_number = 0,
+      double latitude = 0.0,
+      double longitude = 0.0,
+      float pitch = 0.0f,
+      float roll = 0.0f,
+      float yaw = 0.0f,
+      float vel_north = 0.0f,
+      float vel_east = 0.0f,
+      float vel_down = 0.0f,
+      sbyte num_satellites = 0,
+      sbyte fix_quality = 0) {
+    builder.StartTable(12);
+    VectornavReport.AddLongitude(builder, longitude);
+    VectornavReport.AddLatitude(builder, latitude);
+    VectornavReport.AddTimestamp(builder, timestamp);
+    VectornavReport.AddVelDown(builder, vel_down);
+    VectornavReport.AddVelEast(builder, vel_east);
+    VectornavReport.AddVelNorth(builder, vel_north);
+    VectornavReport.AddYaw(builder, yaw);
+    VectornavReport.AddRoll(builder, roll);
+    VectornavReport.AddPitch(builder, pitch);
+    VectornavReport.AddSequenceNumber(builder, sequence_number);
+    VectornavReport.AddFixQuality(builder, fix_quality);
+    VectornavReport.AddNumSatellites(builder, num_satellites);
+    return VectornavReport.EndVectornavReport(builder);
+  }
+
+  public static void StartVectornavReport(FlatBufferBuilder builder) { builder.StartTable(12); }
   public static void AddTimestamp(FlatBufferBuilder builder, ulong timestamp) { builder.AddUlong(0, timestamp, 0); }
   public static void AddSequenceNumber(FlatBufferBuilder builder, uint sequenceNumber) { builder.AddUint(1, sequenceNumber, 0); }
-  public static void AddLocation(FlatBufferBuilder builder, Offset<Messages.Location> locationOffset) { builder.AddStruct(2, locationOffset.Value, 0); }
-  public static void AddOrientation(FlatBufferBuilder builder, Offset<Messages.Orientation> orientationOffset) { builder.AddStruct(3, orientationOffset.Value, 0); }
-  public static void AddNumSatellites(FlatBufferBuilder builder, ushort numSatellites) { builder.AddUshort(4, numSatellites, 0); }
-  public static void AddFixQuality(FlatBufferBuilder builder, sbyte fixQuality) { builder.AddSbyte(5, fixQuality, 0); }
+  public static void AddLatitude(FlatBufferBuilder builder, double latitude) { builder.AddDouble(2, latitude, 0.0); }
+  public static void AddLongitude(FlatBufferBuilder builder, double longitude) { builder.AddDouble(3, longitude, 0.0); }
+  public static void AddPitch(FlatBufferBuilder builder, float pitch) { builder.AddFloat(4, pitch, 0.0f); }
+  public static void AddRoll(FlatBufferBuilder builder, float roll) { builder.AddFloat(5, roll, 0.0f); }
+  public static void AddYaw(FlatBufferBuilder builder, float yaw) { builder.AddFloat(6, yaw, 0.0f); }
+  public static void AddVelNorth(FlatBufferBuilder builder, float velNorth) { builder.AddFloat(7, velNorth, 0.0f); }
+  public static void AddVelEast(FlatBufferBuilder builder, float velEast) { builder.AddFloat(8, velEast, 0.0f); }
+  public static void AddVelDown(FlatBufferBuilder builder, float velDown) { builder.AddFloat(9, velDown, 0.0f); }
+  public static void AddNumSatellites(FlatBufferBuilder builder, sbyte numSatellites) { builder.AddSbyte(10, numSatellites, 0); }
+  public static void AddFixQuality(FlatBufferBuilder builder, sbyte fixQuality) { builder.AddSbyte(11, fixQuality, 0); }
   public static Offset<Messages.VectornavReport> EndVectornavReport(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<Messages.VectornavReport>(o);
@@ -50,10 +91,16 @@ static public class VectornavReportVerify
     return verifier.VerifyTableStart(tablePos)
       && verifier.VerifyField(tablePos, 4 /*Timestamp*/, 8 /*ulong*/, 8, false)
       && verifier.VerifyField(tablePos, 6 /*SequenceNumber*/, 4 /*uint*/, 4, false)
-      && verifier.VerifyField(tablePos, 8 /*Location*/, 16 /*Messages.Location*/, 8, false)
-      && verifier.VerifyField(tablePos, 10 /*Orientation*/, 12 /*Messages.Orientation*/, 4, false)
-      && verifier.VerifyField(tablePos, 12 /*NumSatellites*/, 2 /*ushort*/, 2, false)
-      && verifier.VerifyField(tablePos, 14 /*FixQuality*/, 1 /*sbyte*/, 1, false)
+      && verifier.VerifyField(tablePos, 8 /*Latitude*/, 8 /*double*/, 8, false)
+      && verifier.VerifyField(tablePos, 10 /*Longitude*/, 8 /*double*/, 8, false)
+      && verifier.VerifyField(tablePos, 12 /*Pitch*/, 4 /*float*/, 4, false)
+      && verifier.VerifyField(tablePos, 14 /*Roll*/, 4 /*float*/, 4, false)
+      && verifier.VerifyField(tablePos, 16 /*Yaw*/, 4 /*float*/, 4, false)
+      && verifier.VerifyField(tablePos, 18 /*VelNorth*/, 4 /*float*/, 4, false)
+      && verifier.VerifyField(tablePos, 20 /*VelEast*/, 4 /*float*/, 4, false)
+      && verifier.VerifyField(tablePos, 22 /*VelDown*/, 4 /*float*/, 4, false)
+      && verifier.VerifyField(tablePos, 24 /*NumSatellites*/, 1 /*sbyte*/, 1, false)
+      && verifier.VerifyField(tablePos, 26 /*FixQuality*/, 1 /*sbyte*/, 1, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }
