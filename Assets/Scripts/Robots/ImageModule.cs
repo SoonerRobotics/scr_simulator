@@ -14,8 +14,8 @@ namespace Robots
         public string imageIdentifier = "camera_id";
 
         [Header("Resolution")]
-        public int width = 640;
-        public int height = 480;
+        public int width = 1280;
+        public int height = 720;
 
         [Header("JPEG Settings")]
         [Range(1, 100)]

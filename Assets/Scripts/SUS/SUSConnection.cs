@@ -19,7 +19,6 @@ namespace SUS
         private int _nextClientId = 1;
 
         private readonly ConcurrentDictionary<int, ClientConnection> _clients = new();
-        private readonly ConcurrentDictionary<int, MessageAccumulator> _accumulators = new();
         private readonly ConcurrentQueue<(int clientId, MessageWrapper wrapper)> _incomingFrames = new();
         private readonly Dictionary<MessageType, List<Action<MessageWrapper>>> _subscriptions = new();
 
@@ -43,15 +42,10 @@ namespace SUS
                     var client = _listener.EndAcceptTcpClient(ar);
                     var id = _nextClientId++;
 
-                    _accumulators[id] = new MessageAccumulator(
-                        Endianness.Little,
-                        wrapper => _incomingFrames.Enqueue((id, wrapper))
-                    );
-
                     var connection = new ClientConnection(
                         id,
                         client,
-                        OnFrameReceived,
+                        OnMessageReceived,
                         OnClientDisconnected
                     );
 
@@ -70,16 +64,14 @@ namespace SUS
             }, null);
         }
 
-        private void OnFrameReceived(int clientId, byte[] frame)
+        private void OnMessageReceived(int clientId, MessageWrapper wrapper)
         {
-            if (_accumulators.TryGetValue(clientId, out var accumulator))
-                accumulator.Append(frame);
+            _incomingFrames.Enqueue((clientId, wrapper));
         }
 
         private void OnClientDisconnected(int clientId)
         {
             _clients.TryRemove(clientId, out _);
-            _accumulators.TryRemove(clientId, out _);
             Debug.Log($"Client {clientId} disconnected");
         }
 

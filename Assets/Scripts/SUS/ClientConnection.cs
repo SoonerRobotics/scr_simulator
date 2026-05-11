@@ -15,27 +15,29 @@ namespace SUS
         private readonly int _id;
         private readonly TcpClient _client;
         private readonly NetworkStream _stream;
-
-        private readonly Action<int, byte[]> _onFrame;
+        private readonly Action<int, MessageWrapper> _onMessage;
         private readonly Action<int> _onDisconnect;
-
+        private readonly MessageAccumulator _accumulator;
         private readonly BlockingCollection<byte[]> _sendQueue = new(256);
         private readonly CancellationTokenSource _cts = new();
-
         private Thread _readThread;
         private Thread _writeThread;
 
         public ClientConnection(
             int id,
             TcpClient client,
-            Action<int, byte[]> onFrame,
+            Action<int, MessageWrapper> onMessage,
             Action<int> onDisconnect)
         {
             _id = id;
             _client = client;
             _stream = client.GetStream();
-            _onFrame = onFrame;
+            _onMessage = onMessage;
             _onDisconnect = onDisconnect;
+            _accumulator = new MessageAccumulator(
+                Endianness.Little,
+                wrapper => _onMessage(_id, wrapper)
+            );
         }
 
         public void Start()
@@ -49,15 +51,21 @@ namespace SUS
 
         private void ReadLoop()
         {
+            var buffer = new byte[4096];
             try
             {
                 while (!_cts.IsCancellationRequested)
                 {
+                    var bytesRead = _stream.Read(buffer, 0, buffer.Length);
+                    if (bytesRead == 0) break;
+
+                    _accumulator.Append(buffer.AsSpan(0, bytesRead));
                 }
             }
-            catch
+            catch (Exception) when (_cts.IsCancellationRequested) { }
+            catch (Exception ex)
             {
-                // ignored
+                Debug.LogWarning($"Client {_id} read error: {ex.Message}");
             }
             finally
             {

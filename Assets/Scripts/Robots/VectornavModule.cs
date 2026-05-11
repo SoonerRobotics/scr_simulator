@@ -49,7 +49,7 @@ namespace Robots
             );
             builder.Finish(imageOffset.Value);
 
-            var wrapper = MessageWrapper.From(MessageType.Vectornav, builder.SizedByteArray());
+            var wrapper = MessageWrapper.From(MessageType.VectorNav, builder.SizedByteArray());
             SusConnection.Instance.Broadcast(wrapper);
         }
     }

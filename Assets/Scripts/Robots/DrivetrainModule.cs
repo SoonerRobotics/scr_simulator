@@ -36,8 +36,8 @@ namespace Robots
             // Extract the actual motor command
             var motorCommand = CanHelper.PacketFromBytes<CanHelper.MotorControlPacket>(_mLastCanFrame.Value.GetCanDataArray());
             
-            var localVelocity = new Vector2(motorCommand.SidewaysVelocity, motorCommand.ForwardVelocity);
-            var localAngular = motorCommand.AngularVelocity;
+            var localVelocity = new Vector2(motorCommand.SidewaysVelocity * 0.0001f, motorCommand.ForwardVelocity * 0.0001f);
+            var localAngular = motorCommand.AngularVelocity * 0.001f;
         
             // store last position/rotationss
             var currentPosition = _mLastPosition;
