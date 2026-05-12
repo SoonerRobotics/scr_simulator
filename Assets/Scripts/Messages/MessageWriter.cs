@@ -14,10 +14,9 @@ namespace Messages
         public static byte[] Write(
             MessageType type,
             ReadOnlySpan<byte> payload,
-            Endianness endianness,
-            int maxMessageLength = 64 * 1024)
+            Endianness endianness)
         {
-            if (payload.Length <= 0 || payload.Length > maxMessageLength)
+            if (payload.Length <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(payload), $"Payload length {payload.Length} is invalid");
             }

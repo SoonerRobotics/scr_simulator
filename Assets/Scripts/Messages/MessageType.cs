@@ -9,6 +9,7 @@
         MetricHistory = 0x05,
         CanFrame = 0x07,
         VectorNav = 0x08,
+        ZedDepth = 0x09,
         
         // Reserved Stuff
         CapabilityReq = 60_000,
