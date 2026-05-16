@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: ZED2iDepthFeature
   m_EditorClassIdentifier: Assembly-CSharp::ZED2iDepthFeature
   m_Active: 1
+  targetCamera: {fileID: 0}
   width: 1280
   height: 720
 --- !u!114 &-4512023626822706792

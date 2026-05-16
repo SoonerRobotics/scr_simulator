@@ -1,15 +1,14 @@
-﻿using System.IO;
+﻿using System;
+using System.Buffers;
+using System.Collections.Concurrent;
+using System.Net.Sockets;
+using System.Threading;
 using Messages;
 using Messages.Arc;
 using UnityEngine;
 
 namespace SUS
 {
-    using System;
-    using System.Collections.Concurrent;
-    using System.Net.Sockets;
-    using System.Threading;
-
     internal sealed class ClientConnection : IDisposable
     {
         private readonly int _id;
@@ -18,8 +17,11 @@ namespace SUS
         private readonly Action<int, MessageWrapper> _onMessage;
         private readonly Action<int> _onDisconnect;
         private readonly MessageAccumulator _accumulator;
-        private readonly BlockingCollection<byte[]> _sendQueue = new(256);
+
+        // Send queue holds (rentedBuffer, validLength) pairs
+        private readonly BlockingCollection<(byte[] buffer, int length)> _sendQueue = new(256);
         private readonly CancellationTokenSource _cts = new();
+
         private Thread _readThread;
         private Thread _writeThread;
 
@@ -29,46 +31,57 @@ namespace SUS
             Action<int, MessageWrapper> onMessage,
             Action<int> onDisconnect)
         {
-            _id = id;
-            _client = client;
-            _stream = client.GetStream();
-            _onMessage = onMessage;
+            _id          = id;
+            _client      = client;
+            _stream      = client.GetStream();
+            _onMessage   = onMessage;
             _onDisconnect = onDisconnect;
             _accumulator = new MessageAccumulator(
                 Endianness.Little,
-                wrapper => _onMessage(_id, wrapper)
+                OnWrapperReceived,
+                initialCapacity: 64 * 1024  // 64 KB - grows as needed
             );
+        }
+
+        // Dispatch received wrapper to the main-thread queue, then dispose it
+        // after all subscribers have seen it. SusConnection copies Data before
+        // dispatching so pooled memory is safe to return here.
+        private void OnWrapperReceived(MessageWrapper wrapper)
+        {
+            _onMessage(_id, wrapper);
+            // Wrapper is pooled — return backing array now that onMessage has taken a copy
+            wrapper.Dispose();
         }
 
         public void Start()
         {
-            _readThread = new Thread(ReadLoop) { IsBackground = true };
-            _writeThread = new Thread(WriteLoop) { IsBackground = true };
-
+            _readThread  = new Thread(ReadLoop)  { IsBackground = true, Name = $"SUS-Read-{_id}"  };
+            _writeThread = new Thread(WriteLoop) { IsBackground = true, Name = $"SUS-Write-{_id}" };
             _readThread.Start();
             _writeThread.Start();
         }
 
         private void ReadLoop()
         {
-            var buffer = new byte[4096];
+            // Rent a reusable read buffer — no per-read allocation
+            var buffer = ArrayPool<byte>.Shared.Rent(64 * 1024);
             try
             {
                 while (!_cts.IsCancellationRequested)
                 {
                     var bytesRead = _stream.Read(buffer, 0, buffer.Length);
                     if (bytesRead == 0) break;
-
                     _accumulator.Append(buffer.AsSpan(0, bytesRead));
                 }
             }
             catch (Exception) when (_cts.IsCancellationRequested) { }
             catch (Exception ex)
             {
-                Debug.LogWarning($"Client {_id} read error: {ex.Message}");
+                Debug.LogWarning($"[SUS] Client {_id} read error: {ex.Message}");
             }
             finally
             {
+                ArrayPool<byte>.Shared.Return(buffer);
                 Dispose();
             }
         }
@@ -77,15 +90,23 @@ namespace SUS
         {
             try
             {
-                foreach (var frame in _sendQueue.GetConsumingEnumerable(_cts.Token))
+                foreach (var (buffer, length) in _sendQueue.GetConsumingEnumerable(_cts.Token))
                 {
-                    _stream.Write(frame, 0, frame.Length);
-                    _stream.Flush();
+                    try
+                    {
+                        _stream.Write(buffer, 0, length);
+                        // No Flush() — TCP batches large frames (JPEGs) fine without it
+                    }
+                    finally
+                    {
+                        ArrayPool<byte>.Shared.Return(buffer);
+                    }
                 }
             }
-            catch
+            catch (OperationCanceledException) { }
+            catch (Exception ex)
             {
-                // ignored
+                Debug.LogWarning($"[SUS] Client {_id} write error: {ex.Message}");
             }
             finally
             {
@@ -97,12 +118,25 @@ namespace SUS
         {
             if (_sendQueue.IsAddingCompleted)
             {
-                Debug.LogWarning($"[SEND DROPPED] client {_id}");
+                Debug.LogWarning($"[SUS] Send dropped — client {_id} disconnected");
                 return;
             }
 
-            // Convert to bytes
-            _sendQueue.Add(MessageWriter.Write(wrapper.Type, wrapper.Data, Endianness.Little));
+            // ImageFrame skips CRC — bulk data, TCP guarantees delivery
+            var includeCrc = wrapper.Type != MessageType.ImageFrame;
+            var (buffer, length) = MessageWriter.WritePooled(
+                wrapper.Type,
+                wrapper.Data.AsSpan(0, wrapper.Length),
+                Endianness.Little,
+                includeCrc
+            );
+
+            if (!_sendQueue.TryAdd((buffer, length)))
+            {
+                // Queue full — drop and return buffer immediately
+                ArrayPool<byte>.Shared.Return(buffer);
+                Debug.LogWarning($"[SUS] Send queue full — frame dropped for client {_id}");
+            }
         }
 
         private int _disposed;
@@ -114,24 +148,14 @@ namespace SUS
             _cts.Cancel();
             _sendQueue.CompleteAdding();
 
-            try
-            {
-                _stream.Close();
-            }
-            catch
-            {
-                // ignored
-            }
+            // Drain and return any queued buffers
+            while (_sendQueue.TryTake(out var entry))
+                ArrayPool<byte>.Shared.Return(entry.buffer);
 
-            try
-            {
-                _client.Close();
-            }
-            catch
-            {
-                // ignored
-            }
+            try { _stream.Close();  } catch { /* ignored */ }
+            try { _client.Close();  } catch { /* ignored */ }
 
+            _accumulator.Dispose();
             _onDisconnect(_id);
         }
     }

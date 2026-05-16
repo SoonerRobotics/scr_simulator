@@ -1,7 +1,11 @@
+using System;
+using System.Buffers;
+using System.Threading.Tasks;
 using Google.FlatBuffers;
 using Messages;
 using SUS;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Robots
 {
@@ -21,100 +25,123 @@ namespace Robots
         [Range(1, 100)]
         public int jpegQuality = 70;
 
+        [Header("FPS Logging")]
+        public float fpsLogInterval = 2f;
+
         private Camera _camera;
-        private RenderTexture _renderTexture;
-        private Texture2D _readTexture;
+
+        private RenderTexture[] _renderTextures;
+        private int _activeIndex;
+        private bool _readbackPending;
+
         private float _nextFrameTime;
 
         private void Start()
         {
             _camera = GetComponent<Camera>();
 
-            _renderTexture = new RenderTexture(
-                width,
-                height,
-                24
-            )
+            _renderTextures = new RenderTexture[2];
+            for (var i = 0; i < 2; i++)
             {
-                antiAliasing = 2,
-                filterMode = FilterMode.Point
-            };
-            _renderTexture.Create();
+                _renderTextures[i] = new RenderTexture(width, height, 24)
+                {
+                    antiAliasing = 2,
+                    filterMode = FilterMode.Point
+                };
+                _renderTextures[i].Create();
+            }
 
-            _camera.targetTexture = _renderTexture;
-
-            _readTexture = new Texture2D(
-                width,
-                height,
-                TextureFormat.RGB24,
-                false
-            );
+            _camera.targetTexture = _renderTextures[_activeIndex];
         }
 
         private void LateUpdate()
         {
-            if (!enableStreaming)
-            {
-                return;
-            }
-
-            if (Time.time < _nextFrameTime)
-            {
-                return;
-            }
+            if (!enableStreaming) return;
+            if (Time.time < _nextFrameTime) return;
+            if (_readbackPending) return;
 
             _nextFrameTime = Time.time + (1f / targetFps);
-            CaptureAndSend();
+
+            AsyncGPUReadback.Request(_renderTextures[_activeIndex], 0, TextureFormat.RGB24, OnReadbackComplete);
+            _readbackPending = true;
+
+            _activeIndex = 1 - _activeIndex;
+            _camera.targetTexture = _renderTextures[_activeIndex];
         }
 
-        // ReSharper disable Unity.PerformanceAnalysis
-        private void CaptureAndSend()
+        private void OnReadbackComplete(AsyncGPUReadbackRequest request)
         {
-            RenderTexture.active = _renderTexture;
+            _readbackPending = false;
 
-            _readTexture.ReadPixels(
-                new Rect(0, 0, width, height),
-                0,
-                0,
-                false
-            );
+            if (request.hasError || !enableStreaming) return;
 
-            _readTexture.Apply(false);
+            var rawSize = width * height * 3;
+            var rawBuffer = ArrayPool<byte>.Shared.Rent(rawSize);
+            request.GetData<byte>().CopyTo(rawBuffer);
 
-            RenderTexture.active = null;
+            var captureTime = (ulong)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            var w = width;
+            var h = height;
+            var quality = jpegQuality;
+            var id = imageIdentifier;
 
-            var jpegBytes = _readTexture.EncodeToJPG(jpegQuality);
+            Task.Run(() =>
+            {
+                try { EncodeAndSend(rawBuffer, rawSize, captureTime, w, h, quality, id); }
+                finally { ArrayPool<byte>.Shared.Return(rawBuffer); }
+            });
+        }
 
-            var builder = new FlatBufferBuilder(1024);
-            var encoding = builder.CreateString("jpeg");
-            var identifier = builder.CreateString(imageIdentifier);
-            var jpegOffset = ImageFrame.CreateImageDataVector(builder, jpegBytes);
-            var imageOffset = ImageFrame.CreateImageFrame(
-                builder,
-                (ulong)System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
-                0,
-                (uint)width,
-                (uint)height,
-                encoding,
-                identifier,
-                jpegOffset
-            );
-            builder.Finish(imageOffset.Value);
+        private static void EncodeAndSend(
+            byte[] raw, int rawSize,
+            ulong timestamp,
+            int w, int h,
+            int quality, string id)
+        {
+            var flipped = ArrayPool<byte>.Shared.Rent(rawSize);
+            try
+            {
+                FlipVertical(raw, flipped, w, h);
+                var jpegBytes = TurboJpeg.Encode(flipped, w, h, quality);
 
-            var wrapper = MessageWrapper.From(MessageType.ImageFrame, builder.SizedByteArray());
-            SusConnection.Instance.Broadcast(wrapper);
+                var builder = new FlatBufferBuilder(1024 + jpegBytes.Length);
+                var encoding = builder.CreateString("jpeg");
+                var identifier = builder.CreateString(id);
+                var jpegOffset = ImageFrame.CreateImageDataVector(builder, jpegBytes);
+                var imageOffset = ImageFrame.CreateImageFrame(
+                    builder, timestamp, 0, (uint)w, (uint)h,
+                    encoding, identifier, jpegOffset
+                );
+                builder.Finish(imageOffset.Value);
+
+                var wrapper = MessageWrapper.From(MessageType.ImageFrame, builder.SizedByteArray());
+                SusConnection.Instance.Broadcast(wrapper);
+            }
+            finally
+            {
+                ArrayPool<byte>.Shared.Return(flipped);
+            }
+        }
+
+        private static void FlipVertical(byte[] src, byte[] dst, int w, int h)
+        {
+            var stride = w * 3;
+            for (var y = 0; y < h; y++)
+            {
+                src.AsSpan((h - 1 - y) * stride, stride).CopyTo(dst.AsSpan(y * stride, stride));
+            }
         }
 
         private void OnDestroy()
         {
-            if (_camera != null)
-            {
-                _camera.targetTexture = null;
-            }
+            if (_camera != null) _camera.targetTexture = null;
 
-            if (_renderTexture != null)
+            if (_renderTextures != null)
             {
-                _renderTexture.Release();
+                foreach (var rt in _renderTextures)
+                {
+                    rt?.Release();
+                }
             }
         }
     }

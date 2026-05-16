@@ -19,6 +19,8 @@ namespace SUS
         private int _nextClientId = 1;
 
         private readonly ConcurrentDictionary<int, ClientConnection> _clients = new();
+
+        // Queue holds owned (non-pooled) wrappers safe to read on the main thread
         private readonly ConcurrentQueue<(int clientId, MessageWrapper wrapper)> _incomingFrames = new();
         private readonly Dictionary<MessageType, List<Action<MessageWrapper>>> _subscriptions = new();
 
@@ -30,7 +32,7 @@ namespace SUS
             _listener.Start();
 
             BeginAccept();
-            Debug.Log("SUSConnection listening on port 4001");
+            Debug.Log("[SUS] Listening on port 4001");
         }
 
         private void BeginAccept()
@@ -40,23 +42,15 @@ namespace SUS
                 try
                 {
                     var client = _listener.EndAcceptTcpClient(ar);
-                    var id = _nextClientId++;
+                    var id     = _nextClientId++;
 
-                    var connection = new ClientConnection(
-                        id,
-                        client,
-                        OnMessageReceived,
-                        OnClientDisconnected
-                    );
+                    var connection = new ClientConnection(id, client, OnMessageReceived, OnClientDisconnected);
+                    _clients[id]  = connection;
 
-                    _clients[id] = connection;
-
-                    Debug.Log($"Client {id} connected");
+                    Debug.Log($"[SUS] Client {id} connected from {((System.Net.Sockets.TcpClient)client).Client.RemoteEndPoint}");
                     connection.Start();
                 }
-                catch (ObjectDisposedException)
-                {
-                }
+                catch (ObjectDisposedException) { }
                 finally
                 {
                     BeginAccept();
@@ -64,20 +58,31 @@ namespace SUS
             }, null);
         }
 
+        /// <summary>
+        /// Called from a background read thread.
+        /// The wrapper is pooled — copy its payload to an owned wrapper for the main thread queue.
+        /// </summary>
         private void OnMessageReceived(int clientId, MessageWrapper wrapper)
         {
-            _incomingFrames.Enqueue((clientId, wrapper));
+            // Copy payload out of the pooled buffer into an owned array
+            var ownedData = new byte[wrapper.Length];
+            wrapper.Data.AsSpan(0, wrapper.Length).CopyTo(ownedData);
+            var owned = MessageWrapper.From(wrapper.Type, ownedData);
+
+            _incomingFrames.Enqueue((clientId, owned));
+            // wrapper.Dispose() is called by ClientConnection.OnWrapperReceived after this returns
         }
 
         private void OnClientDisconnected(int clientId)
         {
             _clients.TryRemove(clientId, out _);
-            Debug.Log($"Client {clientId} disconnected");
+            Debug.Log($"[SUS] Client {clientId} disconnected");
         }
 
         private void Update()
         {
-            for (var i = 0; i < 10; i++)
+            // Process up to 20 messages per frame — raise if needed for high FPS streams
+            for (var i = 0; i < 20; i++)
             {
                 if (!_incomingFrames.TryDequeue(out var entry))
                     break;
@@ -92,14 +97,8 @@ namespace SUS
 
             foreach (var handler in handlers)
             {
-                try
-                {
-                    handler(wrapper);
-                }
-                catch (Exception ex)
-                {
-                    Debug.LogError($"Subscriber threw on {wrapper.Type}: {ex}");
-                }
+                try   { handler(wrapper); }
+                catch (Exception ex) { Debug.LogError($"[SUS] Subscriber threw on {wrapper.Type}: {ex}"); }
             }
         }
 
@@ -126,7 +125,6 @@ namespace SUS
             }
 
             list.Add(handler);
-
             return new Subscription(() => Unsubscribe(type, handler));
         }
 
@@ -139,9 +137,7 @@ namespace SUS
         private sealed class Subscription : IDisposable
         {
             private Action _onDispose;
-
             public Subscription(Action onDispose) => _onDispose = onDispose;
-
             public void Dispose()
             {
                 _onDispose?.Invoke();

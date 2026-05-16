@@ -113,8 +113,8 @@ public class ZED2iDepthFeature : ScriptableRendererFeature
         }
     }
 
-    public int width  = 1280;
-    public int height = 720;
+    public int width  = 1920;
+    public int height = 1080;
 
     private DepthPass depthPass;
     public RTHandle DepthRTHandle => depthPass?.DepthRTHandle;
