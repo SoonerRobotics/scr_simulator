@@ -5,8 +5,14 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: 00eb7cab3c080db4a9b8e7204ede48fa
+  - enabled: 1
+    path: Assets/Scenes/Maps/IGVC_2026_SelfDrive.unity
+    guid: 37aac9871fa293cf99e61679767a3b63
+  - enabled: 1
+    path: Assets/Scenes/Maps/IGVC_2026_AutoNav.unity
+    guid: 3fcc563d3f5dcaa41af63aef49538f45
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

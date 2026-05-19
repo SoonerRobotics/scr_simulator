@@ -1,0 +1,110 @@
+fileFormatVersion: 2
+guid: 16eca64567d4ae14fa678f4fa93fb6bb
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 804e1ce4c496647cfa3f1a1134187c71, type: 3}
+  _removeEmptyRootObjects: 1
+  _scaleFactor: 1
+  _deduplicateResources: 0
+  _deduplicatedStatistics:
+    meshCountBefore: 0
+    meshCountAfter: 0
+    textureCountBefore: 0
+    textureCountAfter: 0
+  _maximumLod: 300
+  _readWriteEnabled: 1
+  _generateColliders: 0
+  _addColliders: 0
+  _swapUvs: 0
+  _generateLightmapUVs: 0
+  _importBlendShapeNames: 1
+  _blendShapeFrameWeight:
+    _option: 0
+    _multiplier: 1
+  _importNormals: 0
+  _importTangents: 0
+  _importCamera: 2
+  _importAnimations: 0
+  _mecanimHumanoidFlip: 0
+  _addAnimatorComponent: 0
+  _animationLoopTime: 1
+  _animationLoopPose: 0
+  _importMaterials: 1
+  _enableGpuInstancing: 0
+  _texturesReadWriteEnabled: 1
+  _generateMipMaps: 1
+  _useSceneNameIdentifier: 1
+  _textureCompression: -50
+  _gltfAsset: '<b>Generator: </b>ONSHAPE BY PTC INC, 1.215
+
+    <b>Version: </b>2.0
+
+    
+
+    <b>Extras:
+    </b>
+
+'
+  optimizeGameObjects: 0
+  materials:
+  - {fileID: 4413029529068330265, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: -6264911931313677300, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: 5109424970147356552, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: 561622078051213871, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: -7450844449148054130, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: 4154249109739032482, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: -7958830029848003500, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: -20209234369071907, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: -8274074265961293671, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: -3152502896817537655, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: 2633303669997237870, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: 782699680660339675, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: 7022855049262093898, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: -6100423912410489222, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: -1039426160997558291, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: 8264450939257149022, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: 824524657567264473, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: -2445297494498972909, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: -1728595604950711583, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: 2776071431046421379, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: 1221880377911273441, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: 7362794226701252191, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: -1348816870145145128, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: -465237401229034894, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: 8700421715103192860, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: 7549480396921261676, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: -8875538654216536282, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: 3228724254655948560, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: -5412727318750577952, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: 375782643714171932, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: -414629869822258015, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: -8256967204332688903, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: 8726022300281482058, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: 7026477799286376828, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: 9212217454841600735, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: 2722550335425908863, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: 7239298065659308923, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  - {fileID: -2599012482402032195, guid: 16eca64567d4ae14fa678f4fa93fb6bb, type: 3}
+  textures: []
+  hasSceneData: 1
+  hasAnimationData: 0
+  hasMaterialData: 1
+  hasTextureData: 0
+  animations: []
+  _extensions:
+  - name: PTC_onshape_metadata
+    supported: 1
+    used: 1
+    required: 0
+  - name: KHR_draco_mesh_compression
+    supported: 1
+    used: 1
+    required: 1
+  _textures: []
+  _mainAssetIdentifier: scenes/Root
+  _importPlugins: []
