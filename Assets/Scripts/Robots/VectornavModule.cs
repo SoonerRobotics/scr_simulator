@@ -29,6 +29,9 @@ namespace Robots
             {
                 return;
             }
+
+            // Determine YPR
+            var ypr = transform.rotation.eulerAngles;
         
             _nextSend = Time.time + interval;
             var builder = new FlatBufferBuilder(1024);
@@ -36,11 +39,11 @@ namespace Robots
                 builder,
                 (ulong)System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
                 0,
-                transform.position.z + latitudeLength / originLatitude,
-                transform.position.x + longitudeLength / originLongitude,
-                0,
-                0,
-                0,
+                transform.position.z / latitudeLength + originLatitude,
+                transform.position.x / longitudeLength + originLongitude,
+                ypr.x, // Pitch
+                ypr.z, // Roll
+                ypr.y, // Yaw
                 0,
                 0,
                 0,

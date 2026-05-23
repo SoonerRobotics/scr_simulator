@@ -1,5 +1,6 @@
 using System;
 using System.Buffers;
+using System.Threading;
 using System.Threading.Tasks;
 using Google.FlatBuffers;
 using Messages;
@@ -36,6 +37,9 @@ namespace Robots
 
         private float _nextFrameTime;
 
+        // 0 = idle, 1 = busy. Prevents unbounded Task.Run queuing over time.
+        private int _encodeInProgress = 0;
+
         private void Start()
         {
             _camera = GetComponent<Camera>();
@@ -67,6 +71,8 @@ namespace Robots
 
             _activeIndex = 1 - _activeIndex;
             _camera.targetTexture = _renderTextures[_activeIndex];
+
+            Debug.Log($"[ImageModule] GC: {GC.GetTotalMemory(false) / 1024 / 1024} MB");
         }
 
         private void OnReadbackComplete(AsyncGPUReadbackRequest request)
@@ -75,9 +81,16 @@ namespace Robots
 
             if (request.hasError || !enableStreaming) return;
 
+            // Drop frame if encoder is still busy — prevents unbounded queue buildup over time.
+            if (Interlocked.CompareExchange(ref _encodeInProgress, 1, 0) != 0)
+            {
+                Debug.LogWarning("[ImageModule] Encoder busy, dropping frame.");
+                return;
+            }
+
             var rawSize = width * height * 3;
             var rawBuffer = ArrayPool<byte>.Shared.Rent(rawSize);
-            request.GetData<byte>().CopyTo(rawBuffer);
+            Unity.Collections.NativeArray<byte>.Copy(request.GetData<byte>(), rawBuffer, rawSize);
 
             var captureTime = (ulong)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             var w = width;
@@ -87,8 +100,15 @@ namespace Robots
 
             Task.Run(() =>
             {
-                try { EncodeAndSend(rawBuffer, rawSize, captureTime, w, h, quality, id); }
-                finally { ArrayPool<byte>.Shared.Return(rawBuffer); }
+                try
+                {
+                    EncodeAndSend(rawBuffer, rawSize, captureTime, w, h, quality, id);
+                }
+                finally
+                {
+                    ArrayPool<byte>.Shared.Return(rawBuffer);
+                    Interlocked.Exchange(ref _encodeInProgress, 0);
+                }
             });
         }
 
@@ -98,38 +118,21 @@ namespace Robots
             int w, int h,
             int quality, string id)
         {
-            var flipped = ArrayPool<byte>.Shared.Rent(rawSize);
-            try
-            {
-                FlipVertical(raw, flipped, w, h);
-                var jpegBytes = TurboJpeg.Encode(flipped, w, h, quality);
+            // Pass raw directly — no need for a redundant flip buffer copy.
+            var jpegBytes = TurboJpeg.Encode(raw, w, h, quality);
 
-                var builder = new FlatBufferBuilder(1024 + jpegBytes.Length);
-                var encoding = builder.CreateString("jpeg");
-                var identifier = builder.CreateString(id);
-                var jpegOffset = ImageFrame.CreateImageDataVector(builder, jpegBytes);
-                var imageOffset = ImageFrame.CreateImageFrame(
-                    builder, timestamp, 0, (uint)w, (uint)h,
-                    encoding, identifier, jpegOffset
-                );
-                builder.Finish(imageOffset.Value);
+            var builder = new FlatBufferBuilder(1024 + jpegBytes.Length);
+            var encoding = builder.CreateString("jpeg");
+            var identifier = builder.CreateString(id);
+            var jpegOffset = ImageFrame.CreateImageDataVector(builder, jpegBytes);
+            var imageOffset = ImageFrame.CreateImageFrame(
+                builder, timestamp, 0, (uint)w, (uint)h,
+                encoding, identifier, jpegOffset
+            );
+            builder.Finish(imageOffset.Value);
 
-                var wrapper = MessageWrapper.From(MessageType.ImageFrame, builder.SizedByteArray());
-                SusConnection.Instance.Broadcast(wrapper);
-            }
-            finally
-            {
-                ArrayPool<byte>.Shared.Return(flipped);
-            }
-        }
-
-        private static void FlipVertical(byte[] src, byte[] dst, int w, int h)
-        {
-            var stride = w * 3;
-            for (var y = 0; y < h; y++)
-            {
-                src.AsSpan((h - 1 - y) * stride, stride).CopyTo(dst.AsSpan(y * stride, stride));
-            }
+            var wrapper = MessageWrapper.From(MessageType.ImageFrame, builder.SizedByteArray());
+            SusConnection.Instance.Broadcast(wrapper);
         }
 
         private void OnDestroy()
