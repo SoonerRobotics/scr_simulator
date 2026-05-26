@@ -38,6 +38,9 @@ namespace Robots
             
             var localVelocity = new Vector2(motorCommand.SidewaysVelocity * 0.0001f, motorCommand.ForwardVelocity * 0.0001f);
             var localAngular = motorCommand.AngularVelocity * 0.001f;
+            // convert localAngular from radians per second to degrees per second
+            localAngular = localAngular * -Mathf.Rad2Deg;
+            Debug.Log($"Received motor command: {localVelocity} m/s, {localAngular} deg/s");
         
             // store last position/rotationss
             var currentPosition = _mLastPosition;
