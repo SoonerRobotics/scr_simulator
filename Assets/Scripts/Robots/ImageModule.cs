@@ -71,8 +71,6 @@ namespace Robots
 
             _activeIndex = 1 - _activeIndex;
             _camera.targetTexture = _renderTextures[_activeIndex];
-
-            Debug.Log($"[ImageModule] GC: {GC.GetTotalMemory(false) / 1024 / 1024} MB");
         }
 
         private void OnReadbackComplete(AsyncGPUReadbackRequest request)
@@ -103,6 +101,10 @@ namespace Robots
                 try
                 {
                     EncodeAndSend(rawBuffer, rawSize, captureTime, w, h, quality, id);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"[ImageModule] Encode failed: {e}");
                 }
                 finally
                 {
